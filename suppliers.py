@@ -18,9 +18,14 @@ class takeGenerator(sim.Component):
             'arrival_dist', 'resource', 'n_supplied')(self.config)
 
         # Generate objects
-        while True:
-            TAKE(self.config)
-            yield self.hold(arrival_dist.sample())
+        i = 0
+        while i > -1:
+            if i == 0:
+                yield self.hold(arrival_dist.sample())
+            else:
+                TAKE(self.config)
+                yield self.hold(arrival_dist.sample())
+            i += 1
 
 
 class TAKE(sim.Component):

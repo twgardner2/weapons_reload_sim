@@ -33,9 +33,9 @@ class Base(sim.Component):
 
         # Run process
         while True:
-            while len(queue) == 0:
+            while len(resource.requesters()) == 0:
                 yield self.passivate()
-            self.customer = queue.pop()
+            self.customer = resource.pop()
             # if resource.available_quantity() >= self.customer.config.get('n_consumed'):
             yield self.hold(reload_team.reload_time)
             self.customer.activate()
@@ -49,10 +49,11 @@ base1_config = {
 }
 
 base1 = Base(base1_config)
-# base2 = Base({
-#     "name": "base2",
-#     "queue": res.queue2,
-#     "resource": res.TLAMs2,
-#     "reload_team": res.fast_ERT
-# })
-# print(base1.config.get('reload_team'))
+
+base2 = Base({
+    "name": "base2",
+    "queue": res.queue2,
+    "resource": res.TLAMs2,
+    "reload_team": res.fast_ERT
+})
+print(base1.config.get('reload_team'))
