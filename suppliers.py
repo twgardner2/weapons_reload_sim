@@ -10,8 +10,6 @@ class takeGenerator(sim.Component):
 
         # Attach the config dict to self
         self.config = config
-        # self.resource = resource
-        # self.n_supplied = n_supplied
 
     def process(self):
 
@@ -21,19 +19,23 @@ class takeGenerator(sim.Component):
 
         # Generate objects
         while True:
-            TAKE(resource, n_supplied)
+            TAKE(self.config)
             yield self.hold(arrival_dist.sample())
 
 
 class TAKE(sim.Component):
-    def __init__(self, resource, n_supplied):
+    def __init__(self, config={}):
         sim.Component.__init__(self)
-        self.resource = resource
-        self.n_supplied = n_supplied
+        self.config = config
 
     def process(self):
-        print(f'TAKE arrived, supplying {self.n_supplied} resources')
-        self.resource.set_capacity(self.resource.capacity() + self.n_supplied)
+
+        # Destructure config
+        resource, n_supplied = itemgetter(
+            'resource', 'n_supplied')(self.config)
+        if VERBOSE:
+            print(f'TAKE arrived, supplying {n_supplied} resources')
+        resource.set_capacity(resource.capacity() + n_supplied)
         # self.resource.set_capacity(self.resource.capacity() + 0)
         yield self.hold()
 

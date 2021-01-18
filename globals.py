@@ -1,5 +1,8 @@
 import salabim as sim
 
+# Debugging
+VERBOSE = True
+
 # DDG
 DDG_ARRIVAL_DIST = sim.Normal(10, 1)
 DDG_N_CONSUMED = 36

@@ -1,7 +1,6 @@
 import salabim as sim
 from operator import itemgetter
-
-# queue, resource, mean_time=30
+from globals import *
 
 
 class ddgGenerator(sim.Component):
@@ -30,7 +29,8 @@ class DDG(sim.Component):
         _, base, n_consumed = itemgetter(
             'gen_dist', 'base', 'n_consumed')(self.config)
 
-        print(f'DDG arrived, requesting {n_consumed} resources')
+        if VERBOSE:
+            print(f'DDG arrived, requesting {n_consumed} resources')
 
         # Enter the queue at the assigned base
         self.enter(base.config.get('queue'))
