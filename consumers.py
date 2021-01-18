@@ -1,30 +1,40 @@
 import salabim as sim
+from operator import itemgetter
+
+# queue, resource, mean_time=30
 
 
 class ddgGenerator(sim.Component):
-    def __init__(self, queue, resource, mean_time=30):
+    def __init__(self, config={}):
         sim.Component.__init__(self)
-        self.queue = queue
-        self.resource = resource
-        self.mean_time = mean_time
+        self.config = config
 
     def process(self):
+        # Destructure the config dict
+        gen_dist, base = itemgetter('gen_dist', 'base')(self.config)
+
+        # Generate objects
         while True:
-            DDG(self.queue, self.resource)
-            yield self.hold(sim.Normal(int(self.mean_time), 2).sample())
+            DDG(self.config)
+            yield self.hold(gen_dist.sample())
 
 
 class DDG(sim.Component):
-    def __init__(self, queue, resource):
+    def __init__(self, config):
         sim.Component.__init__(self)
-        self.queue = queue
-        self.resource = resource
-        # print(self.queue.reload_team)
+        self.config = config
+        # self.config.get('base').config.get('resource').print_info()
 
     def process(self):
-        self.enter(self.queue)
-        # yield self.hold(sim.Uniform(5, 15).sample())
-        yield self
+        # Destructure the config dict
+        _, base, n_consumed = itemgetter(
+            'gen_dist', 'base', 'n_consumed')(self.config)
 
+        print(f'DDG arrived, requesting {n_consumed} resources')
 
-# sim.ComponentGenerator(con.DDG, duration=5000, number=521, queue=queue1)
+        # Enter the queue at the assigned base
+        self.enter(base.config.get('queue'))
+        if base.ispassive():
+            base.activate()
+            self.request((base.config.get('resource'), n_consumed))
+        yield self.passivate()
