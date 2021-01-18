@@ -1,11 +1,16 @@
 import salabim as sim
 import resources as res
 from operator import itemgetter
+from globals import *
 
 
 class Base(sim.Component):
     def __init__(self, config={}):
         sim.Component.__init__(self)
+
+        # Debug
+        if VERBOSE:
+            print(f'creating a BASE, config: {config}')
 
         # Attach config to self to pass to process
         self.config = config
@@ -25,7 +30,7 @@ class Base(sim.Component):
         # Destructure config
         name, queue, resource, reload_team = itemgetter(
             'name', 'queue', 'resource', 'reload_team')(self.config)
-        print(f'reload time: {reload_team.reload_time}')
+
         # Run process
         while True:
             while len(queue) == 0:

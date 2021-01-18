@@ -8,6 +8,10 @@ class ddgGenerator(sim.Component):
         sim.Component.__init__(self)
         self.config = config
 
+        # Debug
+        if VERBOSE:
+            print(f'creating a ddgGenerator, config: {config}')
+
     def process(self):
         # Destructure the config dict
         gen_dist, base = itemgetter('gen_dist', 'base')(self.config)
@@ -33,7 +37,7 @@ class DDG(sim.Component):
             print(f'DDG arrived, requesting {n_consumed} resources')
 
         # Enter the queue at the assigned base
-        self.enter(base.config.get('queue'))
+        # self.enter(base.config.get('queue'))
         if base.ispassive():
             base.activate()
             self.request((base.config.get('resource'), n_consumed))
