@@ -5,7 +5,9 @@ from globals import *
 
 
 # Setup environment
-env = sim.Environment()
+env = sim.Environment(time_unit='hours', trace=True)
+# env = sim.Environment(time_units='hours')
+
 
 # Import resources
 from resources import TLAMs, TLAMs1, TLAMs2, queue1, queue2, fast_ERT, slow_ERT
@@ -35,8 +37,13 @@ env.run(till=5000)
 # fast_ERT.print_statistics()
 # TLAMs1.print_info()
 # TLAMs1.requesters().length.print_histogram()
-TLAMs1.requesters().length_of_stay.print_histogram()
+# TLAMs1.requesters().length_of_stay.print_histogram()
 # TLAMs1.claimers().length.print_histogram()
 # bases.base1.config.get("resource").print_histograms()
 # bases.base1.config.get("resource").print_statistics()
 # bases.base1.config.get("resource").print_info()
+
+
+queue1.length_of_stay.print_histogram()
+TLAMs1.occupancy.print_histogram()
+queue1.print_info()

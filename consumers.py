@@ -2,6 +2,10 @@ import salabim as sim
 from operator import itemgetter
 from globals import *
 
+import crayons
+
+verbose = VERBOSE_ALL or VERBOSE_CONSUMERS
+
 
 class ddgGenerator(sim.Component):
     def __init__(self, config={}):
@@ -9,7 +13,7 @@ class ddgGenerator(sim.Component):
         self.config = config
 
         # Debug
-        if VERBOSE:
+        if verbose:
             print(f'creating a ddgGenerator, config: {config}')
 
     def process(self):
@@ -35,13 +39,25 @@ class DDG(sim.Component):
         _, base, n_consumed = itemgetter(
             'gen_dist', 'base', 'n_consumed')(self.config)
 
-        # Debugging
-        if VERBOSE:
-            # print(f'DDG arrived, requesting {n_consumed} resources')
-            # base.config.get('resource').print_info()
-            print(base.config.get('resource').requesters().length())
-
         # Enter the queue for resources at the assigned base
-        yield self.hold(base.config.get('reload_team').reload_time)
-        yield self.request((base.config.get('resource'), n_consumed))
+        self.enter(base.config.get('queue'))
+
+        # Debugging
+        if verbose:
+            print(
+                crayons.blue(f'DDG arrived, requesting {n_consumed} resources, number in line: {len(base.config.get("queue"))}'))
+
+        # # Enter the queue for resources at the assigned base
+        # yield self.hold(base.config.get('reload_team').reload_time)
+        # yield self.request((base.config.get('resource'), n_consumed))
+        # yield self.passivate()
+
+        # for ship in base.config.get('queue'):
+        #     print(ship)
+        if base.ispassive():
+            base.activate()
+
         yield self.passivate()
+        # yield self.hold(base.config.get('reload_team').reload_time)
+        yield self.request((base.config.get('resource'), n_consumed))
+        yield self.hold(float('inf'))

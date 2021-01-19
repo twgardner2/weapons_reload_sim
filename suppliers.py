@@ -2,6 +2,10 @@ import salabim as sim
 from operator import itemgetter
 from globals import *
 
+import crayons
+
+verbose = VERBOSE_ALL or VERBOSE_SUPPLIERS
+
 
 class takeGenerator(sim.Component):
     # def __init__(self, resource, n_supplied=1):
@@ -20,7 +24,8 @@ class takeGenerator(sim.Component):
         # Generate objects
         i = 0
         while i > -1:
-            if i == 0:
+            if i < 1:
+                # TAKE(self.config)  # remove
                 yield self.hold(arrival_dist.sample())
             else:
                 TAKE(self.config)
@@ -38,8 +43,9 @@ class TAKE(sim.Component):
         # Destructure config
         resource, n_supplied = itemgetter(
             'resource', 'n_supplied')(self.config)
-        if VERBOSE:
-            print(f'TAKE arrived, supplying {n_supplied} resources')
+        if verbose:
+            print(crayons.green(
+                f'TAKE arrived, supplying {n_supplied} resources'))
         resource.set_capacity(resource.capacity() + n_supplied)
         # self.resource.set_capacity(self.resource.capacity() + 0)
         yield self.hold()

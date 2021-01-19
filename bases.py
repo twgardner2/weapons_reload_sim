@@ -3,13 +3,17 @@ import resources as res
 from operator import itemgetter
 from globals import *
 
+import crayons
+
+verbose = VERBOSE_ALL or VERBOSE_BASE
+
 
 class Base(sim.Component):
     def __init__(self, config={}):
         sim.Component.__init__(self)
 
         # Debug
-        if VERBOSE:
+        if verbose:
             print(f'creating a BASE, config: {config}')
 
         # Attach config to self to pass to process
@@ -33,12 +37,21 @@ class Base(sim.Component):
 
         # Run process
         while True:
-            while len(resource.requesters()) == 0:
+            if verbose:
+                print(
+                    crayons.red(f'Available resources, {resource} at base {self}: {resource.available_quantity()}'))
+            # While no ship in line, passivate
+            while len(queue) == 0:
                 yield self.passivate()
-            self.customer = resource.pop()
-            # if resource.available_quantity() >= self.customer.config.get('n_consumed'):
-            yield self.hold(reload_team.reload_time)
-            self.customer.activate()
+            print(crayons.blue(
+                f'Number in line: {len(queue)}, front of line: {queue[0]}'))
+            if resource.available_quantity() >= queue[0].config.get('n_consumed'):
+                self.customer = queue.pop()
+                print(crayons.yellow(f'popped customer: {self.customer}'))
+                self.customer.hold(reload_team.reload_time)
+                yield self.hold(reload_team.reload_time)
+            else:
+                yield self.passivate()
 
 
 base1_config = {
@@ -56,4 +69,4 @@ base2 = Base({
     "resource": res.TLAMs2,
     "reload_team": res.fast_ERT
 })
-print(base1.config.get('reload_team'))
+# print(base1.config.get('reload_team'))
