@@ -37,9 +37,11 @@ sim.AnimateMonitor(queue1.length, x=10, y=450, width=1600,
                    height=300, horizontal_scale=0.2, vertical_scale=7.5)
 qa0 = sim.AnimateQueue(
     queue1, x=100, y=50, title='queue, normal', direction='e', id='blue')
-
+sim.AnimateRectangle(spec=lambda arg, t: (0, 10, arg.available_quantity(), 30),
+                     text="", arg=TLAMs1)
+# spec=(100, 10, 300, 30)
 # Run simulation
-env.animation_parameters(animate=True, speed=350)
+env.animation_parameters(animate=True, speed=250)
 
 env.background_color('20%gray')
 env.run(till=3500)
