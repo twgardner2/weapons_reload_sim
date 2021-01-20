@@ -2,6 +2,7 @@ import salabim as sim
 import consumers as con
 import suppliers as sup
 from globals import *
+import animation as ani
 
 
 # Setup environment
@@ -36,10 +37,13 @@ sup.takeGenerator({
 sim.AnimateMonitor(queue1.length, x=10, y=450, width=1600,
                    height=300, horizontal_scale=0.2, vertical_scale=7.5)
 qa0 = sim.AnimateQueue(
-    queue1, x=100, y=50, title='queue, normal', direction='e', id='blue')
-sim.AnimateRectangle(spec=lambda arg, t: (0, 10, arg.available_quantity(), 30),
-                     text="", arg=TLAMs1)
-# spec=(100, 10, 300, 30)
+    queue1, x=ani.queue_x_left, y=ani.queue_y_bottom, title='queue, normal', direction='e', id='blue')
+sim.AnimateRectangle(spec=ani.resource_bar_spec,
+                     text=ani.resource_bar_text,
+                     arg=TLAMs1)
+sim.AnimateRectangle(ani.resource_label_spec,
+                     text="TLAMs Available", arg=TLAMs1)
+
 # Run simulation
 env.animation_parameters(animate=True, speed=250)
 
