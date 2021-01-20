@@ -59,5 +59,5 @@ class DDG(sim.Component):
 
         yield self.passivate()
         # yield self.hold(base.config.get('reload_team').reload_time)
-        yield self.request((base.config.get('resource'), n_consumed))
+        yield self.request((base.config.get('resource'), n_consumed.sample()))
         yield self.hold(float('inf'))

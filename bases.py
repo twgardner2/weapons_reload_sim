@@ -45,7 +45,7 @@ class Base(sim.Component):
                 yield self.passivate()
             print(crayons.blue(
                 f'Number in line: {len(queue)}, front of line: {queue[0]}'))
-            if resource.available_quantity() >= queue[0].config.get('n_consumed'):
+            if resource.available_quantity() >= queue[0].config.get('n_consumed').sample():
                 self.customer = queue.pop()
                 print(crayons.yellow(f'popped customer: {self.customer}'))
                 self.customer.hold(reload_team.reload_time)
@@ -61,12 +61,12 @@ base1_config = {
     "reload_team": res.fast_ERT
 }
 
-base1 = Base(base1_config)
 
-base2 = Base({
-    "name": "base2",
-    "queue": res.queue2,
-    "resource": res.TLAMs2,
-    "reload_team": res.fast_ERT
-})
-# print(base1.config.get('reload_team'))
+# base2_config = {
+#     "name": "base2",
+#     "queue": res.queue2,
+#     "resource": res.TLAMs2,
+#     "reload_team": res.fast_ERT
+# }
+base1 = Base(base1_config)
+# base2 = Base(base2_config)
