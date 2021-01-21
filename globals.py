@@ -1,11 +1,12 @@
 import salabim as sim
 
 # Simulation Controls
+TRACE = False
 SIM_LENGTH = 5000
-SIM_SPEED = 200
+SIM_SPEED = 250
 
 # Debugging
-VERBOSE_ALL = 1
+VERBOSE_ALL = 0
 VERBOSE_BASE = 0
 VERBOSE_CONSUMERS = 0
 VERBOSE_SUPPLIERS = 0

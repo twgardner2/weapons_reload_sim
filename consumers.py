@@ -37,18 +37,25 @@ class DDG(sim.Component):
         # self.config.get('base').config.get('resource').print_info()
 
     def animation_objects(self, id):
-        size_x = 50
+        size_x = 60
         size_y = 50
         b = 0.1 * size_x
         # Instances of Animate class:
-        an0 = sim.AnimateRectangle(
-            # spec=(b, 2, xvisitor_dim - b, yvisitor_dim - b),
-            spec=(0, 0, 20, 20),
-            linewidth=0,
-            # fillcolor=direction_color(self.direction),
-            text=str(round(self.config.get('n_consumed'))),
-            # fontsize=xvisitor_dim * 0.7,
-            textcolor="black"
+        # an0 = sim.AnimateRectangle(
+        #     # spec=(b, 2, xvisitor_dim - b, yvisitor_dim - b),
+        #     spec=(0, 0, 20, 20),
+        #     linewidth=0,
+        #     # fillcolor=direction_color(self.direction),
+        #     text='Needs: ' + str(round(self.config.get('n_consumed'))),
+        #     # fontsize=xvisitor_dim * 0.7,
+        #     textcolor="black"
+        # )
+        an0 = sim.AnimateImage(
+            'img/warship2.png',
+            width=50,
+            text='Needs:\n' + str(round(self.config.get('n_consumed'))),
+            text_offsety=-25,
+            textcolor="white"
         )
         return size_x, size_y, an0
 

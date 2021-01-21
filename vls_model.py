@@ -6,7 +6,7 @@ import animation as ani
 
 
 # Setup environment
-env = sim.Environment(time_unit='hours', trace=True)
+env = sim.Environment(time_unit='hours', trace=TRACE)
 # env = sim.Environment(time_units='hours')
 
 
@@ -37,8 +37,19 @@ sup.takeGenerator({
 
 # Animation
 # > Queue length line plot
-sim.AnimateMonitor(queue1.length, x=10, y=450, width=1600,
-                   height=300, horizontal_scale=0.2, vertical_scale=7.5)
+sim.AnimateMonitor(monitor=queue1.length,
+                   x=ani.q_lineplot_x_left,
+                   y=ani.q_lineplot_y_bottom,
+                   width=ani.q_lineplot_width,
+                   height=ani.q_lineplot_height,
+                   horizontal_scale=0.1,
+                   vertical_scale=7.5)
+# > Queue length of stay histogram
+sim.AnimateText(text=lambda: queue1.length_of_stay.print_histogram(as_str=True),
+                x=ani.q_LOS_hist_x_left,
+                y=ani.q_LOS_hist_y_top,
+                text_anchor='nw', font='narrow', fontsize=10)
+
 # Queue1 Animation
 qa0 = sim.AnimateQueue(
     queue1,
@@ -55,8 +66,9 @@ sim.AnimateRectangle(spec=ani.resource_label_spec,
                      text=ani.resource_label_text,
                      arg=TLAMs1)
 
+
 # Run simulation
-env.animation_parameters(animate=True, speed=SIM_SPEED)
+env.animation_parameters(animate=True, speed=SIM_SPEED)  # , width=1500
 
 env.background_color('20%gray')
 env.run(till=SIM_LENGTH)
