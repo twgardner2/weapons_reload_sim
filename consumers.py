@@ -43,7 +43,7 @@ class DDG(sim.Component):
         # Instances of Animate class:
         an0 = sim.AnimateRectangle(
             # spec=(b, 2, xvisitor_dim - b, yvisitor_dim - b),
-            spec=(0, 0, 30, 30),
+            spec=(0, 0, 20, 20),
             linewidth=0,
             # fillcolor=direction_color(self.direction),
             text=str(round(self.config.get('n_consumed'))),

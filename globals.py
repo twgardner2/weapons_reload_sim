@@ -16,7 +16,8 @@ DDG_N_CONSUMED_DIST = sim.Uniform(20, 30)
 
 
 # TAKEs
-TAKE_ARRIVAL_DIST = sim.Uniform(800, 1000)
+# TAKE_ARRIVAL_DIST = sim.Uniform(800, 1000)
+TAKE_ARRIVAL_DIST = sim.Normal(800, 200)
 TAKE_N_SUPPLIED = 200
 
 # ERTs

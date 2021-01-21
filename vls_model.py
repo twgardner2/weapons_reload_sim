@@ -42,7 +42,7 @@ sim.AnimateMonitor(queue1.length, x=10, y=450, width=1600,
 # Queue1 Animation
 qa0 = sim.AnimateQueue(
     queue1,
-    x=ani.queue_x_left,
+    x=ani.queue_x_left + 50,
     y=ani.queue_y_bottom,
     title='Queue of Ships Waiting for Reload at Base 1',
     direction='e',
