@@ -16,13 +16,20 @@ resource_bar_y_top = resource_bar_y_bottom + resource_bar_height
 
 # Label Left and Right x-values #
 resource_bar_label_x_left = margins['left'] + 0
-resource_bar_label_width = 150
+resource_bar_label_width = 250
 resource_bar_label_x_right = resource_bar_label_x_left + resource_bar_label_width
 # Label Specification
 resource_label_spec = (resource_bar_label_x_left,
                        resource_bar_y_bottom,
                        resource_bar_label_x_left + resource_bar_label_width,
                        resource_bar_y_top)
+
+
+def resource_label_text(arg, t):
+    return(
+        f'TLAMs Available: {str(round(arg.available_quantity()))}'
+    )
+
 
 # Bar Left and Right x-values #
 resource_bar_x_left = resource_bar_label_x_right + 10
@@ -48,4 +55,4 @@ def resource_bar_text(arg, t): return(
 
 # Queue Animation
 queue_x_left = margins['left']
-queue_y_bottom = resource_bar_y_top + margins['general']
+queue_y_bottom = resource_bar_y_top + margins['general'] + 40

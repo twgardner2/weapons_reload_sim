@@ -45,7 +45,7 @@ class Base(sim.Component):
                 yield self.passivate()
             print(crayons.blue(
                 f'Number in line: {len(queue)}, front of line: {queue[0]}'))
-            if resource.available_quantity() >= queue[0].config.get('n_consumed').sample():
+            if resource.available_quantity() >= queue[0].config.get('n_consumed'):
                 self.customer = queue.pop()
                 print(crayons.yellow(f'popped customer: {self.customer}'))
                 self.customer.hold(reload_team.reload_time)

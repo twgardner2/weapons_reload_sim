@@ -31,8 +31,26 @@ class ddgGenerator(sim.Component):
 class DDG(sim.Component):
     def __init__(self, config={}):
         sim.Component.__init__(self)
+        n_consumed = config.get('n_consumed_dist').sample()
+        config['n_consumed'] = n_consumed
         self.config = config
         # self.config.get('base').config.get('resource').print_info()
+
+    def animation_objects(self, id):
+        size_x = 50
+        size_y = 50
+        b = 0.1 * size_x
+        # Instances of Animate class:
+        an0 = sim.AnimateRectangle(
+            # spec=(b, 2, xvisitor_dim - b, yvisitor_dim - b),
+            spec=(0, 0, 30, 30),
+            linewidth=0,
+            # fillcolor=direction_color(self.direction),
+            text=str(round(self.config.get('n_consumed'))),
+            # fontsize=xvisitor_dim * 0.7,
+            textcolor="black"
+        )
+        return size_x, size_y, an0
 
     def process(self):
         # Destructure the config dict
@@ -47,17 +65,10 @@ class DDG(sim.Component):
             print(
                 crayons.blue(f'DDG arrived, requesting {n_consumed} resources, number in line: {len(base.config.get("queue"))}'))
 
-        # # Enter the queue for resources at the assigned base
-        # yield self.hold(base.config.get('reload_team').reload_time)
-        # yield self.request((base.config.get('resource'), n_consumed))
-        # yield self.passivate()
-
-        # for ship in base.config.get('queue'):
-        #     print(ship)
         if base.ispassive():
             base.activate()
 
         yield self.passivate()
         # yield self.hold(base.config.get('reload_team').reload_time)
-        yield self.request((base.config.get('resource'), n_consumed.sample()))
+        yield self.request((base.config.get('resource'), n_consumed))
         yield self.hold(float('inf'))

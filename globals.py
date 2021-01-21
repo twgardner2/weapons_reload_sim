@@ -1,5 +1,9 @@
 import salabim as sim
 
+# Simulation Controls
+SIM_LENGTH = 5000
+SIM_SPEED = 200
+
 # Debugging
 VERBOSE_ALL = 1
 VERBOSE_BASE = 0
@@ -8,12 +12,12 @@ VERBOSE_SUPPLIERS = 0
 
 # DDG
 DDG_ARRIVAL_DIST = sim.Uniform(60, 110)
-DDG_N_CONSUMED = sim.Uniform(20)
+DDG_N_CONSUMED_DIST = sim.Uniform(20, 30)
 
 
 # TAKEs
-TAKE_ARRIVAL_DIST = sim.Uniform(700, 1000)
-TAKE_N_SUPPLIED = 8 * 36
+TAKE_ARRIVAL_DIST = sim.Uniform(800, 1000)
+TAKE_N_SUPPLIED = 200
 
 # ERTs
 NUM_FAST_ERT = 3
