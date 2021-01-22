@@ -18,19 +18,33 @@ class takeGenerator(sim.Component):
     def process(self):
 
         # Destructure config
-        arrival_dist, resource, n_supplied = itemgetter(
-            'arrival_dist', 'resource', 'n_supplied')(self.config)
+        gen_dist, gen_time, resource, n_supplied, env = itemgetter(
+            'gen_dist', 'gen_time', 'resource', 'n_supplied', 'env')(self.config)
 
-        # Generate objects
-        i = 0
-        while i > -1:
-            if i < 1:
-                # TAKE(self.config)  # remove
-                yield self.hold(arrival_dist.sample())
-            else:
+        # Generate objects: If distribution is defined, overrides times
+        if gen_dist:        # Generate based on distribution
+            i = 1
+            while i > 0:
+                if verbose:
+                    print(crayons.green(
+                        f'{round(env.now(), 2)}: Generating a T-AKE based on distribution:\n {gen_dist.print_info(as_str=True)}', bold=True))
+                TAKE(self.config) if i > 1 else print(
+                    'skipping generating T-AKE on first loop')
+                yield self.hold(gen_dist.sample())
+                i += 1
+
+        else:               # Generate at predefined times
+            yield self.hold(gen_time.pop(0) - env.now())
+            if verbose:
+                print(crayons.green(
+                    f'{round(env.now(), 2)}: Generating a T-AKE based on time', bold=True))
+            TAKE(self.config)
+            while len(gen_time) > 0:
+                yield self.hold(gen_time.pop(0) - env.now())
+                if verbose:
+                    print(crayons.green(
+                        f'{round(env.now(), 2)}: Generating a T-AKE based on time', bold=True))
                 TAKE(self.config)
-                yield self.hold(arrival_dist.sample())
-            i += 1
 
 
 class TAKE(sim.Component):

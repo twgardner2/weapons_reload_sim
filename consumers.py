@@ -39,7 +39,6 @@ class ddgGenerator(sim.Component):
             DDG(self.config)
             while len(gen_time) > 0:
                 yield self.hold(gen_time.pop(0) - env.now())
-
                 if verbose:
                     print(crayons.green(
                         f'{round(env.now(), 2)}: Generating a DDG based on time', bold=True))

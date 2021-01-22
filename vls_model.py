@@ -31,7 +31,9 @@ con.ddgGenerator(ddgGenerator1_config)
 # con.ddgGenerator(ddgGenerator2_config)
 
 sup.takeGenerator({
-    'arrival_dist': TAKE_ARRIVAL_DIST,
+    'env': env,
+    'gen_dist': TAKE_GENERATION_DIST,
+    'gen_time': TAKE_GENERATION_TIMES,
     'resource': TLAMs1,
     'n_supplied': TAKE_N_SUPPLIED,
 })
