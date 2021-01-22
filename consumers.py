@@ -18,14 +18,32 @@ class ddgGenerator(sim.Component):
 
     def process(self):
         # Destructure the config dict
-        gen_dist, base = itemgetter('gen_dist', 'base')(self.config)
+        gen_dist, gen_time, base, env = itemgetter(
+            'gen_dist', 'gen_time', 'base', 'env')(self.config)
 
-        # Generate objects
-        i = 0
-        while i > -1:
+        # Generate objects: If distribution is defined, overrides times
+
+        if gen_dist:        # Generate based on distribution
+            while True:
+                if verbose:
+                    print(crayons.green(
+                        f'{round(env.now(), 2)}: Generating a DDG based on distribution:\n {gen_dist.print_info(as_str=True)}', bold=True))
+                DDG(self.config)
+                yield self.hold(gen_dist.sample())
+
+        else:               # Generate at predefined times
+            yield self.hold(gen_time.pop(0) - env.now())
+            if verbose:
+                print(crayons.green(
+                    f'{round(env.now(), 2)}: Generating a DDG based on time', bold=True))
             DDG(self.config)
-            yield self.hold(gen_dist.sample())
-            i += 1
+            while len(gen_time) > 0:
+                yield self.hold(gen_time.pop(0) - env.now())
+
+                if verbose:
+                    print(crayons.green(
+                        f'{round(env.now(), 2)}: Generating a DDG based on time', bold=True))
+                DDG(self.config)
 
 
 class DDG(sim.Component):
@@ -61,8 +79,8 @@ class DDG(sim.Component):
 
     def process(self):
         # Destructure the config dict
-        _, base, n_consumed = itemgetter(
-            'gen_dist', 'base', 'n_consumed')(self.config)
+        base, n_consumed = itemgetter(
+            'base', 'n_consumed')(self.config)
 
         # Enter the queue for resources at the assigned base
         self.enter(base.config.get('queue'))

@@ -16,7 +16,9 @@ from resources import TLAMs, TLAMs1, TLAMs2, queue1, queue2, fast_ERT, slow_ERT
 import bases
 
 ddgGenerator1_config = {
-    'gen_dist': DDG_ARRIVAL_DIST,
+    'env': env,
+    'gen_dist': DDG_GENERATION_DIST,
+    'gen_time': DDG_GENERATION_TIMES,
     'base': bases.base1,
     'n_consumed_dist': DDG_N_CONSUMED_DIST,
 }
@@ -68,7 +70,7 @@ sim.AnimateRectangle(spec=ani.resource_label_spec,
 
 
 # Run simulation
-env.animation_parameters(animate=True, speed=SIM_SPEED)  # , width=1500
+env.animation_parameters(animate=ANIMATE, speed=SIM_SPEED)  # , width=1500
 
 env.background_color('20%gray')
 env.run(till=SIM_LENGTH)
