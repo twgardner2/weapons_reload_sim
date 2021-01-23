@@ -2,11 +2,11 @@ import salabim as sim
 import crayons
 
 margins = {
-    "top": 10,
-    "bottom": 10,
-    "left": 10,
-    "right": 10,
-    "general": 10
+    'top': 10,
+    'bottom': 10,
+    'left': 10,
+    'right': 10,
+    'general': 10
 }
 
 # ***** Queue Length Line Plot Parameters *****

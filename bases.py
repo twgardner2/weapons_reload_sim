@@ -55,18 +55,19 @@ class Base(sim.Component):
 
 
 guam_config = {
-    "name": "Guam",
-    "queue": res.queue1,
-    "resource": res.TLAMs1,
-    "reload_team": res.fast_ERT
+    'name': 'Guam',
+    'queue': res.queue1,
+    'resource': res.TLAMs1,
+    'reload_team': res.fast_ERT,
+    'num_piers': 2,
 }
 GUAM = Base(guam_config)
 
 
 dgar_config = {
-    "name": "Diego Garcia",
-    "queue": res.queue2,
-    "resource": res.TLAMs2,
-    "reload_team": res.fast_ERT
+    'name': 'Diego Garcia',
+    'queue': res.queue2,
+    'resource': res.TLAMs2,
+    'reload_team': res.fast_ERT
 }
 DGAR = Base(dgar_config)
