@@ -10,25 +10,26 @@ env = sim.Environment(time_unit='hours', trace=TRACE)
 # env = sim.Environment(time_units='hours')
 
 
-# Import resources
+### Resources ##################################################################
 from resources import TLAMs, TLAMs1, TLAMs2, queue1, queue2, fast_ERT, slow_ERT
-# Import bases
+
+### Bases ######################################################################
 import bases
 
-ConsumerGenerator1_config = {
+### Consumers ##################################################################
+# CRUDESs arriving at Guam
+GU_CRUDES_CustGen_config = {
+    'description': 'Cruisers and Destroyers arriving at Guam for resupply',
     'env': env,
     'gen_dist': CONSUMER_GENERATION_DIST,
     'gen_time': CONSUMER_GENERATION_TIMES,
     'base': bases.base1,
     'n_consumed_dist': CONSUMER_N_CONSUMED_DIST,
 }
-# ConsumerGenerator2_config = {
-#     'gen_dist': Consumer_ARRIVAL_DIST,
-#     'base': bases.base2,
-#     'n_consumed_dist': CONSUMER_N_CONSUMED_DIST,
-# }
-con.ConsumerGenerator(ConsumerGenerator1_config)
-# con.ConsumerGenerator(ConsumerGenerator2_config)
+GU_CRUDES_CustGen = con.ConsumerGenerator(
+    GU_CRUDES_CustGen_config)
+
+### Suppliers ##################################################################
 
 sup.SupplierGenerator({
     'env': env,
