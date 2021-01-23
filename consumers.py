@@ -7,14 +7,14 @@ import crayons
 verbose = VERBOSE_ALL or VERBOSE_CONSUMERS
 
 
-class ddgGenerator(sim.Component):
+class ConsumerGenerator(sim.Component):
     def __init__(self, config={}):
         sim.Component.__init__(self)
         self.config = config
 
         # Debug
         if verbose:
-            print(f'creating a ddgGenerator, config: {config}')
+            print(f'creating a ConsumerGenerator, config: {config}')
 
     def process(self):
         # Destructure the config dict
@@ -27,25 +27,25 @@ class ddgGenerator(sim.Component):
             while True:
                 if verbose:
                     print(crayons.green(
-                        f'{round(env.now(), 2)}: Generating a DDG based on distribution:\n {gen_dist.print_info(as_str=True)}', bold=True))
-                DDG(self.config)
+                        f'{round(env.now(), 2)}: Generating a Consumer based on distribution:\n {gen_dist.print_info(as_str=True)}', bold=True))
+                Consumer(self.config)
                 yield self.hold(gen_dist.sample())
 
         else:               # Generate at predefined times
             yield self.hold(gen_time.pop(0) - env.now())
             if verbose:
                 print(crayons.green(
-                    f'{round(env.now(), 2)}: Generating a DDG based on time', bold=True))
-            DDG(self.config)
+                    f'{round(env.now(), 2)}: Generating a Consumer based on time', bold=True))
+            Consumer(self.config)
             while len(gen_time) > 0:
                 yield self.hold(gen_time.pop(0) - env.now())
                 if verbose:
                     print(crayons.green(
-                        f'{round(env.now(), 2)}: Generating a DDG based on time', bold=True))
-                DDG(self.config)
+                        f'{round(env.now(), 2)}: Generating a Consumer based on time', bold=True))
+                Consumer(self.config)
 
 
-class DDG(sim.Component):
+class Consumer(sim.Component):
     def __init__(self, config={}):
         sim.Component.__init__(self)
         n_consumed = config.get('n_consumed_dist').sample()
@@ -87,7 +87,7 @@ class DDG(sim.Component):
         # Debugging
         if verbose:
             print(
-                crayons.blue(f'DDG arrived, requesting {n_consumed} resources, number in line: {len(base.config.get("queue"))}'))
+                crayons.blue(f'Consumer arrived, requesting {n_consumed} resources, number in line: {len(base.config.get("queue"))}'))
 
         if base.ispassive():
             base.activate()

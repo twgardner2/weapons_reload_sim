@@ -15,27 +15,27 @@ from resources import TLAMs, TLAMs1, TLAMs2, queue1, queue2, fast_ERT, slow_ERT
 # Import bases
 import bases
 
-ddgGenerator1_config = {
+ConsumerGenerator1_config = {
     'env': env,
-    'gen_dist': DDG_GENERATION_DIST,
-    'gen_time': DDG_GENERATION_TIMES,
+    'gen_dist': CONSUMER_GENERATION_DIST,
+    'gen_time': CONSUMER_GENERATION_TIMES,
     'base': bases.base1,
-    'n_consumed_dist': DDG_N_CONSUMED_DIST,
+    'n_consumed_dist': CONSUMER_N_CONSUMED_DIST,
 }
-# ddgGenerator2_config = {
-#     'gen_dist': DDG_ARRIVAL_DIST,
+# ConsumerGenerator2_config = {
+#     'gen_dist': Consumer_ARRIVAL_DIST,
 #     'base': bases.base2,
-#     'n_consumed_dist': DDG_N_CONSUMED_DIST,
+#     'n_consumed_dist': CONSUMER_N_CONSUMED_DIST,
 # }
-con.ddgGenerator(ddgGenerator1_config)
-# con.ddgGenerator(ddgGenerator2_config)
+con.ConsumerGenerator(ConsumerGenerator1_config)
+# con.ConsumerGenerator(ConsumerGenerator2_config)
 
-sup.takeGenerator({
+sup.SupplierGenerator({
     'env': env,
-    'gen_dist': TAKE_GENERATION_DIST,
-    'gen_time': TAKE_GENERATION_TIMES,
+    'gen_dist': SUPPLIER_GENERATION_DIST,
+    'gen_time': SUPPLIER_GENERATION_TIMES,
     'resource': TLAMs1,
-    'n_supplied': TAKE_N_SUPPLIED,
+    'n_supplied': SUPPLIER_N_SUPPLIED,
 })
 
 

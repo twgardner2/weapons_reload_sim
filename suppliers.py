@@ -7,7 +7,7 @@ import crayons
 verbose = VERBOSE_ALL or VERBOSE_SUPPLIERS
 
 
-class takeGenerator(sim.Component):
+class SupplierGenerator(sim.Component):
     # def __init__(self, resource, n_supplied=1):
     def __init__(self, config={}):
         sim.Component.__init__(self)
@@ -28,7 +28,7 @@ class takeGenerator(sim.Component):
                 if verbose:
                     print(crayons.green(
                         f'{round(env.now(), 2)}: Generating a T-AKE based on distribution:\n {gen_dist.print_info(as_str=True)}', bold=True))
-                TAKE(self.config) if i > 1 else print(
+                Supplier(self.config) if i > 1 else print(
                     'skipping generating T-AKE on first loop')
                 yield self.hold(gen_dist.sample())
                 i += 1
@@ -38,16 +38,16 @@ class takeGenerator(sim.Component):
             if verbose:
                 print(crayons.green(
                     f'{round(env.now(), 2)}: Generating a T-AKE based on time', bold=True))
-            TAKE(self.config)
+            Supplier(self.config)
             while len(gen_time) > 0:
                 yield self.hold(gen_time.pop(0) - env.now())
                 if verbose:
                     print(crayons.green(
                         f'{round(env.now(), 2)}: Generating a T-AKE based on time', bold=True))
-                TAKE(self.config)
+                Supplier(self.config)
 
 
-class TAKE(sim.Component):
+class Supplier(sim.Component):
     def __init__(self, config={}):
         sim.Component.__init__(self)
         self.config = config
@@ -59,7 +59,7 @@ class TAKE(sim.Component):
             'resource', 'n_supplied')(self.config)
         if verbose:
             print(crayons.green(
-                f'TAKE arrived, supplying {n_supplied} resources'))
+                f'Supplier arrived, supplying {n_supplied} resources'))
         resource.set_capacity(resource.capacity() + n_supplied)
         # self.resource.set_capacity(self.resource.capacity() + 0)
         yield self.hold()
