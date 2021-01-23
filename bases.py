@@ -54,19 +54,19 @@ class Base(sim.Component):
                 yield self.passivate()
 
 
-base1_config = {
-    "name": "base1",
+guam_config = {
+    "name": "Guam",
     "queue": res.queue1,
     "resource": res.TLAMs1,
     "reload_team": res.fast_ERT
 }
+GUAM = Base(guam_config)
 
 
-# base2_config = {
-#     "name": "base2",
-#     "queue": res.queue2,
-#     "resource": res.TLAMs2,
-#     "reload_team": res.fast_ERT
-# }
-base1 = Base(base1_config)
-# base2 = Base(base2_config)
+dgar_config = {
+    "name": "Diego Garcia",
+    "queue": res.queue2,
+    "resource": res.TLAMs2,
+    "reload_team": res.fast_ERT
+}
+DGAR = Base(dgar_config)

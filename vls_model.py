@@ -23,7 +23,7 @@ GU_CRUDES_CustGen_config = {
     'env': env,
     'gen_dist': CONSUMER_GENERATION_DIST,
     'gen_time': CONSUMER_GENERATION_TIMES,
-    'base': bases.base1,
+    'base': bases.GUAM,
     'n_consumed_dist': CONSUMER_N_CONSUMED_DIST,
 }
 GU_CRUDES_CustGen = con.ConsumerGenerator(
