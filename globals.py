@@ -3,7 +3,7 @@ import salabim as sim
 # Simulation Controls
 TRACE = 1
 SIM_LENGTH = 5000
-SIM_SPEED = 250
+SIM_SPEED = 450
 ANIMATE = 1
 
 # Debugging
