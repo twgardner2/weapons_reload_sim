@@ -10,8 +10,8 @@ TLAMs = sim.Resource('TLAMs', 0)
 TLAMs1 = sim.Resource('TLAMs1', 0)
 TLAMs2 = sim.Resource('TLAMs2', 0)
 
-queue1 = sim.Queue('queue1')  # TLAMs1
-queue2 = sim.Queue('queue2')  # TLAMs2
+# queue1 = sim.Queue('queue1')  # TLAMs1
+# queue2 = sim.Queue('queue2')  # TLAMs2
 
 fast_ERT = sim.Resource('fast_ERT', capacity=NUM_FAST_ERT)
 fast_ERT.reload_time = FAST_ERT_RELOAD_TIME

@@ -16,12 +16,12 @@ class Base(sim.Component):
         if verbose:
             print(f'creating a BASE, config: {config}')
 
-        # Attach config to self to pass to process
-        self.config = config
-
         # Destructure config
-        name, queue, resource, reload_team = itemgetter(
-            'name', 'queue', 'resource', 'reload_team')(config)
+        name, resource, reload_team = itemgetter(
+            'name', 'resource', 'reload_team')(config)
+
+        # Create queue for consumers
+        config['queue'] = sim.Queue(name)
 
         # Consume the assigned reload_team resource
         if reload_team.available_quantity() > 1:
@@ -29,6 +29,9 @@ class Base(sim.Component):
         else:
             raise Exception(
                 f'not enough ERTs. {self} tried to request reload_team {reload_team} but there are none')
+
+        # Attach config to self to pass to process
+        self.config = config
 
     def process(self):
         # Destructure config
@@ -47,7 +50,8 @@ class Base(sim.Component):
                 f'Number in line: {len(queue)}, front of line: {queue[0]}'))
             if resource.available_quantity() >= queue[0].config.get('n_consumed'):
                 self.customer = queue.pop()
-                print(crayons.yellow(f'popped customer: {self.customer}'))
+                print(crayons.yellow(
+                    f'popped customer: {self.customer}, resources: {resource.available_quantity()}'))
                 self.customer.hold(reload_team.reload_time)
                 yield self.hold(reload_team.reload_time)
             else:
@@ -56,18 +60,17 @@ class Base(sim.Component):
 
 guam_config = {
     'name': 'Guam',
-    'queue': res.queue1,
     'resource': res.TLAMs1,
     'reload_team': res.fast_ERT,
     'num_piers': 2,
 }
-GUAM = Base(guam_config)
+Guam = Base(guam_config)
 
 
-dgar_config = {
-    'name': 'Diego Garcia',
-    'queue': res.queue2,
-    'resource': res.TLAMs2,
-    'reload_team': res.fast_ERT
-}
-DGAR = Base(dgar_config)
+# dgar_config = {
+#     'name': 'Diego Garcia',
+#     'queue': res.queue2,
+#     'resource': res.TLAMs2,
+#     'reload_team': res.fast_ERT
+# }
+# DGAR = Base(dgar_config)
