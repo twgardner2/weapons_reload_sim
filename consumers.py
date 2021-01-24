@@ -72,12 +72,12 @@ class Consumer(sim.Component):
             'base', 'n_consumed')(self.config)
 
         # Enter the queue for resources at the assigned base
-        self.enter(base.config.get('queue'))
+        self.enter(base.queue)
 
         # Debugging
         if verbose:
             print(
-                crayons.blue(f'Consumer arrived, requesting {n_consumed} resources, number in line: {len(base.config.get("queue"))}'))
+                crayons.blue(f'Consumer arrived, requesting {n_consumed} resources, number in line: {len(base.queue)}'))
 
         if base.ispassive():
             base.activate()

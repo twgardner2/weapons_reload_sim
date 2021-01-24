@@ -44,7 +44,7 @@ sup.SupplierGenerator({
 
 # Animation
 # > Queue length line plot
-sim.AnimateMonitor(monitor=bases.Guam.config.get('queue').length,
+sim.AnimateMonitor(monitor=bases.Guam.queue.length,
                    x=ani.q_lineplot_x_left,
                    y=ani.q_lineplot_y_bottom,
                    width=ani.q_lineplot_width,
@@ -52,7 +52,7 @@ sim.AnimateMonitor(monitor=bases.Guam.config.get('queue').length,
                    horizontal_scale=0.1,
                    vertical_scale=7.5)
 # > Queue length of stay histogram
-sim.AnimateText(text=lambda: bases.Guam.config.get('queue').length_of_stay.print_histogram(as_str=True),
+sim.AnimateText(text=lambda: bases.Guam.queue.length_of_stay.print_histogram(as_str=True),
                 x=ani.q_LOS_hist_x_left,
                 y=ani.q_LOS_hist_y_top,
                 text_anchor='nw',
@@ -61,7 +61,7 @@ sim.AnimateText(text=lambda: bases.Guam.config.get('queue').length_of_stay.print
 
 # Guam Animation
 qa0 = sim.AnimateQueue(
-    bases.Guam.config.get('queue'),
+    queue=bases.Guam.queue,
     x=ani.queue_x_left + 50,
     y=ani.queue_y_bottom,
     title='Queue of Ships Waiting for Reload at Base 1',
@@ -69,7 +69,6 @@ qa0 = sim.AnimateQueue(
     id='blue',
 )
 sim.AnimateRectangle(spec=ani.resource_bar_spec,
-                     #  text=ani.resource_bar_text,
                      arg=TLAMs1)
 sim.AnimateRectangle(spec=ani.resource_label_spec,
                      text=ani.resource_label_text,

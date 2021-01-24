@@ -21,7 +21,8 @@ class Base(sim.Component):
             'name', 'resource', 'reload_team')(config)
 
         # Create queue for consumers
-        config['queue'] = sim.Queue(name)
+        # config['queue'] = sim.Queue(name)
+        self.queue = sim.Queue(name)
 
         # Consume the assigned reload_team resource
         if reload_team.available_quantity() > 1:
@@ -35,8 +36,8 @@ class Base(sim.Component):
 
     def process(self):
         # Destructure config
-        name, queue, resource, reload_team = itemgetter(
-            'name', 'queue', 'resource', 'reload_team')(self.config)
+        name, resource, reload_team = itemgetter(
+            'name', 'resource', 'reload_team')(self.config)
 
         # Run process
         while True:
@@ -44,12 +45,12 @@ class Base(sim.Component):
                 print(
                     crayons.red(f'Available resources, {resource} at base {self}: {resource.available_quantity()}'))
             # While no ship in line, passivate
-            while len(queue) == 0:
+            while len(self.queue) == 0:
                 yield self.passivate()
             print(crayons.blue(
-                f'Number in line: {len(queue)}, front of line: {queue[0]}'))
-            if resource.available_quantity() >= queue[0].config.get('n_consumed'):
-                self.customer = queue.pop()
+                f'Number in line: {len(self.queue)}, front of line: {self.queue[0]}'))
+            if resource.available_quantity() >= self.queue[0].config.get('n_consumed'):
+                self.customer = self.queue.pop()
                 print(crayons.yellow(
                     f'popped customer: {self.customer}, resources: {resource.available_quantity()}'))
                 self.customer.hold(reload_team.reload_time)
