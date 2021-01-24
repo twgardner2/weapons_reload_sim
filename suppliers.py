@@ -18,8 +18,6 @@ class SupplierGenerator(sim.Component):
     def process(self):
 
         # Destructure config
-        # gen_dist, gen_time, resource, n_supplied, env, base = itemgetter(
-        #     'gen_dist', 'gen_time', 'resource', 'n_supplied', 'env', 'base')(self.config)
         gen_dist, gen_time, n_supplied, env, base = itemgetter(
             'gen_dist', 'gen_time', 'n_supplied', 'env', 'base')(self.config)
 
