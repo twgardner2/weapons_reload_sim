@@ -67,9 +67,8 @@ guam_config = {
 Guam = Base(guam_config)
 
 
-# dgar_config = {
-#     'name': 'Diego Garcia',
-#     'queue': res.queue2,
-#     'reload_team': res.fast_ERT
-# }
-# DGAR = Base(dgar_config)
+dgar_config = {
+    'name': 'Diego Garcia',
+    'reload_team': res.fast_ERT
+}
+DGar = Base(dgar_config)

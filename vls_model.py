@@ -3,7 +3,7 @@ import consumers as con
 import suppliers as sup
 from globals import *
 import animation as ani
-
+import weakref
 
 # Setup environment
 env = sim.Environment(time_unit='hours', trace=TRACE)
@@ -30,18 +30,35 @@ GU_CRUDES_CustGen_config = {
 GU_CRUDES_CustGen = con.ConsumerGenerator(
     GU_CRUDES_CustGen_config)
 
+# CRUDESs arriving at Guam
+DGar_CRUDES_CustGen_config = {
+    'description': 'Cruisers and Destroyers arriving at Diego Garcia for resupply',
+    'env': env,
+    'gen_dist': CONSUMER_GENERATION_DIST,
+    'gen_time': CONSUMER_GENERATION_TIMES,
+    'base': bases.DGar,
+    'n_consumed_dist': CONSUMER_N_CONSUMED_DIST,
+}
+DGar_CRUDES_CustGen = con.ConsumerGenerator(
+    DGar_CRUDES_CustGen_config)
+
 ### Suppliers ##################################################################
 
-sup.SupplierGenerator({
+GU_TAKE_Generator = sup.SupplierGenerator({
     'env': env,
     'base': bases.Guam,
     'gen_dist': SUPPLIER_GENERATION_DIST,
     'gen_time': SUPPLIER_GENERATION_TIMES,
-    # 'resource': TLAMs1,
     'n_supplied': SUPPLIER_N_SUPPLIED,
 })
 
-
+DGar_TAKE_Generator = sup.SupplierGenerator({
+    'env': env,
+    'base': bases.DGar,
+    'gen_dist': SUPPLIER_GENERATION_DIST,
+    'gen_time': SUPPLIER_GENERATION_TIMES,
+    'n_supplied': SUPPLIER_N_SUPPLIED,
+})
 # Animation
 # > Queue length line plot
 sim.AnimateMonitor(monitor=bases.Guam.queue.length,
@@ -75,6 +92,10 @@ sim.AnimateRectangle(spec=ani.resource_label_spec,
                      arg=bases.Guam.resource)
 
 
+### Monitors# ##################################################################
+# all_queues_length = bases.Guam.queue.length.merge(bases.DGar.queue.length)
+all_queues_length = bases.Guam.queue.length + bases.DGar.queue.length
+
 # Run simulation
 env.animation_parameters(animate=ANIMATE, speed=SIM_SPEED)  # , width=1500
 
@@ -100,3 +121,11 @@ env.run(till=SIM_LENGTH)
 
 # queue2.length_of_stay.print_histogram()
 # queue2.print_info()
+
+bases.Guam.queue.length.print_histogram()
+bases.DGar.queue.length.print_histogram()
+# print(all_queues_length)
+# all_queues_length.print_histogram()
+bases.Guam.queue.length.merge(
+    bases.DGar.queue.length, name='combined queues').print_histogram()
+all_queues_length.print_histogram()
