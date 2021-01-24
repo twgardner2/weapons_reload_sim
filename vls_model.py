@@ -12,7 +12,6 @@ env.animate_debug(True)
 
 
 ### Resources ##################################################################
-# from resources import TLAMs, TLAMs1, TLAMs2, queue1, queue2, fast_ERT, slow_ERT
 from resources import *
 
 ### Bases ######################################################################
@@ -35,9 +34,10 @@ GU_CRUDES_CustGen = con.ConsumerGenerator(
 
 sup.SupplierGenerator({
     'env': env,
+    'base': bases.Guam,
     'gen_dist': SUPPLIER_GENERATION_DIST,
     'gen_time': SUPPLIER_GENERATION_TIMES,
-    'resource': TLAMs1,
+    # 'resource': TLAMs1,
     'n_supplied': SUPPLIER_N_SUPPLIED,
 })
 
@@ -69,10 +69,10 @@ qa0 = sim.AnimateQueue(
     id='blue',
 )
 sim.AnimateRectangle(spec=ani.resource_bar_spec,
-                     arg=TLAMs1)
+                     arg=bases.Guam.resource)
 sim.AnimateRectangle(spec=ani.resource_label_spec,
                      text=ani.resource_label_text,
-                     arg=TLAMs1)
+                     arg=bases.Guam.resource)
 
 
 # Run simulation

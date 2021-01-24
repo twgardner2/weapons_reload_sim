@@ -17,12 +17,12 @@ class Base(sim.Component):
             print(f'creating a BASE, config: {config}')
 
         # Destructure config
-        name, resource, reload_team = itemgetter(
-            'name', 'resource', 'reload_team')(config)
+        name, reload_team = itemgetter(
+            'name', 'reload_team')(config)
 
-        # Create queue for consumers
-        # config['queue'] = sim.Queue(name)
-        self.queue = sim.Queue(name)
+        # Create queue and resource for consumers
+        self.queue = sim.Queue(f'{name}_queue')
+        self.resource = sim.Resource(f'{name}_resource', 0)
 
         # Consume the assigned reload_team resource
         if reload_team.available_quantity() > 1:
@@ -36,23 +36,23 @@ class Base(sim.Component):
 
     def process(self):
         # Destructure config
-        name, resource, reload_team = itemgetter(
-            'name', 'resource', 'reload_team')(self.config)
+        name, reload_team = itemgetter(
+            'name', 'reload_team')(self.config)
 
         # Run process
         while True:
             if verbose:
                 print(
-                    crayons.red(f'Available resources, {resource} at base {self}: {resource.available_quantity()}'))
+                    crayons.red(f'Available resources, {self.resource} at base {self}: {self.resource.available_quantity()}'))
             # While no ship in line, passivate
             while len(self.queue) == 0:
                 yield self.passivate()
             print(crayons.blue(
                 f'Number in line: {len(self.queue)}, front of line: {self.queue[0]}'))
-            if resource.available_quantity() >= self.queue[0].config.get('n_consumed'):
+            if self.resource.available_quantity() >= self.queue[0].config.get('n_consumed'):
                 self.customer = self.queue.pop()
                 print(crayons.yellow(
-                    f'popped customer: {self.customer}, resources: {resource.available_quantity()}'))
+                    f'popped customer: {self.customer}, resources: {self.resource.available_quantity()}'))
                 self.customer.hold(reload_team.reload_time)
                 yield self.hold(reload_team.reload_time)
             else:
@@ -61,7 +61,6 @@ class Base(sim.Component):
 
 guam_config = {
     'name': 'Guam',
-    'resource': res.TLAMs1,
     'reload_team': res.fast_ERT,
     'num_piers': 2,
 }
@@ -71,7 +70,6 @@ Guam = Base(guam_config)
 # dgar_config = {
 #     'name': 'Diego Garcia',
 #     'queue': res.queue2,
-#     'resource': res.TLAMs2,
 #     'reload_team': res.fast_ERT
 # }
 # DGAR = Base(dgar_config)

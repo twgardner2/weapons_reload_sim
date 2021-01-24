@@ -18,8 +18,10 @@ class SupplierGenerator(sim.Component):
     def process(self):
 
         # Destructure config
-        gen_dist, gen_time, resource, n_supplied, env = itemgetter(
-            'gen_dist', 'gen_time', 'resource', 'n_supplied', 'env')(self.config)
+        # gen_dist, gen_time, resource, n_supplied, env, base = itemgetter(
+        #     'gen_dist', 'gen_time', 'resource', 'n_supplied', 'env', 'base')(self.config)
+        gen_dist, gen_time, n_supplied, env, base = itemgetter(
+            'gen_dist', 'gen_time', 'n_supplied', 'env', 'base')(self.config)
 
         # Generate objects: If distribution is defined, overrides times
         if gen_dist:        # Generate based on distribution
@@ -27,9 +29,9 @@ class SupplierGenerator(sim.Component):
             while i > 0:
                 if verbose:
                     print(crayons.green(
-                        f'{round(env.now(), 2)}: Generating a T-AKE based on distribution:\n {gen_dist.print_info(as_str=True)}', bold=True))
+                        f'{round(env.now(), 2)}: Generating a Supplier based on distribution:\n {gen_dist.print_info(as_str=True)}', bold=True))
                 Supplier(self.config) if i > 1 else print(
-                    'skipping generating T-AKE on first loop')
+                    'skipping generating Supplier on first loop')
                 yield self.hold(gen_dist.sample())
                 i += 1
 
@@ -37,13 +39,13 @@ class SupplierGenerator(sim.Component):
             yield self.hold(gen_time.pop(0) - env.now())
             if verbose:
                 print(crayons.green(
-                    f'{round(env.now(), 2)}: Generating a T-AKE based on time', bold=True))
+                    f'{round(env.now(), 2)}: Generating a Supplier based on time', bold=True))
             Supplier(self.config)
             while len(gen_time) > 0:
                 yield self.hold(gen_time.pop(0) - env.now())
                 if verbose:
                     print(crayons.green(
-                        f'{round(env.now(), 2)}: Generating a T-AKE based on time', bold=True))
+                        f'{round(env.now(), 2)}: Generating a Supplier based on time', bold=True))
                 Supplier(self.config)
 
 
@@ -55,13 +57,12 @@ class Supplier(sim.Component):
     def process(self):
 
         # Destructure config
-        resource, n_supplied = itemgetter(
-            'resource', 'n_supplied')(self.config)
+        n_supplied, base = itemgetter(
+            'n_supplied', 'base')(self.config)
         if verbose:
             print(crayons.green(
                 f'Supplier arrived, supplying {n_supplied} resources'))
-        resource.set_capacity(resource.capacity() + n_supplied)
-        # self.resource.set_capacity(self.resource.capacity() + 0)
+        base.resource.set_capacity(base.resource.capacity() + n_supplied)
         yield self.hold()
 
 
