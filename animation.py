@@ -57,21 +57,23 @@ resource_bar_x_left = resource_bar_label_x_right + 10
 resource_bar_width = 1000
 resource_bar_x_right = resource_bar_x_left + resource_bar_width
 
-# Bar Specification function
+
+def resource_bar_spec(arg, t):
+    '''Bar Specification function'''
+
+    return (
+        resource_bar_x_left,
+        resource_bar_y_bottom,
+        resource_bar_x_left + 2 * arg.available_quantity(),
+        resource_bar_y_top)
 
 
-def resource_bar_spec(arg, t): return (
-    resource_bar_x_left,
-    resource_bar_y_bottom,
-    resource_bar_x_left + 2 * arg.available_quantity(),
-    resource_bar_y_top)
+def resource_bar_text(arg, t):
+    '''Bar text specification function'''
 
-# Bar text specification function
-
-
-def resource_bar_text(arg, t): return(
-    str(round(arg.available_quantity()))
-)
+    return(
+        str(round(arg.available_quantity()))
+    )
 
 
 # Queue Animation

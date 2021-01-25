@@ -58,17 +58,18 @@ Okinawa_CRUDES_CustGen = con.ConsumerGenerator(
 GU_TAKE_Generator = sup.SupplierGenerator({
     'env': env,
     'base': bases.Guam,
-    'gen_dist': SUPPLIER_GENERATION_DIST,
-    'gen_time': SUPPLIER_GENERATION_TIMES,
-    'n_supplied': SUPPLIER_N_SUPPLIED,
+    # 'gen_dist': SUPPLIER_GENERATION_DIST,
+    'gen_dist': None,
+    'gen_time': [100, 500, 700],
+    'n_supplied': TAKE_N_SUPPLIED,
 })
 
 DGar_TAKE_Generator = sup.SupplierGenerator({
     'env': env,
     'base': bases.DGar,
     'gen_dist': SUPPLIER_GENERATION_DIST,
-    'gen_time': SUPPLIER_GENERATION_TIMES,
-    'n_supplied': SUPPLIER_N_SUPPLIED,
+    'gen_time': None,
+    'n_supplied': TAKE_N_SUPPLIED,
 })
 
 Okinawa_TAKE_Generator = sup.SupplierGenerator({
@@ -105,8 +106,8 @@ qa0 = sim.AnimateQueue(
     direction='e',
     id='blue',
 )
-sim.AnimateRectangle(spec=ani.resource_bar_spec,
-                     arg=bases.Guam.resource)
+# sim.AnimateRectangle(spec=ani.resource_bar_spec,
+#                      arg=bases.Guam.resource)
 sim.AnimateRectangle(spec=ani.resource_label_spec,
                      text=ani.resource_label_text,
                      arg=bases.Guam.resource)

@@ -27,7 +27,7 @@ class SupplierGenerator(sim.Component):
             while i > 0:
                 if verbose:
                     print(crayons.green(
-                        f'{round(env.now(), 2)}: Generating a Supplier based on distribution:\n {gen_dist.print_info(as_str=True)}', bold=True))
+                        f'{round(env.now(), 2)}: Generating a Supplier at {base.name} based on distribution:\n {gen_dist.print_info(as_str=True)}', bold=True))
                 Supplier(self.config) if i > 1 else print(
                     'skipping generating Supplier on first loop')
                 yield self.hold(gen_dist.sample())
@@ -37,7 +37,7 @@ class SupplierGenerator(sim.Component):
             yield self.hold(gen_time.pop(0) - env.now())
             if verbose:
                 print(crayons.green(
-                    f'{round(env.now(), 2)}: Generating a Supplier based on time', bold=True))
+                    f'{round(env.now(), 2)}: Generating a Supplier at {base.name} based on time', bold=True))
             Supplier(self.config)
             while len(gen_time) > 0:
                 yield self.hold(gen_time.pop(0) - env.now())
@@ -60,5 +60,14 @@ class Supplier(sim.Component):
         if verbose:
             print(crayons.green(
                 f'Supplier arrived, supplying {n_supplied} resources'))
-        base.resource.set_capacity(base.resource.capacity() + n_supplied)
-        yield self.hold()
+
+        # Simulate unloading resources at base
+        n_left_to_unload = self.config.get('n_supplied')
+        while n_left_to_unload > 0:
+            n_to_unload_this_period = min(
+                SUPPLIER_UNLOAD_RATE, n_left_to_unload)
+            print(crayons.yellow(n_to_unload_this_period))
+            base.resource.set_capacity(
+                base.resource.capacity() + n_to_unload_this_period)
+            n_left_to_unload -= n_to_unload_this_period
+            yield self.hold(1)
