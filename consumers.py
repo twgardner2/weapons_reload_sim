@@ -52,11 +52,11 @@ class Consumer(sim.Component):
         config['n_consumed'] = n_consumed
         self.config = config
 
+    # Method defining how to represent Consumers in a queue animation
     def animation_objects(self, id):
         size_x = 60
         size_y = 50
         b = 0.1 * size_x
-
         an0 = sim.AnimateImage(
             'img/warship2.png',
             width=50,
