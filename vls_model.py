@@ -42,7 +42,6 @@ DGar_CRUDES_CustGen_config = {
 DGar_CRUDES_CustGen = con.ConsumerGenerator(
     DGar_CRUDES_CustGen_config)
 
-
 # CRUDESs arriving at Okinawa
 Okinawa_CRUDES_CustGen_config = {
     'description': 'Cruisers and Destroyers arriving at Diego Garcia for resupply',

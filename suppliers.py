@@ -62,18 +62,3 @@ class Supplier(sim.Component):
                 f'Supplier arrived, supplying {n_supplied} resources'))
         base.resource.set_capacity(base.resource.capacity() + n_supplied)
         yield self.hold()
-
-
-# class ERT(sim.Component):
-#     def __init__(self, queue, reload_time):
-#         sim.Component.__init__(self)
-#         self.queue = queue
-#         self.reload_time = reload_time
-
-#     def process(self):
-#         while True:
-#             while len(self.queue) == 0:
-#                 yield self.passivate()
-#             self.customer = self.queue.pop()
-#             yield self.hold(self.reload_time)
-#             self.customer.activate()
