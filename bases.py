@@ -9,8 +9,12 @@ verbose = VERBOSE_ALL or VERBOSE_BASE
 
 
 class Base(sim.Component):
+    # https://stackoverflow.com/questions/328851/printing-all-instances-of-a-class
+    instances = []
+
     def __init__(self, config={}):
         sim.Component.__init__(self)
+        self.__class__.instances.append(self)
 
         # Debug
         if verbose:
@@ -25,14 +29,18 @@ class Base(sim.Component):
         self.resource = sim.Resource(f'{name}_resource', 0)
 
         # Consume the assigned reload_team resource
-        if reload_team.available_quantity() > 1:
+        if reload_team.available_quantity() > 0:
             self.request((reload_team, 1))
         else:
             raise Exception(
-                f'not enough ERTs. {self} tried to request reload_team {reload_team} but there are none')
+                f'not enough ERTs. {name} tried to request reload_team {reload_team} but there are none')
 
         # Attach config to self to pass to process
         self.config = config
+
+    @classmethod
+    def getInstances(cls):
+        return(cls.instances)
 
     def process(self):
         # Destructure config
@@ -72,3 +80,9 @@ dgar_config = {
     'reload_team': res.fast_ERT
 }
 DGar = Base(dgar_config)
+
+okinawa_config = {
+    'name': 'Okinawa Tengan',
+    'reload_team': res.fast_ERT
+}
+Okinawa = Base(okinawa_config)

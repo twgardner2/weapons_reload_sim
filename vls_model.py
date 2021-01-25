@@ -30,7 +30,7 @@ GU_CRUDES_CustGen_config = {
 GU_CRUDES_CustGen = con.ConsumerGenerator(
     GU_CRUDES_CustGen_config)
 
-# CRUDESs arriving at Guam
+# CRUDESs arriving at DGar
 DGar_CRUDES_CustGen_config = {
     'description': 'Cruisers and Destroyers arriving at Diego Garcia for resupply',
     'env': env,
@@ -42,6 +42,18 @@ DGar_CRUDES_CustGen_config = {
 DGar_CRUDES_CustGen = con.ConsumerGenerator(
     DGar_CRUDES_CustGen_config)
 
+
+# CRUDESs arriving at Okinawa
+Okinawa_CRUDES_CustGen_config = {
+    'description': 'Cruisers and Destroyers arriving at Diego Garcia for resupply',
+    'env': env,
+    'gen_dist': CONSUMER_GENERATION_DIST,
+    'gen_time': CONSUMER_GENERATION_TIMES,
+    'base': bases.Okinawa,
+    'n_consumed_dist': CONSUMER_N_CONSUMED_DIST,
+}
+Okinawa_CRUDES_CustGen = con.ConsumerGenerator(
+    Okinawa_CRUDES_CustGen_config)
 ### Suppliers ##################################################################
 
 GU_TAKE_Generator = sup.SupplierGenerator({
@@ -59,7 +71,16 @@ DGar_TAKE_Generator = sup.SupplierGenerator({
     'gen_time': SUPPLIER_GENERATION_TIMES,
     'n_supplied': SUPPLIER_N_SUPPLIED,
 })
-# Animation
+
+Okinawa_TAKE_Generator = sup.SupplierGenerator({
+    'env': env,
+    'base': bases.Okinawa,
+    'gen_dist': SUPPLIER_GENERATION_DIST,
+    'gen_time': SUPPLIER_GENERATION_TIMES,
+    'n_supplied': SUPPLIER_N_SUPPLIED,
+})
+
+### Animation ##################################################################
 # > Queue length line plot
 sim.AnimateMonitor(monitor=bases.Guam.queue.length,
                    x=ani.q_lineplot_x_left,
@@ -128,4 +149,11 @@ bases.DGar.queue.length.print_histogram()
 # all_queues_length.print_histogram()
 bases.Guam.queue.length.merge(
     bases.DGar.queue.length, name='combined queues').print_histogram()
-all_queues_length.print_histogram()
+# all_queues_length.print_histogram()
+
+print(bases.Base.getInstances())
+
+print([base.queue.length() for base in bases.Base.getInstances()])
+
+sum(base.queue.length for base in bases.Base.getInstances()
+    ).print_histogram()
