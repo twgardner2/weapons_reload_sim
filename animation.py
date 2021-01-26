@@ -1,5 +1,5 @@
 import salabim as sim
-import crayons
+import crayons as cr
 
 margins = {
     'top': 10,
@@ -22,7 +22,7 @@ q_lineplot_width = 500
 # ***** Queue Length of Stay Histogram Parameters *****
 q_LOS_hist_x_left = q_lineplot_x_left + q_lineplot_width + margins['general']
 q_LOS_hist_y_top = q_lineplot_y_bottom + q_lineplot_height
-print(crayons.red(f'q_LOS_hist_y_top: {q_LOS_hist_y_top}'))
+print(cr.red(f'q_LOS_hist_y_top: {q_LOS_hist_y_top}'))
 q_lineplot_height = 300
 q_lineplot_width = 500
 

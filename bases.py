@@ -3,7 +3,7 @@ import resources as res
 from operator import itemgetter
 from globals import *
 
-import crayons
+import crayons as cr
 
 verbose = VERBOSE_ALL or VERBOSE_BASE
 
@@ -16,13 +16,13 @@ class Base(sim.Component):
         sim.Component.__init__(self)
         self.__class__.instances.append(self)
 
+        # Destructure config
+        name, reload_team, env = itemgetter(
+            'name', 'reload_team', 'env')(config)
+
         # Debug
         if verbose:
-            print(f'creating a BASE, config: {config}')
-
-        # Destructure config
-        name, reload_team = itemgetter(
-            'name', 'reload_team')(config)
+            print(cr.blue(f'{env.now()}: Creating a BASE, config: {config}'))
 
         # Create queue and resource for consumers
         self.queue = sim.Queue(f'{name}_queue')
@@ -40,49 +40,33 @@ class Base(sim.Component):
 
     @classmethod
     def getInstances(cls):
+        '''Returns all instantiated objects of this class'''
         return(cls.instances)
 
     def process(self):
         # Destructure config
-        name, reload_team = itemgetter(
-            'name', 'reload_team')(self.config)
+        name, reload_team, env = itemgetter(
+            'name', 'reload_team', 'env')(self.config)
 
         # Run process
         while True:
             if verbose:
                 print(
-                    crayons.red(f'Available resources, {self.resource} at base {self}: {self.resource.available_quantity()}'))
-            # While no ship in line, passivate
+                    cr.red(f'{env.now()}: Available resources, {self.resource} at base {self}: {self.resource.available_quantity()}'))
+            # While no consumers in line, passivate
             while len(self.queue) == 0:
                 yield self.passivate()
-            print(crayons.blue(
-                f'Number in line: {len(self.queue)}, front of line: {self.queue[0]}'))
+
+            # When consumers are in line
+            print(cr.blue(
+                f'{env.now()}: Number in line: {len(self.queue)}, front of line: {self.queue[0]}'))
             if self.resource.available_quantity() >= self.queue[0].config.get('n_consumed'):
                 self.customer = self.queue.pop()
-                print(crayons.yellow(
-                    f'popped customer: {self.customer}, resources: {self.resource.available_quantity()}'))
-                self.customer.hold(reload_team.reload_time)
-                yield self.hold(reload_team.reload_time)
+                reload_time = self.customer.config.get(
+                    'n_consumed') / reload_team.reload_rate
+                print(cr.yellow(
+                    f'{env.now()}: Popped customer: {self.customer}, resources: {self.resource.available_quantity()}'))
+                self.customer.hold(reload_time)
+                yield self.hold(reload_time)
             else:
                 yield self.passivate()
-
-
-guam_config = {
-    'name': 'Guam',
-    'reload_team': res.fast_ERT,
-    'num_piers': 2,
-}
-Guam = Base(guam_config)
-
-
-dgar_config = {
-    'name': 'Diego Garcia',
-    'reload_team': res.fast_ERT
-}
-DGar = Base(dgar_config)
-
-okinawa_config = {
-    'name': 'Okinawa Tengan',
-    'reload_team': res.fast_ERT
-}
-Okinawa = Base(okinawa_config)

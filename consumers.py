@@ -2,7 +2,7 @@ import salabim as sim
 from operator import itemgetter
 from globals import *
 
-import crayons
+import crayons as cr
 
 verbose = VERBOSE_ALL or VERBOSE_CONSUMERS
 
@@ -12,9 +12,13 @@ class ConsumerGenerator(sim.Component):
         sim.Component.__init__(self)
         self.config = config
 
+        # Destructure the config dict
+        gen_dist, gen_time, base, env = itemgetter(
+            'gen_dist', 'gen_time', 'base', 'env')(config)
         # Debug
         if verbose:
-            print(f'creating a ConsumerGenerator, config: {config}')
+            print(
+                cr.red(f'{env.now()}: Creating a ConsumerGenerator, config: {config}'))
 
     def process(self):
         # Destructure the config dict
@@ -26,7 +30,7 @@ class ConsumerGenerator(sim.Component):
         if gen_dist:        # Generate based on distribution
             while True:
                 if verbose:
-                    print(crayons.green(
+                    print(cr.green(
                         f'{round(env.now(), 2)}: Generating a Consumer based on distribution:\n {gen_dist.print_info(as_str=True)}', bold=True))
                 Consumer(self.config)
                 yield self.hold(gen_dist.sample())
@@ -34,13 +38,13 @@ class ConsumerGenerator(sim.Component):
         else:               # Generate at predefined times
             yield self.hold(gen_time.pop(0) - env.now())
             if verbose:
-                print(crayons.green(
+                print(cr.green(
                     f'{round(env.now(), 2)}: Generating a Consumer based on time', bold=True))
             Consumer(self.config)
             while len(gen_time) > 0:
                 yield self.hold(gen_time.pop(0) - env.now())
                 if verbose:
-                    print(crayons.green(
+                    print(cr.green(
                         f'{round(env.now(), 2)}: Generating a Consumer based on time', bold=True))
                 Consumer(self.config)
 
@@ -68,8 +72,8 @@ class Consumer(sim.Component):
 
     def process(self):
         # Destructure the config dict
-        base, n_consumed = itemgetter(
-            'base', 'n_consumed')(self.config)
+        base, n_consumed, env = itemgetter(
+            'base', 'n_consumed', 'env')(self.config)
 
         # Enter the queue for resources at the assigned base
         self.enter(base.queue)
@@ -77,7 +81,7 @@ class Consumer(sim.Component):
         # Debugging
         if verbose:
             print(
-                crayons.blue(f'Consumer arrived, requesting {n_consumed} resources, number in line: {len(base.queue)}'))
+                cr.blue(f'{env.now()}: Consumer arrived, requesting {n_consumed} resources, number in line: {len(base.queue)}'))
 
         if base.ispassive():
             base.activate()
