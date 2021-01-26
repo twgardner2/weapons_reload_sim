@@ -52,8 +52,8 @@ class Consumer(sim.Component):
         config['n_consumed'] = n_consumed
         self.config = config
 
-    # Method defining how to represent Consumers in a queue animation
     def animation_objects(self, id):
+        '''defines representation of Consumers in a queue animation'''
         size_x = 60
         size_y = 50
         b = 0.1 * size_x
