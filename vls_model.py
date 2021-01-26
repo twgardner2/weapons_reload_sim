@@ -125,7 +125,6 @@ env.run(till=SIM_LENGTH)
 
 # Simulation statistics
 # TLAMs.available_quantity.print_histogram()
-# fast_ERT.print_statistics()
 # TLAMs1.print_info()
 # TLAMs1.requesters().length.print_histogram()
 # TLAMs1.requesters().length_of_stay.print_histogram()

@@ -69,5 +69,6 @@ class Supplier(sim.Component):
             print(crayons.yellow(n_to_unload_this_period))
             base.resource.set_capacity(
                 base.resource.capacity() + n_to_unload_this_period)
+            base.activate()
             n_left_to_unload -= n_to_unload_this_period
             yield self.hold(1)

@@ -3,7 +3,7 @@ import salabim as sim
 ### Simulation Controls ########################################################
 TRACE = 1
 SIM_LENGTH = 5000
-SIM_SPEED = 10
+SIM_SPEED = 250
 ANIMATE = 1
 
 ### Debugging ##################################################################
@@ -20,7 +20,8 @@ CONSUMER_GENERATION_DIST = sim.Normal(100, 20)
 # CONSUMER_GENERATION_DIST = None
 # CONSUMER_GENERATION_TIMES = [3, 33, 333, 3333]
 CONSUMER_GENERATION_TIMES = list(range(1, 300, 50))
-CONSUMER_N_CONSUMED_DIST = sim.IntUniform(8, 96)
+# CONSUMER_N_CONSUMED_DIST = sim.IntUniform(8, 96)
+CONSUMER_N_CONSUMED_DIST = sim.IntUniform(25, 25)
 
 
 ### Suppliers: #################################################################
