@@ -2,7 +2,7 @@ import salabim as sim
 from operator import itemgetter
 from globals import *
 
-import crayons
+import crayons as cr
 
 verbose = VERBOSE_ALL or VERBOSE_SUPPLIERS
 
@@ -26,7 +26,7 @@ class SupplierGenerator(sim.Component):
             i = 1
             while i > 0:
                 if verbose:
-                    print(crayons.green(
+                    print(cr.green(
                         f'{round(env.now(), 2)}: Generating a Supplier at {base.name} based on distribution:\n {gen_dist.print_info(as_str=True)}', bold=True))
                 Supplier(self.config) if i > 1 else print(
                     'skipping generating Supplier on first loop')
@@ -36,13 +36,13 @@ class SupplierGenerator(sim.Component):
         else:               # Generate at predefined times
             yield self.hold(gen_time.pop(0) - env.now())
             if verbose:
-                print(crayons.green(
+                print(cr.green(
                     f'{round(env.now(), 2)}: Generating a Supplier at {base.name} based on time', bold=True))
             Supplier(self.config)
             while len(gen_time) > 0:
                 yield self.hold(gen_time.pop(0) - env.now())
                 if verbose:
-                    print(crayons.green(
+                    print(cr.green(
                         f'{round(env.now(), 2)}: Generating a Supplier based on time', bold=True))
                 Supplier(self.config)
 
@@ -58,7 +58,7 @@ class Supplier(sim.Component):
         n_supplied, base = itemgetter(
             'n_supplied', 'base')(self.config)
         if verbose:
-            print(crayons.green(
+            print(cr.green(
                 f'Supplier arrived, supplying {n_supplied} resources'))
 
         # Simulate unloading resources at base
@@ -66,7 +66,7 @@ class Supplier(sim.Component):
         while n_left_to_unload > 0:
             n_to_unload_this_period = min(
                 SUPPLIER_UNLOAD_RATE, n_left_to_unload)
-            print(crayons.yellow(n_to_unload_this_period))
+            print(cr.yellow(n_to_unload_this_period))
             base.resource.set_capacity(
                 base.resource.capacity() + n_to_unload_this_period)
             base.activate()

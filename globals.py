@@ -2,13 +2,13 @@ import salabim as sim
 
 ### Simulation Controls ########################################################
 TRACE = 1
-SIM_LENGTH = 5000
-SIM_SPEED = 250
+SIM_LENGTH = 200
+SIM_SPEED = 2
 ANIMATE = 1
 
 ### Debugging ##################################################################
-VERBOSE_ALL = 0
-VERBOSE_BASE = 0
+VERBOSE_ALL = 1
+VERBOSE_BASE = 1
 VERBOSE_CONSUMERS = 0
 VERBOSE_SUPPLIERS = 1
 
@@ -42,5 +42,5 @@ SUPPLIER_UNLOAD_RATE = 4  # resources/hour
 NUM_FAST_ERT = 3
 NUM_SLOW_ERT = 3
 
-FAST_ERT_RELOAD_TIME = 15
-SLOW_ERT_RELOAD_TIME = 30
+FAST_ERT_RELOAD_RATE = 4
+SLOW_ERT_RELOAD_RATE = 2
