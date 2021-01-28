@@ -61,12 +61,12 @@ class Base(sim.Component):
             print(cr.blue(
                 f'{env.now()}: Number in line: {len(self.queue)}, front of line: {self.queue[0]}'))
             if self.resource.available_quantity() >= self.queue[0].config.get('n_consumed'):
-                self.customer = self.queue.pop()
-                reload_time = self.customer.config.get(
+                reload_time = self.queue[0].config.get(
                     'n_consumed') / reload_team.reload_rate
-                print(cr.yellow(
-                    f'{env.now()}: Popped customer: {self.customer}, resources: {self.resource.available_quantity()}'))
-                self.customer.hold(reload_time)
+                print(cr.cyan(
+                    f'{env.now()}: Going to reoload customer: {self.queue[0]}, resources: {self.resource.available_quantity()}'))
                 yield self.hold(reload_time)
+                self.queue.pop()
             else:
-                yield self.passivate()
+                # yield self.passivate()
+                yield self.hold(1)

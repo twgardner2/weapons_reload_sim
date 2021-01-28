@@ -87,7 +87,9 @@ GU_TAKE_Generator = sup.SupplierGenerator({
     'base': Guam,
     # 'gen_dist': SUPPLIER_GENERATION_DIST,
     'gen_dist': None,
-    'gen_time': [55, 500, 700],
+    # 'gen_time': [55],
+    # 'gen_times': list(range(1, 300, 50)),
+    'gen_time': list(range(100, 300, 100)),
     'n_supplied': TAKE_N_SUPPLIED,
 })
 
