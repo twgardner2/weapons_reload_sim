@@ -2,8 +2,8 @@ import salabim as sim
 
 ### Simulation Controls ########################################################
 TRACE = 1
-SIM_LENGTH = 200
-SIM_SPEED = 2
+SIM_LENGTH = 1000
+SIM_SPEED = 8
 ANIMATE = 1
 
 ### Debugging ##################################################################

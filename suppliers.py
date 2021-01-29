@@ -55,8 +55,8 @@ class Supplier(sim.Component):
     def process(self):
 
         # Destructure config
-        n_supplied, base = itemgetter(
-            'n_supplied', 'base')(self.config)
+        n_supplied, base, env = itemgetter(
+            'n_supplied', 'base', 'env')(self.config)
         if verbose:
             print(cr.green(
                 f'Supplier arrived, supplying {n_supplied} resources'))
@@ -66,9 +66,11 @@ class Supplier(sim.Component):
         while n_left_to_unload > 0:
             n_to_unload_this_period = min(
                 SUPPLIER_UNLOAD_RATE, n_left_to_unload)
-            print(cr.yellow(n_to_unload_this_period))
+            print(cr.yellow(
+                f'{env.now()}: {self} is unloading {n_to_unload_this_period} resources at {base}'))
             base.resource.set_capacity(
                 base.resource.capacity() + n_to_unload_this_period)
-            base.activate()
+            print(cr.magenta(base.remaining_duration(), bold=True))
+            # base.activate()
             n_left_to_unload -= n_to_unload_this_period
             yield self.hold(1)
