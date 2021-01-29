@@ -8,7 +8,6 @@ verbose = VERBOSE_ALL or VERBOSE_SUPPLIERS
 
 
 class SupplierGenerator(sim.Component):
-    # def __init__(self, resource, n_supplied=1):
     def __init__(self, config={}):
         sim.Component.__init__(self)
 
