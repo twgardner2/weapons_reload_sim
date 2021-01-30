@@ -4,6 +4,8 @@ from globals import *
 
 import crayons as cr
 
+import time
+
 verbose = VERBOSE_ALL or VERBOSE_CONSUMERS
 
 
@@ -52,28 +54,44 @@ class ConsumerGenerator(sim.Component):
 class Consumer(sim.Component):
     def __init__(self, config={}):
         sim.Component.__init__(self)
+        self.config = config
+        self.n_res_resupply = config['n_res_resupply']
+        self.n_res_onhand = config['n_res_onhand']
+        if verbose:
+            print(cr.green(f'Init Consumer:'))
+            print(self)
+            print(cr.green(f'n_res_required: {self.n_res_required()}'))
         n_consumed = config.get('n_consumed_dist').sample()
         config['n_consumed'] = n_consumed
-        self.config = config
 
     def animation_objects(self, id):
-        '''defines representation of Consumers in a queue animation'''
+        '''Defines representation of Consumers in a queue animation'''
+
+        # Destructure config
+        base = itemgetter('base')(self.config)
+
         size_x = 60
         size_y = 50
         b = 0.1 * size_x
         an0 = sim.AnimateImage(
             'img/warship2.png',
             width=50,
-            text='Needs:\n' + str(round(self.config.get('n_consumed'))),
+            text='Needs:\n' + str(round(self.n_res_required())),
+            # text=lambda self: 'Needs:\n' + str(round(self.n_res_required())),
             text_offsety=-25,
-            textcolor='white'
+            textcolor='white' if base.queue.index(
+                self) >= base.config.get('n_reload_team') else 'red'
         )
         return size_x, size_y, an0
 
+    def n_res_required(self):
+        '''Returns number of resources the Consumer requires'''
+        return self.n_res_resupply - self.n_res_onhand
+
     def process(self):
         # Destructure the config dict
-        base, n_consumed, env = itemgetter(
-            'base', 'n_consumed', 'env')(self.config)
+        base, n_consumed, env, n_res_resupply = itemgetter(
+            'base', 'n_consumed', 'env', 'n_res_resupply')(self.config)
 
         # Enter the queue for resources at the assigned base
         self.enter(base.queue)
@@ -87,6 +105,12 @@ class Consumer(sim.Component):
             base.activate()
 
         yield self.passivate()
-        # yield self.hold(base.config.get('reload_team').reload_time)
-        yield self.request((base.resource, n_consumed))
+
+        while self.n_res_required() > 0:
+            print(f'$$$$$ {self.n_issued}')
+            yield self.request((base.resource, self.n_issued))
+            yield self.hold(1)
+
+        # Finished with the consumer object, hold for remainder of simulation
+        # so it doesn't release its resources
         yield self.hold(float('inf'))

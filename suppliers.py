@@ -69,7 +69,7 @@ class Supplier(sim.Component):
                 f'{env.now()}: {self} is unloading {n_to_unload_this_period} resources at {base}'))
             base.resource.set_capacity(
                 base.resource.capacity() + n_to_unload_this_period)
-            print(cr.magenta(base.remaining_duration(), bold=True))
+            # print(cr.magenta(base.remaining_duration(), bold=True))
             # base.activate()
             n_left_to_unload -= n_to_unload_this_period
             yield self.hold(1)

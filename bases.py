@@ -17,16 +17,19 @@ class Base(sim.Component):
         self.__class__.instances.append(self)
 
         # Destructure config
-        name, reload_team, env = itemgetter(
-            'name', 'reload_team', 'env')(config)
+        name, reload_team, env, n_reload_team = itemgetter(
+            'name', 'reload_team', 'env', 'n_reload_team')(config)
 
         # Debug
         if verbose:
             print(cr.blue(f'{env.now()}: Creating a BASE, config: {config}'))
 
-        # Create queue and resource for consumers
+        # Create queue and resources for consumers
         self.queue = sim.Queue(f'{name}_queue')
         self.resource = sim.Resource(f'{name}_resource', 0)
+
+        self.reload_teams = sim.Resource(f'{name}_reload_teams', n_reload_team)
+        self.reload_queue = [None] * n_reload_team
 
         # Consume the assigned reload_team resource
         if reload_team.available_quantity() > 0:
@@ -45,28 +48,78 @@ class Base(sim.Component):
 
     def process(self):
         # Destructure config
-        name, reload_team, env = itemgetter(
-            'name', 'reload_team', 'env')(self.config)
+        name, reload_team, env, n_reload_team = itemgetter(
+            'name', 'reload_team', 'env', 'n_reload_team')(self.config)
 
         # Run process
         while True:
             if verbose:
                 print(
                     cr.red(f'{env.now()}: Available resources, {self.resource} at base {self}: {self.resource.available_quantity()}'))
+                print([customer for customer in self.queue])
+                print([customer.n_res_required() for customer in self.queue])
             # While no consumers in line, passivate
+            # while self.reload_teams.claimers().length() == 0:
             while len(self.queue) == 0:
+                # print(cr.red(self.reload_teams.claimers().length(), bold=True))
                 yield self.passivate()
 
             # When consumers are in line
-            print(cr.blue(
-                f'{env.now()}: Number in line: {len(self.queue)}, front of line: {self.queue[0]}'))
-            if self.resource.available_quantity() >= self.queue[0].config.get('n_consumed'):
-                reload_time = self.queue[0].config.get(
-                    'n_consumed') / reload_team.reload_rate
-                print(cr.cyan(
-                    f'{env.now()}: Going to reoload customer: {self.queue[0]}, resources: {self.resource.available_quantity()}'))
-                yield self.hold(reload_time)
-                self.queue.pop()
+            if verbose:
+                print(cr.blue(
+                    f'{env.now()}: Number in line: {len(self.queue)}, front of line: {self.queue[0]} needs: {self.queue[0].n_res_required()}'))
+
+            # Resources at base are > 0
+            if verbose:
+                print(
+                    cr.red(f'Resources available: {self.resource.available_quantity()}', bold=True))
+
+            # Resources available
+            if self.resource.available_quantity() > 0:
+
+                # Issue resources to as many Consumers as there are Reload Teams
+                # starting from the first in line
+                n = 0
+                n_all_teams = 0
+
+                print(range(0, n_reload_team))
+                print(list(range(0, n_reload_team)))
+                print([x for x in self.queue[0:n_reload_team]])
+
+                print("==========================================")
+                print([el for el in range(0, n_reload_team)
+                       if self.queue[el] is not None])
+                for team in [el for el in range(0, n_reload_team) if self.queue[el] is not None]:
+                    if verbose:
+                        # ': Consumer needs {self.queue[team].n_res_required()}')
+                        print(f'TEAM: {team}')
+                        print(f'CONSUMER: {self.queue[team]}')
+                        print(f'QUEUE: {self.queue.length()}')
+                    # Determine n resources to issue this loop
+                    # n_possibilities =
+                    n = min(self.resource.available_quantity() - n_all_teams,
+                            self.queue[team].n_res_required(),
+                            reload_team.reload_rate)
+                    n_all_teams += n
+                    # Issue resources to Consumer, have Consumer request the resource
+                    print(cr.red(f'issuing {n} to {self.queue[team]}'))
+                    # self.queue[team].config['n_res_onhand'] += n
+                    print(
+                        f"!@#$ - {self.queue[team]} n_res_onhand: {self.queue[team].n_res_onhand}, n_res_required: {self.queue[team].n_res_required()}")
+                    self.queue[team].n_res_onhand += n
+                    print(self.queue[team].n_res_onhand)
+                    print(
+                        f"!@#$ - {self.queue[team]} n_res_onhand: {self.queue[team].n_res_onhand}, n_res_required: {self.queue[team].n_res_required()}")
+                    # self.queue[team].request((self.resource, n))
+                    self.queue[team].n_issued = n
+                    self.queue[team].activate()
+
+                for consumer in self.queue[0:n_reload_team]:
+                    if consumer.n_res_required() <= 0:
+                        self.queue.remove(consumer)
+
+                yield self.hold(1)
+
+            # Resources not available
             else:
-                # yield self.passivate()
                 yield self.hold(1)
