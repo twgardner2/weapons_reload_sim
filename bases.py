@@ -82,21 +82,9 @@ class Base(sim.Component):
                 n = 0
                 n_all_teams = 0
 
-                print(range(0, n_reload_team))
-                print(list(range(0, n_reload_team)))
-                print([x for x in self.queue[0:n_reload_team]])
-
-                print("==========================================")
-                print([el for el in range(0, n_reload_team)
-                       if self.queue[el] is not None])
                 for team in [el for el in range(0, n_reload_team) if self.queue[el] is not None]:
-                    if verbose:
-                        # ': Consumer needs {self.queue[team].n_res_required()}')
-                        print(f'TEAM: {team}')
-                        print(f'CONSUMER: {self.queue[team]}')
-                        print(f'QUEUE: {self.queue.length()}')
+
                     # Determine n resources to issue this loop
-                    # n_possibilities =
                     n = min(self.resource.available_quantity() - n_all_teams,
                             self.queue[team].n_res_required(),
                             reload_team.reload_rate)
