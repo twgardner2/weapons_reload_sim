@@ -7,13 +7,22 @@ from globals import *
 # Verbose logging setup
 verbose = VERBOSE_ALL or VERBOSE_BASE
 
+cprint = MAKE_CPRINT(verbose, VERBOSE_BASE_COLOR)
 
-def cprint(verbose, str):
-    if verbose:
-        print(cr.magenta(str, bold=True))
+# def make_cprint(verbose):
+#     if verbose:
+#         def cprint(str):
+#             print(cr.magenta(str, bold=True))
+#     else:
+#         def cprint(str):
+#             pass
+#     return cprint
+#
+#
+# cprint = make_cprint(verbose)
 
 
-cprint(verbose, f"bases.py verbose output: {verbose}")
+cprint(f"bases.py verbose output ON")
 
 
 class Base(sim.Component):
@@ -31,7 +40,7 @@ class Base(sim.Component):
         # Verbose logging
         # if verbose:
         #     print(cr.blue(f'{env.now()}: Creating a BASE, config: {config}'))
-        cprint(verbose, f'{env.now()}: Creating a BASE, config: {config}')
+        cprint(f'{env.now()}: Creating a BASE, config: {config}')
 
         # Create queue and resources for consumers
         self.queue = sim.Queue(f'{name}_queue')
@@ -63,23 +72,22 @@ class Base(sim.Component):
         while True:
 
             # Verbose logging
-            cprint(verbose,
-                   f'{env.now()}: Available resources, {self.resource} at base {self}: {self.resource.available_quantity()}')
-            cprint(verbose, [customer for customer in self.queue])
-            cprint(verbose,
-                   [customer.n_res_required() for customer in self.queue])
+            cprint(
+                f'{env.now()}: Available resources, {self.resource} at base {self}: {self.resource.available_quantity()}')
+            cprint([customer for customer in self.queue])
+            cprint([customer.n_res_required() for customer in self.queue])
 
             # While no consumers in line, passivate
             while len(self.queue) == 0:
                 yield self.passivate()
 
             # When consumers are in line
-            cprint(verbose,
-                   f'{env.now()}: Number in line: {len(self.queue)}, front of line: {self.queue[0]} needs: {self.queue[0].n_res_required()}')
+            cprint(
+                f'{env.now()}: Number in line: {len(self.queue)}, front of line: {self.queue[0]} needs: {self.queue[0].n_res_required()}')
 
             # Resources at base are > 0
-            cprint(verbose,
-                   f'Resources available: {self.resource.available_quantity()}')
+            cprint(
+                f'Resources available: {self.resource.available_quantity()}')
 
             # Resources available
             if self.resource.available_quantity() > 0:
@@ -101,12 +109,12 @@ class Base(sim.Component):
                     n_all_teams += n
 
                     # Issue resources to Consumer, have Consumer request the resource
-                    cprint(verbose, f'issuing {n} to {self.queue[team]}')
-                    cprint(verbose,
-                           f"!@#$ - {self.queue[team]} n_res_onhand: {self.queue[team].n_res_onhand}, n_res_required: {self.queue[team].n_res_required()}")
-                    cprint(verbose, self.queue[team].n_res_onhand)
-                    cprint(verbose,
-                           f"!@#$ - {self.queue[team]} n_res_onhand: {self.queue[team].n_res_onhand}, n_res_required: {self.queue[team].n_res_required()}")
+                    cprint(f'issuing {n} to {self.queue[team]}')
+                    cprint(
+                        f"!@#$ - {self.queue[team]} n_res_onhand: {self.queue[team].n_res_onhand}, n_res_required: {self.queue[team].n_res_required()}")
+                    cprint(self.queue[team].n_res_onhand)
+                    cprint(
+                        f"!@#$ - {self.queue[team]} n_res_onhand: {self.queue[team].n_res_onhand}, n_res_required: {self.queue[team].n_res_required()}")
 
                     self.queue[team].n_res_onhand += n
                     self.queue[team].n_issued = n

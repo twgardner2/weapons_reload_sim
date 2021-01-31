@@ -1,16 +1,31 @@
 import salabim as sim
+import crayons
 
 ### Simulation Controls ########################################################
 TRACE = 1
-SIM_LENGTH = 3500
-SIM_SPEED = 8
-ANIMATE = 1
+SIM_LENGTH = 100
+SIM_SPEED = 200
+ANIMATE = 0
 
 ### Debugging ##################################################################
 VERBOSE_ALL = 1
-VERBOSE_BASE = 1
-VERBOSE_CONSUMERS = 1
+VERBOSE_BASE = 0
+VERBOSE_CONSUMERS = 0
 VERBOSE_SUPPLIERS = 1
+
+VERBOSE_BASE_COLOR = crayons.blue
+VERBOSE_CONSUMERS_COLOR = crayons.green
+VERBOSE_SUPPLIERS_COLOR = crayons.magenta
+
+
+def MAKE_CPRINT(verbose, color):
+    if verbose:
+        def cprint(str):
+            print(color(str, bold=True))
+    else:
+        def cprint(str):
+            pass
+    return cprint
 
 
 ### Consumers ##################################################################
