@@ -7,22 +7,8 @@ import crayons as cr
 # import time
 
 # Verbose logging setup
-
 verbose = VERBOSE_ALL or VERBOSE_CONSUMERS
-
 cprint = MAKE_CPRINT(verbose, VERBOSE_CONSUMERS_COLOR)
-# def make_cprint(verbose):
-#     if verbose:
-#         def cprint(str):
-#             print(cr.green(str, bold=True))
-#     else:
-#         def cprint(str):
-#             pass
-#     return cprint
-
-
-# cprint = make_cprint(verbose)
-
 cprint(f"consumers.py verbose output ON")
 
 
@@ -35,8 +21,7 @@ class ConsumerGenerator(sim.Component):
         gen_dist, gen_time, base, env = itemgetter(
             'gen_dist', 'gen_time', 'base', 'env')(config)
         # Debug
-        cprint(
-            f'{env.now()}: Creating a ConsumerGenerator, config: {config}')
+        cprint(f'{env.now()}: Creating a ConsumerGenerator, config: {config}')
 
     def process(self):
         # Destructure the config dict
@@ -54,14 +39,12 @@ class ConsumerGenerator(sim.Component):
 
         else:               # Generate at predefined times
             yield self.hold(gen_time.pop(0) - env.now())
-            cprint(
-                f'{round(env.now(), 2)}: Generating a Consumer based on time')
+            cprint(f'{round(env.now(), 2)}: Generating a Consumer based on time')
             Consumer(self.config)
             while len(gen_time) > 0:
                 yield self.hold(gen_time.pop(0) - env.now())
-                if verbose:
-                    print(verbose,
-                          f'{round(env.now(), 2)}: Generating a Consumer based on time')
+                cprint(
+                    f'{round(env.now(), 2)}: Generating a Consumer based on time')
                 Consumer(self.config)
 
 
@@ -73,7 +56,7 @@ class Consumer(sim.Component):
         self.n_res_onhand = config['n_res_onhand']
         cprint(f'Init Consumer:')
         cprint(self)
-        print(cr.green(f'n_res_required: {self.n_res_required()}'))
+        cprint(f'n_res_required: {self.n_res_required()}')
         n_consumed = config.get('n_consumed_dist').sample()
         config['n_consumed'] = n_consumed
 
@@ -119,7 +102,7 @@ class Consumer(sim.Component):
         yield self.passivate()
 
         while self.n_res_required() > 0:
-            print(f'$$$$$ {self.n_issued}')
+            cprint(f'$$$$$ {self.n_issued}')
             yield self.request((base.resource, self.n_issued))
             yield self.hold(1)
 

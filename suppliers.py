@@ -28,7 +28,7 @@ class SupplierGenerator(sim.Component):
             while i > 0:
                 cprint(
                     f'{round(env.now(), 2)}: Generating a Supplier at {base.name} based on distribution:\n {gen_dist.print_info(as_str=True)}')
-                Supplier(self.config) if i > 1 else print(
+                Supplier(self.config) if i > 1 else cprint(
                     'skipping generating Supplier on first loop')
                 yield self.hold(gen_dist.sample())
                 i += 1
@@ -62,8 +62,8 @@ class Supplier(sim.Component):
         while n_left_to_unload > 0:
             n_to_unload_this_period = min(
                 SUPPLIER_UNLOAD_RATE, n_left_to_unload)
-            print(cr.yellow(
-                f'{env.now()}: {self} is unloading {n_to_unload_this_period} resources at {base}'))
+            cprint(
+                f'{env.now()}: {self} is unloading {n_to_unload_this_period} resources at {base}')
             base.resource.set_capacity(
                 base.resource.capacity() + n_to_unload_this_period)
 

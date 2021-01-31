@@ -6,22 +6,7 @@ from globals import *
 
 # Verbose logging setup
 verbose = VERBOSE_ALL or VERBOSE_BASE
-
 cprint = MAKE_CPRINT(verbose, VERBOSE_BASE_COLOR)
-
-# def make_cprint(verbose):
-#     if verbose:
-#         def cprint(str):
-#             print(cr.magenta(str, bold=True))
-#     else:
-#         def cprint(str):
-#             pass
-#     return cprint
-#
-#
-# cprint = make_cprint(verbose)
-
-
 cprint(f"bases.py verbose output ON")
 
 
@@ -38,8 +23,6 @@ class Base(sim.Component):
             'name', 'reload_team', 'env', 'n_reload_team')(config)
 
         # Verbose logging
-        # if verbose:
-        #     print(cr.blue(f'{env.now()}: Creating a BASE, config: {config}'))
         cprint(f'{env.now()}: Creating a BASE, config: {config}')
 
         # Create queue and resources for consumers

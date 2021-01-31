@@ -156,11 +156,6 @@ env.background_color('20%gray')
 env.run(till=SIM_LENGTH)
 
 # Simulation statistics
-# TLAMs.available_quantity.print_histogram()
-# TLAMs1.print_info()
-# TLAMs1.requesters().length.print_histogram()
-# TLAMs1.requesters().length_of_stay.print_histogram()
-# TLAMs1.claimers().length.print_histogram()
 # bases.base1.config.get('resource').print_histograms()
 # bases.base1.config.get('resource').print_statistics()
 # bases.base1.config.get('resource').print_info()
