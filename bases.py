@@ -1,11 +1,19 @@
 import salabim as sim
 import resources as res
 from operator import itemgetter
+import crayons as cr
 from globals import *
 
-import crayons as cr
-
+# Verbose logging setup
 verbose = VERBOSE_ALL or VERBOSE_BASE
+
+
+def cprint(verbose, str):
+    if verbose:
+        print(cr.magenta(str, bold=True))
+
+
+cprint(verbose, f"bases.py verbose output: {verbose}")
 
 
 class Base(sim.Component):
@@ -20,14 +28,14 @@ class Base(sim.Component):
         name, reload_team, env, n_reload_team = itemgetter(
             'name', 'reload_team', 'env', 'n_reload_team')(config)
 
-        # Debug
-        if verbose:
-            print(cr.blue(f'{env.now()}: Creating a BASE, config: {config}'))
+        # Verbose logging
+        # if verbose:
+        #     print(cr.blue(f'{env.now()}: Creating a BASE, config: {config}'))
+        cprint(verbose, f'{env.now()}: Creating a BASE, config: {config}')
 
         # Create queue and resources for consumers
         self.queue = sim.Queue(f'{name}_queue')
         self.resource = sim.Resource(f'{name}_resource', 0)
-
         self.reload_teams = sim.Resource(f'{name}_reload_teams', n_reload_team)
         self.reload_queue = [None] * n_reload_team
 
@@ -53,52 +61,54 @@ class Base(sim.Component):
 
         # Run process
         while True:
-            if verbose:
-                print(
-                    cr.red(f'{env.now()}: Available resources, {self.resource} at base {self}: {self.resource.available_quantity()}'))
-                print([customer for customer in self.queue])
-                print([customer.n_res_required() for customer in self.queue])
+
+            # Verbose logging
+            cprint(verbose,
+                   f'{env.now()}: Available resources, {self.resource} at base {self}: {self.resource.available_quantity()}')
+            cprint(verbose, [customer for customer in self.queue])
+            cprint(verbose,
+                   [customer.n_res_required() for customer in self.queue])
+
             # While no consumers in line, passivate
-            # while self.reload_teams.claimers().length() == 0:
             while len(self.queue) == 0:
-                # print(cr.red(self.reload_teams.claimers().length(), bold=True))
                 yield self.passivate()
 
             # When consumers are in line
-            if verbose:
-                print(cr.blue(
-                    f'{env.now()}: Number in line: {len(self.queue)}, front of line: {self.queue[0]} needs: {self.queue[0].n_res_required()}'))
+            cprint(verbose,
+                   f'{env.now()}: Number in line: {len(self.queue)}, front of line: {self.queue[0]} needs: {self.queue[0].n_res_required()}')
 
             # Resources at base are > 0
-            if verbose:
-                print(
-                    cr.red(f'Resources available: {self.resource.available_quantity()}', bold=True))
+            cprint(verbose,
+                   f'Resources available: {self.resource.available_quantity()}')
 
             # Resources available
             if self.resource.available_quantity() > 0:
 
                 # Issue resources to as many Consumers as there are Reload Teams
                 # starting from the first in line
-                n = 0
-                n_all_teams = 0
+                n = 0               # resources issued to one team
+                n_all_teams = 0     # resources issued to all teams
 
-                for team in [el for el in range(0, n_reload_team) if self.queue[el] is not None]:
+                # Loop through reload teams
+                for team in range(0, n_reload_team):
 
-                    # Determine n resources to issue this loop
+                    # Determine n resources to issue to consumer
                     n = min(self.resource.available_quantity() - n_all_teams,
                             self.queue[team].n_res_required(),
                             reload_team.reload_rate)
+
+                    # Track number issued this time step
                     n_all_teams += n
+
                     # Issue resources to Consumer, have Consumer request the resource
-                    print(cr.red(f'issuing {n} to {self.queue[team]}'))
-                    # self.queue[team].config['n_res_onhand'] += n
-                    print(
-                        f"!@#$ - {self.queue[team]} n_res_onhand: {self.queue[team].n_res_onhand}, n_res_required: {self.queue[team].n_res_required()}")
+                    cprint(verbose, f'issuing {n} to {self.queue[team]}')
+                    cprint(verbose,
+                           f"!@#$ - {self.queue[team]} n_res_onhand: {self.queue[team].n_res_onhand}, n_res_required: {self.queue[team].n_res_required()}")
+                    cprint(verbose, self.queue[team].n_res_onhand)
+                    cprint(verbose,
+                           f"!@#$ - {self.queue[team]} n_res_onhand: {self.queue[team].n_res_onhand}, n_res_required: {self.queue[team].n_res_required()}")
+
                     self.queue[team].n_res_onhand += n
-                    print(self.queue[team].n_res_onhand)
-                    print(
-                        f"!@#$ - {self.queue[team]} n_res_onhand: {self.queue[team].n_res_onhand}, n_res_required: {self.queue[team].n_res_required()}")
-                    # self.queue[team].request((self.resource, n))
                     self.queue[team].n_issued = n
                     self.queue[team].activate()
 
