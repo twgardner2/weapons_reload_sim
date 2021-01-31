@@ -4,7 +4,26 @@ from globals import *
 
 import crayons as cr
 
+# import time
+
+# Verbose logging setup
+
 verbose = VERBOSE_ALL or VERBOSE_CONSUMERS
+
+cprint = MAKE_CPRINT(verbose, VERBOSE_CONSUMERS_COLOR)
+# def make_cprint(verbose):
+#     if verbose:
+#         def cprint(str):
+#             print(cr.green(str, bold=True))
+#     else:
+#         def cprint(str):
+#             pass
+#     return cprint
+
+
+# cprint = make_cprint(verbose)
+
+cprint(f"consumers.py verbose output ON")
 
 
 class ConsumerGenerator(sim.Component):
@@ -16,9 +35,8 @@ class ConsumerGenerator(sim.Component):
         gen_dist, gen_time, base, env = itemgetter(
             'gen_dist', 'gen_time', 'base', 'env')(config)
         # Debug
-        if verbose:
-            print(
-                cr.red(f'{env.now()}: Creating a ConsumerGenerator, config: {config}'))
+        cprint(
+            f'{env.now()}: Creating a ConsumerGenerator, config: {config}')
 
     def process(self):
         # Destructure the config dict
@@ -29,64 +47,82 @@ class ConsumerGenerator(sim.Component):
 
         if gen_dist:        # Generate based on distribution
             while True:
-                if verbose:
-                    print(cr.green(
-                        f'{round(env.now(), 2)}: Generating a Consumer based on distribution:\n {gen_dist.print_info(as_str=True)}', bold=True))
+                cprint(
+                    f'{round(env.now(), 2)}: Generating a Consumer based on distribution:\n {gen_dist.print_info(as_str=True)}')
                 Consumer(self.config)
                 yield self.hold(gen_dist.sample())
 
         else:               # Generate at predefined times
             yield self.hold(gen_time.pop(0) - env.now())
-            if verbose:
-                print(cr.green(
-                    f'{round(env.now(), 2)}: Generating a Consumer based on time', bold=True))
+            cprint(
+                f'{round(env.now(), 2)}: Generating a Consumer based on time')
             Consumer(self.config)
             while len(gen_time) > 0:
                 yield self.hold(gen_time.pop(0) - env.now())
                 if verbose:
-                    print(cr.green(
-                        f'{round(env.now(), 2)}: Generating a Consumer based on time', bold=True))
+                    print(verbose,
+                          f'{round(env.now(), 2)}: Generating a Consumer based on time')
                 Consumer(self.config)
 
 
 class Consumer(sim.Component):
     def __init__(self, config={}):
         sim.Component.__init__(self)
+        self.config = config
+        self.n_res_resupply = config['n_res_resupply']
+        self.n_res_onhand = config['n_res_onhand']
+        cprint(f'Init Consumer:')
+        cprint(self)
+        print(cr.green(f'n_res_required: {self.n_res_required()}'))
         n_consumed = config.get('n_consumed_dist').sample()
         config['n_consumed'] = n_consumed
-        self.config = config
 
     def animation_objects(self, id):
-        '''defines representation of Consumers in a queue animation'''
+        '''Defines representation of Consumers in a queue animation'''
+
+        # Destructure config
+        base = itemgetter('base')(self.config)
+
         size_x = 60
         size_y = 50
         b = 0.1 * size_x
         an0 = sim.AnimateImage(
             'img/warship2.png',
             width=50,
-            text='Needs:\n' + str(round(self.config.get('n_consumed'))),
+            text='Needs:\n' + str(round(self.n_res_required())),
+            # text=lambda self: 'Needs:\n' + str(round(self.n_res_required())),
             text_offsety=-25,
-            textcolor='white'
+            textcolor='white' if base.queue.index(
+                self) >= base.config.get('n_reload_team') else 'red'
         )
         return size_x, size_y, an0
 
+    def n_res_required(self):
+        '''Returns number of resources the Consumer requires'''
+        return self.n_res_resupply - self.n_res_onhand
+
     def process(self):
         # Destructure the config dict
-        base, n_consumed, env = itemgetter(
-            'base', 'n_consumed', 'env')(self.config)
+        base, n_consumed, env, n_res_resupply = itemgetter(
+            'base', 'n_consumed', 'env', 'n_res_resupply')(self.config)
 
         # Enter the queue for resources at the assigned base
         self.enter(base.queue)
 
         # Debugging
-        if verbose:
-            print(
-                cr.blue(f'{env.now()}: Consumer arrived, requesting {n_consumed} resources, number in line: {len(base.queue)}'))
+        cprint(
+            f'{env.now()}: Consumer arrived, requesting {n_consumed} resources, number in line: {len(base.queue)}')
 
         if base.ispassive():
             base.activate()
 
         yield self.passivate()
-        # yield self.hold(base.config.get('reload_team').reload_time)
-        yield self.request((base.resource, n_consumed))
+
+        while self.n_res_required() > 0:
+            print(f'$$$$$ {self.n_issued}')
+            yield self.request((base.resource, self.n_issued))
+            yield self.hold(1)
+
+        # Finished with the consumer object, hold for remainder of simulation
+        # so it doesn't release its resources
         yield self.hold(float('inf'))

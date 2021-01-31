@@ -21,24 +21,25 @@ guam_config = {
     'name': 'Guam',
     'env': env,
     'reload_team': fast_ERT,
-    'num_piers': 2,
+    'n_reload_team': 3,
+
 }
 Guam = bases.Base(guam_config)
 
 
-dgar_config = {
-    'name': 'Diego Garcia',
-    'env': env,
-    'reload_team': fast_ERT
-}
-DGar = bases.Base(dgar_config)
+# dgar_config = {
+#     'name': 'Diego Garcia',
+#     'env': env,
+#     'reload_team': fast_ERT
+# }
+# DGar = bases.Base(dgar_config)
 
-okinawa_config = {
-    'name': 'Okinawa Tengan',
-    'env': env,
-    'reload_team': fast_ERT
-}
-Okinawa = bases.Base(okinawa_config)
+# okinawa_config = {
+#     'name': 'Okinawa Tengan',
+#     'env': env,
+#     'reload_team': fast_ERT
+# }
+# Okinawa = bases.Base(okinawa_config)
 
 
 ### Consumers ##################################################################
@@ -46,10 +47,12 @@ Okinawa = bases.Base(okinawa_config)
 GU_CRUDES_CustGen_config = {
     'description': 'Cruisers and Destroyers arriving at Guam for resupply',
     'env': env,
-    # 'gen_dist': CONSUMER_GENERATION_DIST,
-    'gen_dist': None,
+    'gen_dist': CONSUMER_GENERATION_DIST,
+    # 'gen_dist': None,
     'gen_time': list(range(10, 50, 5)),
     'base': Guam,
+    'n_res_resupply': 40,
+    'n_res_onhand': 1,
     'n_consumed_dist': CONSUMER_N_CONSUMED_DIST,
 }
 GU_CRUDES_CustGen = con.ConsumerGenerator(
@@ -85,11 +88,11 @@ GU_CRUDES_CustGen = con.ConsumerGenerator(
 GU_TAKE_Generator = sup.SupplierGenerator({
     'env': env,
     'base': Guam,
-    # 'gen_dist': SUPPLIER_GENERATION_DIST,
-    'gen_dist': None,
+    'gen_dist': SUPPLIER_GENERATION_DIST,
+    # 'gen_dist': None,
     # 'gen_time': [55],
     # 'gen_times': list(range(1, 300, 50)),
-    'gen_time': list(range(100, 300, 100)),
+    'gen_time': list(range(100, 1000, 100)),
     'n_supplied': TAKE_N_SUPPLIED,
 })
 
@@ -116,7 +119,7 @@ sim.AnimateMonitor(monitor=Guam.queue.length,
                    y=ani.q_lineplot_y_bottom,
                    width=ani.q_lineplot_width,
                    height=ani.q_lineplot_height,
-                   horizontal_scale=3.1,
+                   horizontal_scale=0.15,
                    vertical_scale=7.5)
 # > Queue length of stay histogram
 sim.AnimateText(text=lambda: Guam.queue.length_of_stay.print_histogram(as_str=True),
@@ -131,7 +134,7 @@ qa0 = sim.AnimateQueue(
     queue=Guam.queue,
     x=ani.queue_x_left + 50,
     y=ani.queue_y_bottom,
-    title='Queue of Ships Waiting for Reload at Base 1',
+    title='Queue of Ships Waiting for Reload at Guam',
     direction='e',
     id='blue',
 )
@@ -144,7 +147,7 @@ sim.AnimateRectangle(spec=ani.resource_label_spec,
 
 ### Monitors# ##################################################################
 # all_queues_length = Guam.queue.length.merge(DGar.queue.length)
-all_queues_length = Guam.queue.length + DGar.queue.length
+# all_queues_length = Guam.queue.length + DGar.queue.length
 
 # Run simulation
 env.animation_parameters(animate=ANIMATE, speed=SIM_SPEED)  # , width=1500
@@ -171,17 +174,17 @@ env.run(till=SIM_LENGTH)
 # queue2.length_of_stay.print_histogram()
 # queue2.print_info()
 
-Guam.queue.length.print_histogram()
-DGar.queue.length.print_histogram()
+# Guam.queue.length.print_histogram()
+# DGar.queue.length.print_histogram()
 # print(all_queues_length)
 # all_queues_length.print_histogram()
-Guam.queue.length.merge(
-    DGar.queue.length, name='combined queues').print_histogram()
+# Guam.queue.length.merge(
+#     DGar.queue.length, name='combined queues').print_histogram()
 # all_queues_length.print_histogram()
 
 print(bases.Base.getInstances())
 
 print([base.queue.length() for base in bases.Base.getInstances()])
 
-sum(base.queue.length for base in bases.Base.getInstances()
-    ).print_histogram()
+# sum(base.queue.length for base in bases.Base.getInstances()
+#     ).print_histogram()

@@ -5,6 +5,8 @@ from globals import *
 import crayons as cr
 
 verbose = VERBOSE_ALL or VERBOSE_SUPPLIERS
+cprint = MAKE_CPRINT(verbose, VERBOSE_SUPPLIERS_COLOR)
+cprint(f"suppliers.py verbose output ON")
 
 
 class SupplierGenerator(sim.Component):
@@ -24,9 +26,8 @@ class SupplierGenerator(sim.Component):
         if gen_dist:        # Generate based on distribution
             i = 1
             while i > 0:
-                if verbose:
-                    print(cr.green(
-                        f'{round(env.now(), 2)}: Generating a Supplier at {base.name} based on distribution:\n {gen_dist.print_info(as_str=True)}', bold=True))
+                cprint(
+                    f'{round(env.now(), 2)}: Generating a Supplier at {base.name} based on distribution:\n {gen_dist.print_info(as_str=True)}')
                 Supplier(self.config) if i > 1 else print(
                     'skipping generating Supplier on first loop')
                 yield self.hold(gen_dist.sample())
@@ -34,15 +35,13 @@ class SupplierGenerator(sim.Component):
 
         else:               # Generate at predefined times
             yield self.hold(gen_time.pop(0) - env.now())
-            if verbose:
-                print(cr.green(
-                    f'{round(env.now(), 2)}: Generating a Supplier at {base.name} based on time', bold=True))
+            cprint(
+                f'{round(env.now(), 2)}: Generating a Supplier at {base.name} based on time')
             Supplier(self.config)
             while len(gen_time) > 0:
                 yield self.hold(gen_time.pop(0) - env.now())
-                if verbose:
-                    print(cr.green(
-                        f'{round(env.now(), 2)}: Generating a Supplier based on time', bold=True))
+                cprint(
+                    f'{round(env.now(), 2)}: Generating a Supplier based on time')
                 Supplier(self.config)
 
 
@@ -56,9 +55,7 @@ class Supplier(sim.Component):
         # Destructure config
         n_supplied, base, env = itemgetter(
             'n_supplied', 'base', 'env')(self.config)
-        if verbose:
-            print(cr.green(
-                f'Supplier arrived, supplying {n_supplied} resources'))
+        cprint(f'Supplier arrived, supplying {n_supplied} resources')
 
         # Simulate unloading resources at base
         n_left_to_unload = self.config.get('n_supplied')
@@ -69,7 +66,6 @@ class Supplier(sim.Component):
                 f'{env.now()}: {self} is unloading {n_to_unload_this_period} resources at {base}'))
             base.resource.set_capacity(
                 base.resource.capacity() + n_to_unload_this_period)
-            print(cr.magenta(base.remaining_duration(), bold=True))
-            # base.activate()
+
             n_left_to_unload -= n_to_unload_this_period
             yield self.hold(1)
