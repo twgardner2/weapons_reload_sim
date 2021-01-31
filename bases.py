@@ -112,10 +112,12 @@ class Base(sim.Component):
                     self.queue[team].n_issued = n
                     self.queue[team].activate()
 
+                # Remove consumers who no longer need resources from queue
                 for consumer in self.queue[0:n_reload_team]:
                     if consumer.n_res_required() <= 0:
                         self.queue.remove(consumer)
 
+                # Hold  until next time step
                 yield self.hold(1)
 
             # Resources not available
