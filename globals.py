@@ -3,8 +3,8 @@ import crayons
 
 ### Simulation Controls ########################################################
 TRACE = 1
-SIM_LENGTH = 2000
-SIM_SPEED = 400
+SIM_LENGTH = 100
+SIM_SPEED = 4
 ANIMATE = 0
 
 ### Debugging ##################################################################
@@ -51,11 +51,11 @@ C5_N_SUPPLIED = 18
 C17_N_SUPPLIED = 8
 C130_N_SUPPLIED = 2
 
-SUPPLIER_UNLOAD_RATE = 4  # resources/hour
+SUPPLIER_UNLOAD_RATE = 8  # resources/hour
 ### ERTs #######################################################################
 # - make reload time be missiles/hour
 NUM_FAST_ERT = 3
 NUM_SLOW_ERT = 3
 
-FAST_ERT_RELOAD_RATE = 8
+FAST_ERT_RELOAD_RATE = 4
 SLOW_ERT_RELOAD_RATE = 2

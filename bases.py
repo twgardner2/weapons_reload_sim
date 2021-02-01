@@ -57,8 +57,8 @@ class Base(sim.Component):
             # Verbose logging
             cprint(
                 f'{env.now()}: Available resources, {self.resource} at base {self}: {self.resource.available_quantity()}')
-            cprint([customer for customer in self.queue])
-            cprint([customer.n_res_required() for customer in self.queue])
+            # cprint([customer for customer in self.queue])
+            # cprint([customer.n_res_required() for customer in self.queue])
 
             # While no consumers in line, passivate
             while len(self.queue) == 0:
@@ -77,25 +77,36 @@ class Base(sim.Component):
 
                 # Issue resources to as many Consumers as there are Reload Teams
                 # starting from the first in line
+
+                # Available at base this time step
+                avail = self.resource.available_quantity()
+                # Required by each consumer
+                n_req = [x.n_res_required()
+                         for x in self.queue[:n_reload_team]]
+                # Required by all consumers ahead of a particular consumer
+                n_req_cum = [sum(n_req[:x]) for x in range(0, len(n_req))]
                 n = 0               # resources issued to one team
                 n_all_teams = 0     # resources issued to all teams
+                cprint(n_req)
+                cprint(n_req_cum)
 
                 # Loop through reload teams
                 for team in range(0, n_reload_team):
-
+                    # cprint(team)
+                    # If no consumer in line for this reload team, break
+                    if self.queue[team] is None:
+                        break
                     # Determine n resources to issue to consumer
-                    n = min(self.resource.available_quantity() - n_all_teams,
-                            self.queue[team].n_res_required(),
-                            reload_team.reload_rate)
+                    n = min(avail - n_all_teams,
+                            n_req[team],
+                            reload_team.reload_rate,
+                            avail - n_req_cum[team] if avail >= n_req_cum[team] else 0)
 
                     # Track number issued this time step
                     n_all_teams += n
 
                     # Issue resources to Consumer, have Consumer request the resource
                     cprint(f'issuing {n} to {self.queue[team]}')
-                    cprint(
-                        f"!@#$ - {self.queue[team]} n_res_onhand: {self.queue[team].n_res_onhand}, n_res_required: {self.queue[team].n_res_required()}")
-                    cprint(self.queue[team].n_res_onhand)
                     cprint(
                         f"!@#$ - {self.queue[team]} n_res_onhand: {self.queue[team].n_res_onhand}, n_res_required: {self.queue[team].n_res_required()}")
 

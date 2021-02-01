@@ -102,7 +102,7 @@ class Consumer(sim.Component):
         yield self.passivate()
 
         while self.n_res_required() > 0:
-            cprint(f'$$$$$ {self.n_issued}')
+            # cprint(f'$$$$$ {self.n_issued}')
             yield self.request((base.resource, self.n_issued))
             yield self.hold(1)
 

@@ -47,9 +47,10 @@ Guam = bases.Base(guam_config)
 GU_CRUDES_CustGen_config = {
     'description': 'Cruisers and Destroyers arriving at Guam for resupply',
     'env': env,
-    'gen_dist': CONSUMER_GENERATION_DIST,
-    # 'gen_dist': None,
-    'gen_time': list(range(10, 50, 5)),
+    # 'gen_dist': CONSUMER_GENERATION_DIST,
+    'gen_dist': None,
+    # 'gen_time': list(range(10, 15, 5)),
+    'gen_time': [15, 25, 35],
     'base': Guam,
     'n_res_resupply': 40,
     'n_res_onhand': 1,
@@ -88,11 +89,10 @@ GU_CRUDES_CustGen = con.ConsumerGenerator(
 GU_TAKE_Generator = sup.SupplierGenerator({
     'env': env,
     'base': Guam,
-    'gen_dist': SUPPLIER_GENERATION_DIST,
-    # 'gen_dist': None,
-    # 'gen_time': [55],
-    # 'gen_times': list(range(1, 300, 50)),
-    'gen_time': list(range(100, 1000, 100)),
+    # 'gen_dist': SUPPLIER_GENERATION_DIST,
+    'gen_dist': None,
+    'gen_time': [55, 56, 57],
+    # 'gen_time': list(range(100, 1000, 100)),
     'n_supplied': TAKE_N_SUPPLIED,
 })
 
