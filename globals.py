@@ -5,17 +5,21 @@ import crayons
 TRACE = 1
 SIM_LENGTH = 100
 SIM_SPEED = 4
-ANIMATE = 0
+ANIMATE = 1
 
 ### Debugging ##################################################################
 VERBOSE_ALL = 1
+VERBOSE_MAIN = 1
 VERBOSE_BASE = 0
 VERBOSE_CONSUMERS = 0
 VERBOSE_SUPPLIERS = 1
+VERBOSE_ANIMATION = 1
 
+VERBOSE_MAIN_COLOR = crayons.yellow
 VERBOSE_BASE_COLOR = crayons.blue
 VERBOSE_CONSUMERS_COLOR = crayons.green
 VERBOSE_SUPPLIERS_COLOR = crayons.magenta
+VERBOSE_ANIMATION_COLOR = crayons.red
 
 
 def MAKE_CPRINT(verbose, color):

@@ -1,5 +1,12 @@
 import salabim as sim
 import crayons as cr
+from globals import *
+
+# Verbose logging setup
+verbose = VERBOSE_ALL or VERBOSE_ANIMATION
+cprint = MAKE_CPRINT(verbose, VERBOSE_ANIMATION_COLOR)
+cprint(f"animation.py verbose output ON")
+
 
 margins = {
     'top': 10,
@@ -22,7 +29,7 @@ q_lineplot_width = 500
 # ***** Queue Length of Stay Histogram Parameters *****
 q_LOS_hist_x_left = q_lineplot_x_left + q_lineplot_width + margins['general']
 q_LOS_hist_y_top = q_lineplot_y_bottom + q_lineplot_height
-print(cr.red(f'q_LOS_hist_y_top: {q_LOS_hist_y_top}'))
+cprint(f'q_LOS_hist_y_top: {q_LOS_hist_y_top}')
 q_lineplot_height = 300
 q_lineplot_width = 500
 
