@@ -27,6 +27,7 @@ class Base(sim.Component):
 
         # Create queue and resources for consumers
         self.queue = sim.Queue(f'{name}_queue')
+        self.supplier_queue = sim.Queue(f'{name}_supplier_queue')
         self.resource = sim.Resource(f'{name}_resource', 0)
         self.reload_teams = sim.Resource(f'{name}_reload_teams', n_reload_team)
         self.reload_queue = [None] * n_reload_team

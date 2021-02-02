@@ -3,8 +3,8 @@ import crayons
 
 ### Simulation Controls ########################################################
 TRACE = 1
-SIM_LENGTH = 100
-SIM_SPEED = 4
+SIM_LENGTH = 1000
+SIM_SPEED = 16
 ANIMATE = 1
 
 ### Debugging ##################################################################
