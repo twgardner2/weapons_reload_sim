@@ -13,7 +13,7 @@ margins = {
     'bottom': 10,
     'left': 10,
     'right': 10,
-    'general': 10
+    'general': 30
 }
 
 # ***** Queue Length Line Plot Parameters *****
@@ -88,10 +88,18 @@ def resource_bar_text(arg, t):
 
 
 # region: (((((((((((((((((((((((((((((Base Queues)))))))))))))))))))))))))))))
+base_rectangle_x_left = 150
+base_rectangle_width = 150
+# def base_rectangle_spec(arg, t):
+
+
+def base_rectangle_text(arg, t):
+    return f'{arg.config.get("name")}:\n{str(round(arg.resource.available_quantity()))}'
+
 
 base_queues_x_queues_start = 300
 
-base_queues_y_bottom = margins['bottom'] + 300
+base_queues_y_bottom = margins['bottom'] + 100
 
 
 base_queues_vertical_spacing = 70

@@ -58,7 +58,7 @@ Okinawa = bases.Base(okinawa_config)
 GU_CRUDES_CustGen_config = {
     'description': 'Cruisers and Destroyers arriving at Guam for resupply',
     'env': env,
-    'gen_dist': sim.IntUniform(20, 50),
+    'gen_dist': sim.IntUniform(30, 60),
     # 'gen_dist': None,
     # 'gen_time': list(range(10, 15, 5)),
     'gen_time': [15, 25, 35],
@@ -104,7 +104,7 @@ Okinawa_CRUDES_CustGen = con.ConsumerGenerator(
 GU_TAKE_Generator = sup.SupplierGenerator({
     'env': env,
     'base': Guam,
-    'gen_dist': sim.Normal(300, 20),
+    'gen_dist': sim.Normal(300, 40),
     # 'gen_dist': None,
     'gen_time': [55, 56, 57],
     # 'gen_time': list(range(100, 1000, 100)),
@@ -117,7 +117,7 @@ DGar_TAKE_Generator = sup.SupplierGenerator({
     # 'gen_dist': SUPPLIER_GENERATION_DIST,
     'gen_dist': None,
     # 'gen_time': None,
-    'gen_time': [10],
+    'gen_time': [10, 300, 400],
     'n_supplied': TAKE_N_SUPPLIED,
 })
 
@@ -163,15 +163,27 @@ Okinawa_TAKE_Generator = sup.SupplierGenerator({
 #                      text=ani.resource_label_text,
 #                      arg=Guam.resource)
 
+# Base rectangle
+for i, base in enumerate(bases.Base.getInstances()):
+    sim.AnimateRectangle(spec=(ani.base_rectangle_x_left,
+                               ani.base_queues_y_bottom + ani.base_queues_vertical_spacing * i,
+                               ani.base_rectangle_x_left + ani.base_rectangle_width,
+                               ani.base_queues_y_bottom + ani.base_queues_vertical_spacing * i + 50),
+                         text=ani.base_rectangle_text,
+                         arg=base,
+                         offsety=-25)
+
 # Consumers Queue
 for i, base in enumerate(bases.Base.getInstances()):
     cprint(f'{i}: {base}')
     sim.AnimateQueue(
         queue=base.queue,
         # x=ani.queue_x_left + 50,
-        x=ani.base_queues_x_queues_start + ani.margins['general'],
-        y=ani.queue_y_bottom + ani.base_queues_vertical_spacing * i,
-        title=f'Queue of Ships Waiting for Reload at {base.config["name"]}',
+        x=ani.base_rectangle_x_left + \
+        ani.base_rectangle_width + ani.margins['general'],
+        y=ani.base_queues_y_bottom + ani.base_queues_vertical_spacing * i,
+        # title=f'Queue of Ships Waiting for Reload at {base.config["name"]}',
+        title=f'Consumers',
         direction='e',
         id='blue',
     )
@@ -182,9 +194,10 @@ for i, base in enumerate(bases.Base.getInstances()):
     sim.AnimateQueue(
         queue=base.supplier_queue,
         # x=ani.queue_x_left + 50,
-        x=ani.base_queues_x_queues_start - ani.margins['general'],
-        y=ani.queue_y_bottom + ani.base_queues_vertical_spacing * i,
-        title=f'Queue of Suppliers Unloading at {base.config["name"]}',
+        x=ani.base_rectangle_x_left - ani.margins['general'],
+        y=ani.base_queues_y_bottom + ani.base_queues_vertical_spacing * i,
+        # title=f'Queue of Suppliers Unloading at {base.config["name"]}',
+        title=f'Suppliers',
         direction='w',
         id='blue',
     )

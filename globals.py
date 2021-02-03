@@ -4,7 +4,7 @@ import crayons
 ### Simulation Controls ########################################################
 TRACE = 1
 SIM_LENGTH = 1000
-SIM_SPEED = 16
+SIM_SPEED = 32
 ANIMATE = 1
 
 ### Debugging ##################################################################
@@ -50,7 +50,7 @@ SUPPLIER_GENERATION_DIST = sim.IntUniform(500, 900)
 SUPPLIER_GENERATION_TIMES = list(range(500, 5000, 500))
 
 SUPPLIER_N_SUPPLIED = 1000
-TAKE_N_SUPPLIED = 400
+TAKE_N_SUPPLIED = 100
 C5_N_SUPPLIED = 18
 C17_N_SUPPLIED = 8
 C130_N_SUPPLIED = 2
