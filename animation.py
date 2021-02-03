@@ -1,12 +1,19 @@
 import salabim as sim
 import crayons as cr
+from globals import *
+
+# Verbose logging setup
+verbose = VERBOSE_ALL or VERBOSE_ANIMATION
+cprint = MAKE_CPRINT(verbose, VERBOSE_ANIMATION_COLOR)
+cprint(f"animation.py verbose output ON")
+
 
 margins = {
     'top': 10,
     'bottom': 10,
     'left': 10,
     'right': 10,
-    'general': 10
+    'general': 30
 }
 
 # ***** Queue Length Line Plot Parameters *****
@@ -22,14 +29,15 @@ q_lineplot_width = 500
 # ***** Queue Length of Stay Histogram Parameters *****
 q_LOS_hist_x_left = q_lineplot_x_left + q_lineplot_width + margins['general']
 q_LOS_hist_y_top = q_lineplot_y_bottom + q_lineplot_height
-print(cr.red(f'q_LOS_hist_y_top: {q_LOS_hist_y_top}'))
+# cprint(f'q_LOS_hist_y_top: {q_LOS_hist_y_top}')
 q_lineplot_height = 300
 q_lineplot_width = 500
 
 # ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
 
-# ********** Resource Bar Animation **********
+# region: ((((((((((((((((((((((((Resource Bar Animation))))))))))))))))))))))))
+
 # Bottom and Top y-values #
 resource_bar_y_bottom = margins['bottom'] + 0
 resource_bar_height = 30
@@ -76,8 +84,26 @@ def resource_bar_text(arg, t):
     )
 
 
-# Queue Animation
+# endregion ====================================================================
+
+
+# region: (((((((((((((((((((((((((((((Base Queues)))))))))))))))))))))))))))))
+base_rectangle_x_left = 150
+base_rectangle_width = 150
+# def base_rectangle_spec(arg, t):
+
+
+def base_rectangle_text(arg, t):
+    return f'{arg.config.get("name")}:\n{str(round(arg.resource.available_quantity()))}'
+
+
+base_queues_x_queues_start = 300
+
+base_queues_y_bottom = margins['bottom'] + 100
+
+
+base_queues_vertical_spacing = 70
+
 queue_x_left = margins['left']
 queue_y_bottom = resource_bar_y_top + margins['general'] + 40
-
-# ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+# endregion ====================================================================

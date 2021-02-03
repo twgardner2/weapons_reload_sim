@@ -57,6 +57,10 @@ class Supplier(sim.Component):
             'n_supplied', 'base', 'env')(self.config)
         cprint(f'Supplier arrived, supplying {n_supplied} resources')
 
+        # Enter supplier queue at base
+        cprint(f'{self} entering supplier queue at {self.config.get("base")}')
+        self.enter(self.config.get('base').supplier_queue)
+
         # Simulate unloading resources at base
         n_left_to_unload = self.config.get('n_supplied')
         while n_left_to_unload > 0:
@@ -69,3 +73,7 @@ class Supplier(sim.Component):
 
             n_left_to_unload -= n_to_unload_this_period
             yield self.hold(1)
+
+        # Leave supplier queue at base
+        cprint(f'{self} leaving supplier queue at {self.config.get("base")}')
+        self.leave(self.config.get('base').supplier_queue)
