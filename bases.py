@@ -9,6 +9,9 @@ verbose = VERBOSE_ALL or VERBOSE_BASE
 cprint = MAKE_CPRINT(verbose, VERBOSE_BASE_COLOR)
 cprint(f"bases.py verbose output ON")
 
+# Writing Output
+out = OUTPUT
+
 
 class Base(sim.Component):
     # https://stackoverflow.com/questions/328851/printing-all-instances-of-a-class
@@ -54,6 +57,10 @@ class Base(sim.Component):
 
         # Run process
         while True:
+
+            if OUTPUT:
+                with open(OUTPUT_DIR + QUEUE_OUTPUT_FILE, 'a') as f:
+                    f.write(f'{env.now()}\t{name}\t{self.queue.length()}\n')
 
             # Verbose logging
             cprint(

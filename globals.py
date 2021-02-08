@@ -1,11 +1,12 @@
 import salabim as sim
 import crayons
+import datetime
 
 ### Simulation Controls ########################################################
 TRACE = 1
-SIM_LENGTH = 1000
+SIM_LENGTH = 100
 SIM_SPEED = 32
-ANIMATE = 1
+ANIMATE = 0
 
 ### Debugging ##################################################################
 VERBOSE_ALL = 1
@@ -30,6 +31,13 @@ def MAKE_CPRINT(verbose, color):
         def cprint(str):
             pass
     return cprint
+
+
+### Output #####################################################################
+OUTPUT = 0
+OUTPUT_DIR = 'output/'
+TIME = datetime.datetime.now().strftime("%y%m%d_%H%M%S")
+QUEUE_OUTPUT_FILE = f'queue_lengths_{TIME}.csv'
 
 
 ### Consumers ##################################################################
