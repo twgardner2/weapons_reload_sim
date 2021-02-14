@@ -48,6 +48,21 @@ PortOfAlma_TAKE_Generator = sup.SupplierGenerator({
     'n_supplied': SUPPLIER_N_SUPPLIED,
 })
 
+PortOfAlma_C17_Generator = sup.SupplierGenerator({
+    'env': env,
+    'base': PortOfAlma,
+    'gen_dist': SUPPLIER_GENERATION_DIST,
+    'gen_time': SUPPLIER_GENERATION_TIMES,
+    'n_supplied': SUPPLIER_N_SUPPLIED,
+})
+
+PortOfAlma_C130_Generator = sup.SupplierGenerator({
+    'env': env,
+    'base': PortOfAlma,
+    'gen_dist': SUPPLIER_GENERATION_DIST,
+    'gen_time': SUPPLIER_GENERATION_TIMES,
+    'n_supplied': SUPPLIER_N_SUPPLIED,
+})
 # endregion ====================================================================
 
 
@@ -155,6 +170,29 @@ PortOfBrisbane = bases.Base({
     'reload_team': fast_ERT,
     'n_reload_team': 1,
 })
+
+PortOfBrisbane_CRUDES_CustGen = con.ConsumerGenerator({
+    'description': 'Cruisers and Destroyers arriving at Diego Garcia for resupply',
+    'env': env,
+    'gen_dist': CONSUMER_GENERATION_DIST,
+    'gen_time': CONSUMER_GENERATION_TIMES,
+    'base': PortOfBrisbane,
+    'n_res_resupply': 40,
+    'n_res_onhand': 1,
+    'n_consumed_dist': CONSUMER_N_CONSUMED_DIST,
+})
+
+PortOfBrisbane_TAKE_Generator = sup.SupplierGenerator({
+    'env': env,
+    'base': PortOfBrisbane,
+    # 'gen_dist': SUPPLIER_GENERATION_DIST,
+    'gen_dist': None,
+    # 'gen_time': None,
+    'gen_time': [10, 300, 400],
+    'n_supplied': TAKE_N_SUPPLIED,
+})
+
+
 # endregion ====================================================================
 
 
@@ -164,6 +202,28 @@ DarwinAnchorage = bases.Base({
     'env': env,
     'reload_team': fast_ERT,
     'n_reload_team': 1,
+})
+
+
+DarwinAnchorage_CRUDES_CustGen = con.ConsumerGenerator({
+    'description': 'Cruisers and Destroyers arriving at Diego Garcia for resupply',
+    'env': env,
+    'gen_dist': CONSUMER_GENERATION_DIST,
+    'gen_time': CONSUMER_GENERATION_TIMES,
+    'base': DarwinAnchorage,
+    'n_res_resupply': 40,
+    'n_res_onhand': 1,
+    'n_consumed_dist': CONSUMER_N_CONSUMED_DIST,
+})
+
+DarwinAnchorage_TAKE_Generator = sup.SupplierGenerator({
+    'env': env,
+    'base': DarwinAnchorage,
+    # 'gen_dist': SUPPLIER_GENERATION_DIST,
+    'gen_dist': None,
+    # 'gen_time': None,
+    'gen_time': [10, 300, 400],
+    'n_supplied': TAKE_N_SUPPLIED,
 })
 
 # endregion ====================================================================
@@ -177,16 +237,77 @@ PointWilson = bases.Base({
     'n_reload_team': 1,
 })
 
+
+PointWilson_CRUDES_CustGen = con.ConsumerGenerator({
+    'description': 'Cruisers and Destroyers arriving at Diego Garcia for resupply',
+    'env': env,
+    'gen_dist': CONSUMER_GENERATION_DIST,
+    'gen_time': CONSUMER_GENERATION_TIMES,
+    'base': PointWilson,
+    'n_res_resupply': 40,
+    'n_res_onhand': 1,
+    'n_consumed_dist': CONSUMER_N_CONSUMED_DIST,
+})
+
+PointWilson_TAKE_Generator = sup.SupplierGenerator({
+    'env': env,
+    'base': PointWilson,
+    # 'gen_dist': SUPPLIER_GENERATION_DIST,
+    'gen_dist': None,
+    # 'gen_time': None,
+    'gen_time': [10, 300, 400],
+    'n_supplied': TAKE_N_SUPPLIED,
+})
 # endregion ====================================================================
 
 
 # region: (((((((((((((((((((((((((((((((((Banyuwangi)))))))))))))))))))))))))))))))))
 
+# Base
 Banyuwangi = bases.Base({
     'name': 'Banyuwangi',
     'env': env,
     'reload_team': fast_ERT,
     'n_reload_team': 1,
+})
+
+# Consumers
+Banyuwangi_CRUDES_CustGen = con.ConsumerGenerator({
+    'description': 'Cruisers and Destroyers arriving at Diego Garcia for resupply',
+    'env': env,
+    'gen_dist': CONSUMER_GENERATION_DIST,
+    'gen_time': CONSUMER_GENERATION_TIMES,
+    'base': Banyuwangi,
+    'n_res_resupply': 40,
+    'n_res_onhand': 1,
+    'n_consumed_dist': CONSUMER_N_CONSUMED_DIST,
+})
+
+# Suppliers
+Banyuwangi_TAKE_Generator = sup.SupplierGenerator({
+    'env': env,
+    'base': Banyuwangi,
+    # 'gen_dist': SUPPLIER_GENERATION_DIST,
+    'gen_dist': None,
+    # 'gen_time': None,
+    'gen_time': [10, 300, 400],
+    'n_supplied': TAKE_N_SUPPLIED,
+})
+
+Banyuwangi_C17_Generator = sup.SupplierGenerator({
+    'env': env,
+    'base': Banyuwangi,
+    'gen_dist': SUPPLIER_GENERATION_DIST,
+    'gen_time': SUPPLIER_GENERATION_TIMES,
+    'n_supplied': SUPPLIER_N_SUPPLIED,
+})
+
+Banyuwangi_C130_Generator = sup.SupplierGenerator({
+    'env': env,
+    'base': Banyuwangi,
+    'gen_dist': SUPPLIER_GENERATION_DIST,
+    'gen_time': SUPPLIER_GENERATION_TIMES,
+    'n_supplied': SUPPLIER_N_SUPPLIED,
 })
 # endregion ====================================================================
 
@@ -202,7 +323,7 @@ Semarang = bases.Base({
 # endregion ====================================================================
 
 
-# region: ((((((((((((((((((((((((((((((((()))))))))))))))))))))))))))))))))
+# region: (((((((((((((((((((((((((((((((((Male)))))))))))))))))))))))))))))))))
 Male = bases.Base({
     'name': 'Male',
     'env': env,

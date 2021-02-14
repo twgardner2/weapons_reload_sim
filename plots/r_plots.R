@@ -1,5 +1,7 @@
 library(tidyverse)
 
+theme_set(theme_minimal())
+
 model_output_path <- '/home/tom/Documents/weapons_reload_sim/output/'
 
 df <- read_csv(file = file.path(model_output_path, 'output.csv'), 
@@ -9,8 +11,16 @@ df <- read_csv(file = file.path(model_output_path, 'output.csv'),
 df_queue_length <- df %>% filter(key=='queue_length')
 p <- ggplot(data = df_queue_length,
             mapping = aes(x=time, y=value, color=key)) +
-    geom_step() + 
-    facet_grid(rows = vars(base))
+    geom_step(show.legend = FALSE) + 
+    facet_grid(rows = vars(base)) +
+  theme(
+      strip.text.x = element_text(
+        size = 6, color = "black", face = "plain"
+      ),
+      strip.text.y = element_text(
+        size = 6, color = "black", face = "plain"
+      )
+    )
 ggsave(filename = file.path(model_output_path, 'queue_length.png'),
        plot = p)
 
