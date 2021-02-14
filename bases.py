@@ -1,3 +1,4 @@
+import os
 import salabim as sim
 import resources as res
 from operator import itemgetter
@@ -11,6 +12,12 @@ cprint(f"bases.py verbose output ON")
 
 # Writing Output
 out = OUTPUT
+
+if out:
+    try:
+        os.remove(OUTPUT_DIR + QUEUE_OUTPUT_FILE)
+    except OSError:
+        pass
 
 
 class Base(sim.Component):
@@ -60,7 +67,7 @@ class Base(sim.Component):
 
             if OUTPUT:
                 with open(OUTPUT_DIR + QUEUE_OUTPUT_FILE, 'a') as f:
-                    f.write(f'{env.now()}\t{name}\t{self.queue.length()}\n')
+                    f.write(f'{env.now()},{name},{self.queue.length()}\n')
 
             # Verbose logging
             cprint(

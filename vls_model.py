@@ -41,14 +41,13 @@ dgar_config = {
 }
 DGar = bases.Base(dgar_config)
 
-# okinawa_config = {
-#     'name': 'Okinawa Tengan',
-#     'env': env,
-#     'reload_team': fast_ERT,
-#     'n_reload_team': 1,
-
-# }
-# Okinawa = bases.Base(okinawa_config)
+okinawa_config = {
+    'name': 'Okinawa Tengan',
+    'env': env,
+    'reload_team': fast_ERT,
+    'n_reload_team': 1,
+}
+Okinawa = bases.Base(okinawa_config)
 # endregion ====================================================================
 
 
@@ -85,18 +84,18 @@ DGar_CRUDES_CustGen = con.ConsumerGenerator(
     DGar_CRUDES_CustGen_config)
 
 # CRUDESs arriving at Okinawa
-# Okinawa_CRUDES_CustGen_config = {
-#     'description': 'Cruisers and Destroyers arriving at Diego Garcia for resupply',
-#     'env': env,
-#     'gen_dist': CONSUMER_GENERATION_DIST,
-#     'gen_time': CONSUMER_GENERATION_TIMES,
-#     'base': Okinawa,
-#     'n_res_resupply': 40,
-#     'n_res_onhand': 1,
-#     'n_consumed_dist': CONSUMER_N_CONSUMED_DIST,
-# }
-# Okinawa_CRUDES_CustGen = con.ConsumerGenerator(
-#     Okinawa_CRUDES_CustGen_config)
+Okinawa_CRUDES_CustGen_config = {
+    'description': 'Cruisers and Destroyers arriving at Diego Garcia for resupply',
+    'env': env,
+    'gen_dist': CONSUMER_GENERATION_DIST,
+    'gen_time': CONSUMER_GENERATION_TIMES,
+    'base': Okinawa,
+    'n_res_resupply': 40,
+    'n_res_onhand': 1,
+    'n_consumed_dist': CONSUMER_N_CONSUMED_DIST,
+}
+Okinawa_CRUDES_CustGen = con.ConsumerGenerator(
+    Okinawa_CRUDES_CustGen_config)
 # endregion ====================================================================
 
 
@@ -121,13 +120,13 @@ DGar_TAKE_Generator = sup.SupplierGenerator({
     'n_supplied': TAKE_N_SUPPLIED,
 })
 
-# Okinawa_TAKE_Generator = sup.SupplierGenerator({
-#     'env': env,
-#     'base': Okinawa,
-#     'gen_dist': SUPPLIER_GENERATION_DIST,
-#     'gen_time': SUPPLIER_GENERATION_TIMES,
-#     'n_supplied': SUPPLIER_N_SUPPLIED,
-# })
+Okinawa_TAKE_Generator = sup.SupplierGenerator({
+    'env': env,
+    'base': Okinawa,
+    'gen_dist': SUPPLIER_GENERATION_DIST,
+    'gen_time': SUPPLIER_GENERATION_TIMES,
+    'n_supplied': SUPPLIER_N_SUPPLIED,
+})
 # endregion ====================================================================
 
 

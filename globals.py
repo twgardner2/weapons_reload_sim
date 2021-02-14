@@ -2,13 +2,14 @@ import salabim as sim
 import crayons
 import datetime
 
-### Simulation Controls ########################################################
+# region: (((((((((((((((((((((((((Simulation Controls)))))))))))))))))))))))))
 TRACE = 1
-SIM_LENGTH = 100
+SIM_LENGTH = 1500
 SIM_SPEED = 32
 ANIMATE = 0
+# endregion ====================================================================
 
-### Debugging ##################################################################
+# region: ((((((((((((((((((((((((((((((Debugging))))))))))))))))))))))))))))))
 VERBOSE_ALL = 1
 VERBOSE_MAIN = 1
 VERBOSE_BASE = 0
@@ -31,16 +32,18 @@ def MAKE_CPRINT(verbose, color):
         def cprint(str):
             pass
     return cprint
+# endregion ====================================================================
 
 
-### Output #####################################################################
-OUTPUT = 0
+# region: ((((((((((((((((((((((((((((((((Output))))))))))))))))))))))))))))))))
+OUTPUT = 1
 OUTPUT_DIR = 'output/'
 TIME = datetime.datetime.now().strftime("%y%m%d_%H%M%S")
-QUEUE_OUTPUT_FILE = f'queue_lengths_{TIME}.csv'
+# QUEUE_OUTPUT_FILE = f'queue_lengths_{TIME}.csv'
+QUEUE_OUTPUT_FILE = f'queue_lengths.csv'
+# endregion ====================================================================
 
-
-### Consumers ##################################################################
+# region: ((((((((((((((((((((((((((((((Consumers))))))))))))))))))))))))))))))
 # defining CONSUMER_GENERATION_DIST overrides CONSUMER_GENERATION_TIMES
 # CONSUMER_GENERATION_DIST = sim.IntUniform(60, 110)
 CONSUMER_GENERATION_DIST = sim.Normal(50, 15)
@@ -49,9 +52,9 @@ CONSUMER_GENERATION_DIST = sim.Normal(50, 15)
 CONSUMER_GENERATION_TIMES = list(range(1, 300, 50))
 # CONSUMER_N_CONSUMED_DIST = sim.IntUniform(8, 96)
 CONSUMER_N_CONSUMED_DIST = sim.IntUniform(25, 25)
+# endregion ====================================================================
 
-
-### Suppliers: #################################################################
+# region: ((((((((((((((((((((((((((((((Suppliers))))))))))))))))))))))))))))))
 # defining SUPPLIER_GENERATION_DIST overrides SUPPLIER_GENERATION_TIMES
 SUPPLIER_GENERATION_DIST = sim.IntUniform(500, 900)
 # SUPPLIER_GENERATION_DIST = None
@@ -64,10 +67,14 @@ C17_N_SUPPLIED = 8
 C130_N_SUPPLIED = 2
 
 SUPPLIER_UNLOAD_RATE = 8  # resources/hour
-### ERTs #######################################################################
+# endregion ====================================================================
+
+
+# region: (((((((((((((((((((((((((((((((((ERTs)))))))))))))))))))))))))))))))))
 # - make reload time be missiles/hour
 NUM_FAST_ERT = 3
 NUM_SLOW_ERT = 3
 
 FAST_ERT_RELOAD_RATE = 4
 SLOW_ERT_RELOAD_RATE = 2
+# endregion ====================================================================
