@@ -43,11 +43,11 @@ class Base(sim.Component):
         self.reload_queue = [None] * n_reload_team
 
         # Consume the assigned reload_team resource
-        if reload_team.available_quantity() > 0:
-            self.request((reload_team, 1))
-        else:
-            raise Exception(
-                f'not enough ERTs. {name} tried to request reload_team {reload_team} but there are none')
+        # if reload_team.available_quantity() > 0:
+        #     self.request((reload_team, 1))
+        # else:
+        #     raise Exception(
+        #         f'not enough ERTs. {name} tried to request reload_team {reload_team} but there are none')
 
         # Attach config to self to pass to process
         self.config = config
@@ -67,7 +67,10 @@ class Base(sim.Component):
 
             if OUTPUT:
                 with open(OUTPUT_DIR + QUEUE_OUTPUT_FILE, 'a') as f:
-                    f.write(f'{env.now()},{name},{self.queue.length()}\n')
+                    f.write(
+                        f'{env.now()},{name},queue_length,{self.queue.length()}\n')
+                    f.write(
+                        f'{env.now()},{name},resources_available,{self.resource.available_quantity()}\n')
 
             # Verbose logging
             cprint(

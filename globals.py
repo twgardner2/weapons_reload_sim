@@ -40,7 +40,7 @@ OUTPUT = 1
 OUTPUT_DIR = 'output/'
 TIME = datetime.datetime.now().strftime("%y%m%d_%H%M%S")
 # QUEUE_OUTPUT_FILE = f'queue_lengths_{TIME}.csv'
-QUEUE_OUTPUT_FILE = f'queue_lengths.csv'
+QUEUE_OUTPUT_FILE = f'output.csv'
 # endregion ====================================================================
 
 # region: ((((((((((((((((((((((((((((((Consumers))))))))))))))))))))))))))))))
