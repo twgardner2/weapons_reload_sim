@@ -9,6 +9,50 @@ cprint = MAKE_CPRINT(verbose, VERBOSE_SUPPLIERS_COLOR)
 cprint(f"suppliers.py verbose output ON")
 
 
+class TAKE_Config():
+    def __init__(self, config={}):
+
+        default_config = {
+            'n_supplied': TAKE_N_SUPPLIED,
+            'gen_dist': SUPPLIER_GENERATION_DIST,
+            'gen_time': SUPPLIER_GENERATION_TIMES,
+        }
+        self.config = {**default_config, **config}
+
+
+class C5_Config():
+    def __init__(self, config={}):
+
+        default_config = {
+            'n_supplied': C5_N_SUPPLIED,
+            'gen_dist': SUPPLIER_GENERATION_DIST,
+            'gen_time': SUPPLIER_GENERATION_TIMES,
+        }
+        self.config = {**default_config, **config}
+
+
+class C17_Config():
+    def __init__(self, config={}):
+
+        default_config = {
+            'n_supplied': C17_N_SUPPLIED,
+            'gen_dist': SUPPLIER_GENERATION_DIST,
+            'gen_time': SUPPLIER_GENERATION_TIMES,
+        }
+        self.config = {**default_config, **config}
+
+
+class C130_Config():
+    def __init__(self, config={}):
+
+        default_config = {
+            'n_supplied': C130_N_SUPPLIED,
+            'gen_dist': SUPPLIER_GENERATION_DIST,
+            'gen_time': SUPPLIER_GENERATION_TIMES,
+        }
+        self.config = {**default_config, **config}
+
+
 class SupplierGenerator(sim.Component):
     def __init__(self, config={}):
         sim.Component.__init__(self)

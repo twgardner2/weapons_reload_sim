@@ -4,6 +4,7 @@ import suppliers as sup
 import animation as ani
 from globals import *
 
+
 # Verbose logging setup
 verbose = VERBOSE_ALL or VERBOSE_MAIN
 cprint = MAKE_CPRINT(verbose, VERBOSE_MAIN_COLOR)
@@ -15,13 +16,25 @@ env = sim.Environment(time_unit='hours', trace=TRACE)
 # env = sim.Environment(time_units='hours')
 import bases
 
+
+print(sup.TAKE_Config({'env': env}).config)
+print(sup.TAKE_Config({'env': env, 'n_supplied': 9}).config)
+
+print(sup.C5_Config({'env': env}).config)
+print(sup.C5_Config({'env': env, 'n_supplied': 9}).config)
+
+print(sup.C17_Config({'env': env}).config)
+print(sup.C17_Config({'env': env, 'n_supplied': 9}).config)
+
+print(sup.C130_Config({'env': env}).config)
+print(sup.C130_Config({'env': env, 'n_supplied': 9}).config)
 # region: ((((((((((((((((((((((((((((((Resources))))))))))))))))))))))))))))))
 from resources import *
 # endregion ====================================================================
 
 
 # region: (((((((((((((((((((((((((((((Port of Alma)))))))))))))))))))))))))))))
-
+# Base
 PortOfAlma = bases.Base({
     'name': 'Port of Alma',
     'env': env,
@@ -29,6 +42,7 @@ PortOfAlma = bases.Base({
     'n_reload_team': 1,
 })
 
+# Consumers
 PortAlma_CRUDES_CustGen = con.ConsumerGenerator({
     'description': 'Cruisers and Destroyers arriving at Diego Garcia for resupply',
     'env': env,
@@ -40,29 +54,24 @@ PortAlma_CRUDES_CustGen = con.ConsumerGenerator({
     'n_consumed_dist': CONSUMER_N_CONSUMED_DIST,
 })
 
-PortOfAlma_TAKE_Generator = sup.SupplierGenerator({
-    'env': env,
-    'base': PortOfAlma,
-    'gen_dist': SUPPLIER_GENERATION_DIST,
-    'gen_time': SUPPLIER_GENERATION_TIMES,
-    'n_supplied': SUPPLIER_N_SUPPLIED,
-})
+# Suppliers
+PortOfAlma_TAKE_Generator = sup.SupplierGenerator(
+    sup.TAKE_Config({
+        'env': env,
+        'base': PortOfAlma,
+    }).config)
 
-PortOfAlma_C17_Generator = sup.SupplierGenerator({
-    'env': env,
-    'base': PortOfAlma,
-    'gen_dist': SUPPLIER_GENERATION_DIST,
-    'gen_time': SUPPLIER_GENERATION_TIMES,
-    'n_supplied': SUPPLIER_N_SUPPLIED,
-})
+PortOfAlma_C17_Generator = sup.SupplierGenerator(
+    sup.C17_Config({
+        'env': env,
+        'base': PortOfAlma,
+    }).config)
 
-PortOfAlma_C130_Generator = sup.SupplierGenerator({
-    'env': env,
-    'base': PortOfAlma,
-    'gen_dist': SUPPLIER_GENERATION_DIST,
-    'gen_time': SUPPLIER_GENERATION_TIMES,
-    'n_supplied': SUPPLIER_N_SUPPLIED,
-})
+PortOfAlma_C130_Generator = sup.SupplierGenerator(
+    sup.C130_Config({
+        'env': env,
+        'base': PortOfAlma,
+    }).config)
 # endregion ====================================================================
 
 

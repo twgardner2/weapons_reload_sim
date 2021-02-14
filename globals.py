@@ -3,19 +3,19 @@ import crayons
 import datetime
 
 # region: (((((((((((((((((((((((((Simulation Controls)))))))))))))))))))))))))
-TRACE = 1
-SIM_LENGTH = 1000
+TRACE = 0
+SIM_LENGTH = 100
 SIM_SPEED = 32
 ANIMATE = 0
 # endregion ====================================================================
 
 # region: ((((((((((((((((((((((((((((((Debugging))))))))))))))))))))))))))))))
-VERBOSE_ALL = 1
-VERBOSE_MAIN = 1
+VERBOSE_ALL = 0
+VERBOSE_MAIN = 0
 VERBOSE_BASE = 0
 VERBOSE_CONSUMERS = 0
-VERBOSE_SUPPLIERS = 1
-VERBOSE_ANIMATION = 1
+VERBOSE_SUPPLIERS = 0
+VERBOSE_ANIMATION = 0
 
 VERBOSE_MAIN_COLOR = crayons.yellow
 VERBOSE_BASE_COLOR = crayons.blue
