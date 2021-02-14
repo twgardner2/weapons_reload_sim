@@ -4,7 +4,7 @@ import datetime
 
 # region: (((((((((((((((((((((((((Simulation Controls)))))))))))))))))))))))))
 TRACE = 0
-SIM_LENGTH = 100
+SIM_LENGTH = 1000
 SIM_SPEED = 32
 ANIMATE = 0
 # endregion ====================================================================

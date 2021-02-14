@@ -28,7 +28,15 @@ ggsave(filename = file.path(model_output_path, 'queue_length.png'),
 df_resources_avail <- df %>% filter(key=='resources_available')
 p <- ggplot(data = df_resources_avail,
             mapping = aes(x=time, y=value, color=key)) +
-  geom_step() + 
-  facet_grid(rows = vars(base))
+  geom_step(show.legend = FALSE) + 
+  facet_grid(rows = vars(base)) +
+  theme(
+    strip.text.x = element_text(
+      size = 6, color = "black", face = "plain"
+    ),
+    strip.text.y = element_text(
+      size = 6, color = "black", face = "plain"
+    )
+  )
 ggsave(filename = file.path(model_output_path, 'resources_available.png'),
        plot = p)

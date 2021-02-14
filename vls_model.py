@@ -17,17 +17,18 @@ env = sim.Environment(time_unit='hours', trace=TRACE)
 import bases
 
 
-print(sup.TAKE_Config({'env': env}).config)
-print(sup.TAKE_Config({'env': env, 'n_supplied': 9}).config)
+print(sup.Supplier_Config('TAKE', {'env': env, 'base': 'base1', }).config)
+print(sup.Supplier_Config(
+    'C130', {'env': env, 'base': 'base1', 'n_supplied': 9, }).config)
 
-print(sup.C5_Config({'env': env}).config)
-print(sup.C5_Config({'env': env, 'n_supplied': 9}).config)
+# print(sup.C5_Config({'env': env, 'base': 'base1'}).config)
+# print(sup.C5_Config({'env': env, 'base': 'base1', 'n_supplied': 9}).config)
 
-print(sup.C17_Config({'env': env}).config)
-print(sup.C17_Config({'env': env, 'n_supplied': 9}).config)
+# print(sup.C17_Config({'env': env, 'base': 'base1'}).config)
+# print(sup.C17_Config({'env': env, 'base': 'base1', 'n_supplied': 9}).config)
 
-print(sup.C130_Config({'env': env}).config)
-print(sup.C130_Config({'env': env, 'n_supplied': 9}).config)
+# print(sup.C130_Config({'env': env, 'base': 'base1'}).config)
+# print(sup.C130_Config({'env': env, 'base': 'base1', 'n_supplied': 9}).config)
 # region: ((((((((((((((((((((((((((((((Resources))))))))))))))))))))))))))))))
 from resources import *
 # endregion ====================================================================
@@ -56,22 +57,25 @@ PortAlma_CRUDES_CustGen = con.ConsumerGenerator({
 
 # Suppliers
 PortOfAlma_TAKE_Generator = sup.SupplierGenerator(
-    sup.TAKE_Config({
-        'env': env,
-        'base': PortOfAlma,
-    }).config)
+    sup.Supplier_Config(supplier_type='TAKE',
+                        config={
+                            'env': env,
+                            'base': PortOfAlma,
+                        }).config)
 
 PortOfAlma_C17_Generator = sup.SupplierGenerator(
-    sup.C17_Config({
-        'env': env,
-        'base': PortOfAlma,
-    }).config)
+    sup.Supplier_Config(supplier_type='C17',
+                        config={
+                            'env': env,
+                            'base': PortOfAlma,
+                        }).config)
 
 PortOfAlma_C130_Generator = sup.SupplierGenerator(
-    sup.C130_Config({
-        'env': env,
-        'base': PortOfAlma,
-    }).config)
+    sup.Supplier_Config(supplier_type='C130',
+                        config={
+                            'env': env,
+                            'base': PortOfAlma,
+                        }).config)
 # endregion ====================================================================
 
 
@@ -94,15 +98,34 @@ DGar_CRUDES_CustGen = con.ConsumerGenerator({
     'n_consumed_dist': CONSUMER_N_CONSUMED_DIST,
 })
 
-DGar_TAKE_Generator = sup.SupplierGenerator({
-    'env': env,
-    'base': DGar,
-    # 'gen_dist': SUPPLIER_GENERATION_DIST,
-    'gen_dist': None,
-    # 'gen_time': None,
-    'gen_time': [10, 300, 400],
-    'n_supplied': TAKE_N_SUPPLIED,
-})
+# Suppliers
+DGar_TAKE_Generator = sup.SupplierGenerator(
+    sup.Supplier_Config(supplier_type='TAKE',
+                        config={
+                            'env': env,
+                            'base': DGar,
+                        }).config)
+
+DGar_C5_Generator = sup.SupplierGenerator(
+    sup.Supplier_Config(supplier_type='C5',
+                        config={
+                            'env': env,
+                            'base': DGar,
+                        }).config)
+
+DGar_C17_Generator = sup.SupplierGenerator(
+    sup.Supplier_Config(supplier_type='C17',
+                        config={
+                            'env': env,
+                            'base': DGar,
+                        }).config)
+
+DGar_C130_Generator = sup.SupplierGenerator(
+    sup.Supplier_Config(supplier_type='C130',
+                        config={
+                            'env': env,
+                            'base': DGar,
+                        }).config)
 # endregion ====================================================================
 
 
@@ -115,7 +138,7 @@ Guam = bases.Base({
 })
 
 # CRUDESs arriving at Guam
-GU_CRUDES_CustGen = con.ConsumerGenerator({
+Guam_CRUDES_CustGen = con.ConsumerGenerator({
     'description': 'Cruisers and Destroyers arriving at Guam for resupply',
     'env': env,
     'gen_dist': sim.IntUniform(30, 60),
@@ -128,15 +151,34 @@ GU_CRUDES_CustGen = con.ConsumerGenerator({
     'n_consumed_dist': CONSUMER_N_CONSUMED_DIST,
 })
 
-GU_TAKE_Generator = sup.SupplierGenerator({
-    'env': env,
-    'base': Guam,
-    'gen_dist': sim.Normal(300, 40),
-    # 'gen_dist': None,
-    'gen_time': [55, 56, 57],
-    # 'gen_time': list(range(100, 1000, 100)),
-    'n_supplied': TAKE_N_SUPPLIED,
-})
+# Suppliers
+Guam_TAKE_Generator = sup.SupplierGenerator(
+    sup.Supplier_Config(supplier_type='TAKE',
+                        config={
+                            'env': env,
+                            'base': Guam,
+                        }).config)
+
+Guam_C5_Generator = sup.SupplierGenerator(
+    sup.Supplier_Config(supplier_type='C5',
+                        config={
+                            'env': env,
+                            'base': Guam,
+                        }).config)
+
+Guam_C17_Generator = sup.SupplierGenerator(
+    sup.Supplier_Config(supplier_type='C17',
+                        config={
+                            'env': env,
+                            'base': Guam,
+                        }).config)
+
+Guam_C130_Generator = sup.SupplierGenerator(
+    sup.Supplier_Config(supplier_type='C130',
+                        config={
+                            'env': env,
+                            'base': Guam,
+                        }).config)
 # endregion ====================================================================
 
 
@@ -159,15 +201,27 @@ Saipan_CRUDES_CustGen = con.ConsumerGenerator({
     'n_consumed_dist': CONSUMER_N_CONSUMED_DIST,
 })
 
-Saipan_TAKE_Generator = sup.SupplierGenerator({
-    'env': env,
-    'base': Saipan,
-    # 'gen_dist': SUPPLIER_GENERATION_DIST,
-    'gen_dist': None,
-    # 'gen_time': None,
-    'gen_time': [10, 300, 400],
-    'n_supplied': TAKE_N_SUPPLIED,
-})
+# Suppliers
+Saipan_TAKE_Generator = sup.SupplierGenerator(
+    sup.Supplier_Config(supplier_type='TAKE',
+                        config={
+                            'env': env,
+                            'base': Saipan,
+                        }).config)
+
+Saipan_C17_Generator = sup.SupplierGenerator(
+    sup.Supplier_Config(supplier_type='C17',
+                        config={
+                            'env': env,
+                            'base': Saipan,
+                        }).config)
+
+Saipan_C130_Generator = sup.SupplierGenerator(
+    sup.Supplier_Config(supplier_type='C130',
+                        config={
+                            'env': env,
+                            'base': Saipan,
+                        }).config)
 # endregion ====================================================================
 
 
@@ -293,31 +347,26 @@ Banyuwangi_CRUDES_CustGen = con.ConsumerGenerator({
 })
 
 # Suppliers
-Banyuwangi_TAKE_Generator = sup.SupplierGenerator({
-    'env': env,
-    'base': Banyuwangi,
-    # 'gen_dist': SUPPLIER_GENERATION_DIST,
-    'gen_dist': None,
-    # 'gen_time': None,
-    'gen_time': [10, 300, 400],
-    'n_supplied': TAKE_N_SUPPLIED,
-})
+Banyuwangi_TAKE_Generator = sup.SupplierGenerator(
+    sup.Supplier_Config(supplier_type='TAKE',
+                        config={
+                            'env': env,
+                            'base': Banyuwangi,
+                        }).config)
 
-Banyuwangi_C17_Generator = sup.SupplierGenerator({
-    'env': env,
-    'base': Banyuwangi,
-    'gen_dist': SUPPLIER_GENERATION_DIST,
-    'gen_time': SUPPLIER_GENERATION_TIMES,
-    'n_supplied': SUPPLIER_N_SUPPLIED,
-})
+Banyuwangi_C17_Generator = sup.SupplierGenerator(
+    sup.Supplier_Config(supplier_type='C17',
+                        config={
+                            'env': env,
+                            'base': Banyuwangi,
+                        }).config)
 
-Banyuwangi_C130_Generator = sup.SupplierGenerator({
-    'env': env,
-    'base': Banyuwangi,
-    'gen_dist': SUPPLIER_GENERATION_DIST,
-    'gen_time': SUPPLIER_GENERATION_TIMES,
-    'n_supplied': SUPPLIER_N_SUPPLIED,
-})
+Banyuwangi_C130_Generator = sup.SupplierGenerator(
+    sup.Supplier_Config(supplier_type='C130',
+                        config={
+                            'env': env,
+                            'base': Banyuwangi,
+                        }).config)
 # endregion ====================================================================
 
 
@@ -329,6 +378,27 @@ Semarang = bases.Base({
     'n_reload_team': 1,
 })
 
+# Suppliers
+Semarang_TAKE_Generator = sup.SupplierGenerator(
+    sup.Supplier_Config(supplier_type='TAKE',
+                        config={
+                            'env': env,
+                            'base': Semarang,
+                        }).config)
+
+Semarang_C17_Generator = sup.SupplierGenerator(
+    sup.Supplier_Config(supplier_type='C17',
+                        config={
+                            'env': env,
+                            'base': Semarang,
+                        }).config)
+
+Semarang_C130_Generator = sup.SupplierGenerator(
+    sup.Supplier_Config(supplier_type='C130',
+                        config={
+                            'env': env,
+                            'base': Semarang,
+                        }).config)
 # endregion ====================================================================
 
 

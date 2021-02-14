@@ -9,11 +9,27 @@ cprint = MAKE_CPRINT(verbose, VERBOSE_SUPPLIERS_COLOR)
 cprint(f"suppliers.py verbose output ON")
 
 
-class TAKE_Config():
-    def __init__(self, config={}):
+class Supplier_Config():
+    def __init__(self, supplier_type, config={}):
+        if supplier_type is None:
+            raise Exception('You must pass "supplier_type"')
+        if 'base' not in config and 'env' not in config:
+            raise Exception('You must pass "env" and "base"')
+        if 'base' not in config:
+            raise Exception('You must pass "base"')
+        if 'env' not in config:
+            raise Exception('You must pass "env"')
+
+        n_supplied_dict = {
+            'TAKE': TAKE_N_SUPPLIED,
+            'C5': C5_N_SUPPLIED,
+            'C17': C17_N_SUPPLIED,
+            'C130': C130_N_SUPPLIED,
+        }
 
         default_config = {
-            'n_supplied': TAKE_N_SUPPLIED,
+            'description': f'{supplier_type} supplying {config["base"]}',
+            'n_supplied': n_supplied_dict[supplier_type],
             'gen_dist': SUPPLIER_GENERATION_DIST,
             'gen_time': SUPPLIER_GENERATION_TIMES,
         }
