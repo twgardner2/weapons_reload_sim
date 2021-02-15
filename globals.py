@@ -52,6 +52,10 @@ CONSUMER_GENERATION_DIST = sim.Normal(50, 15)
 CONSUMER_GENERATION_TIMES = list(range(1, 300, 50))
 # CONSUMER_N_CONSUMED_DIST = sim.IntUniform(8, 96)
 CONSUMER_N_CONSUMED_DIST = sim.IntUniform(25, 25)
+
+CG_FULL_LOADOUT = 122
+DDG_FULL_LOADOUT = 96
+FFG_FULL_LOADOUT = 50
 # endregion ====================================================================
 
 # region: ((((((((((((((((((((((((((((((Suppliers))))))))))))))))))))))))))))))

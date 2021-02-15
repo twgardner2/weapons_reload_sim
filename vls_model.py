@@ -138,18 +138,13 @@ Guam = bases.Base({
 })
 
 # CRUDESs arriving at Guam
-Guam_CRUDES_CustGen = con.ConsumerGenerator({
-    'description': 'Cruisers and Destroyers arriving at Guam for resupply',
-    'env': env,
-    'gen_dist': sim.IntUniform(30, 60),
-    # 'gen_dist': None,
-    # 'gen_time': list(range(10, 15, 5)),
-    'gen_time': [15, 25, 35],
-    'base': Guam,
-    'n_res_resupply': 40,
-    'n_res_onhand': 1,
-    'n_consumed_dist': CONSUMER_N_CONSUMED_DIST,
-})
+Guam_CRUDES_CustGen = con.ConsumerGenerator(
+    con.ConsumerConfig(
+        consumer_type='CG',
+        config={
+            'env': env,
+            'base': Guam,
+        }).config)
 
 # Suppliers
 Guam_TAKE_Generator = sup.SupplierGenerator(
