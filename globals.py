@@ -56,6 +56,7 @@ CONSUMER_N_CONSUMED_DIST = sim.IntUniform(25, 25)
 CG_FULL_LOADOUT = 122
 DDG_FULL_LOADOUT = 96
 FFG_FULL_LOADOUT = 50
+SAG_FULL_LOADOUT = CG_FULL_LOADOUT + DDG_FULL_LOADOUT
 # endregion ====================================================================
 
 # region: ((((((((((((((((((((((((((((((Suppliers))))))))))))))))))))))))))))))
