@@ -2,6 +2,7 @@ import salabim as sim
 import consumers as con
 import suppliers as sup
 import animation as ani
+import os
 from globals import *
 
 
@@ -713,3 +714,6 @@ env.run(till=SIM_LENGTH)
 #     ).print_histogram()
 
 # endregion ====================================================================
+
+
+os.system("Rscript plots/r_plots.R")
