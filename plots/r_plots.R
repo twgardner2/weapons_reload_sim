@@ -40,3 +40,23 @@ p <- ggplot(data = df_resources_avail,
   )
 ggsave(filename = file.path(model_output_path, 'resources_available.png'),
        plot = p)
+
+# Total Queue Length
+df_total_queue <- df %>% 
+  filter(key == "queue_length") %>% 
+  group_by(time) %>% 
+  summarize(total_queue = sum(value))
+
+p <- ggplot(data = df_total_queue,
+            mapping = aes(x=time, y=total_queue)) +
+  geom_step(show.legend = FALSE) + 
+  theme(
+    strip.text.x = element_text(
+      size = 6, color = "black", face = "plain"
+    ),
+    strip.text.y = element_text(
+      size = 6, color = "black", face = "plain"
+    )
+  )
+ggsave(filename = file.path(model_output_path, 'total_queue.png'),
+       plot = p)
