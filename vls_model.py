@@ -17,18 +17,6 @@ env = sim.Environment(time_unit='hours', trace=TRACE)
 import bases
 
 
-print(sup.Supplier_Config('TAKE', {'env': env, 'base': 'base1', }).config)
-print(sup.Supplier_Config(
-    'C130', {'env': env, 'base': 'base1', 'n_supplied': 9, }).config)
-
-# print(sup.C5_Config({'env': env, 'base': 'base1'}).config)
-# print(sup.C5_Config({'env': env, 'base': 'base1', 'n_supplied': 9}).config)
-
-# print(sup.C17_Config({'env': env, 'base': 'base1'}).config)
-# print(sup.C17_Config({'env': env, 'base': 'base1', 'n_supplied': 9}).config)
-
-# print(sup.C130_Config({'env': env, 'base': 'base1'}).config)
-# print(sup.C130_Config({'env': env, 'base': 'base1', 'n_supplied': 9}).config)
 # region: ((((((((((((((((((((((((((((((Resources))))))))))))))))))))))))))))))
 from resources import *
 # endregion ====================================================================
