@@ -84,6 +84,11 @@ class Supplier(sim.Component):
         sim.Component.__init__(self)
         self.config = config
 
+        if OUTPUT:
+            with open(OUTPUT_DIR + QUEUE_OUTPUT_FILE, 'a') as f:
+                f.write(
+                    f'{self.config["env"].now()},{self.config["base"].config["name"]},supplier_arrived,{self.config["n_supplied"]}\n')
+
     def process(self):
 
         # Destructure config
