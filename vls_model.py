@@ -225,69 +225,104 @@ Saipan_C130_Generator = sup.SupplierGenerator(
 # endregion ====================================================================
 
 
-# region: (((((((((((((((((((((((((((((((((Port of Brisbane)))))))))))))))))))))))))))))))))
-
-PortOfBrisbane = bases.Base({
+# region: (((((((((((((((((((((((((((((((Brisbane)))))))))))))))))))))))))))))))
+Brisbane = bases.Base({
     'name': 'Port of Brisbane',
     'env': env,
     'reload_team': fast_ERT,
     'n_reload_team': 1,
 })
 
-PortOfBrisbane_CRUDES_CustGen = con.ConsumerGenerator({
+Brisbane_CRUDES_CustGen = con.ConsumerGenerator({
     'description': 'Cruisers and Destroyers arriving at Diego Garcia for resupply',
     'env': env,
     'gen_dist': CONSUMER_GENERATION_DIST,
     'gen_time': CONSUMER_GENERATION_TIMES,
-    'base': PortOfBrisbane,
+    'base': Brisbane,
     'n_res_resupply': 40,
     'n_res_onhand': 1,
     'n_consumed_dist': CONSUMER_N_CONSUMED_DIST,
 })
 
-PortOfBrisbane_TAKE_Generator = sup.SupplierGenerator({
-    'env': env,
-    'base': PortOfBrisbane,
-    # 'gen_dist': SUPPLIER_GENERATION_DIST,
-    'gen_dist': None,
-    # 'gen_time': None,
-    'gen_time': [10, 300, 400],
-    'n_supplied': TAKE_N_SUPPLIED,
-})
+# Suppliers
+Brisbane_TAKE_Generator = sup.SupplierGenerator(
+    sup.Supplier_Config(supplier_type='TAKE',
+                        config={
+                            'env': env,
+                            'base': Brisbane,
+                        }).config)
 
+Brisbane_C5_Generator = sup.SupplierGenerator(
+    sup.Supplier_Config(supplier_type='C5',
+                        config={
+                            'env': env,
+                            'base': Brisbane,
+                        }).config)
 
+Brisbane_C17_Generator = sup.SupplierGenerator(
+    sup.Supplier_Config(supplier_type='C17',
+                        config={
+                            'env': env,
+                            'base': Brisbane,
+                        }).config)
+
+Brisbane_C130_Generator = sup.SupplierGenerator(
+    sup.Supplier_Config(supplier_type='C130',
+                        config={
+                            'env': env,
+                            'base': Brisbane,
+                        }).config)
 # endregion ====================================================================
 
 
-# region: (((((((((((((((((((((((((((((((((Darwin Anchorage)))))))))))))))))))))))))))))))))
-DarwinAnchorage = bases.Base({
-    'name': 'Darwin Anchorage',
+# region: ((((((((((((((((((((((((((((((((Darwin))))))))))))))))))))))))))))))))
+Darwin = bases.Base({
+    'name': 'Darwin',
     'env': env,
     'reload_team': fast_ERT,
     'n_reload_team': 1,
 })
 
 
-DarwinAnchorage_CRUDES_CustGen = con.ConsumerGenerator({
+Darwin_CRUDES_CustGen = con.ConsumerGenerator({
     'description': 'Cruisers and Destroyers arriving at Diego Garcia for resupply',
     'env': env,
     'gen_dist': CONSUMER_GENERATION_DIST,
     'gen_time': CONSUMER_GENERATION_TIMES,
-    'base': DarwinAnchorage,
+    'base': Darwin,
     'n_res_resupply': 40,
     'n_res_onhand': 1,
     'n_consumed_dist': CONSUMER_N_CONSUMED_DIST,
 })
 
-DarwinAnchorage_TAKE_Generator = sup.SupplierGenerator({
-    'env': env,
-    'base': DarwinAnchorage,
-    # 'gen_dist': SUPPLIER_GENERATION_DIST,
-    'gen_dist': None,
-    # 'gen_time': None,
-    'gen_time': [10, 300, 400],
-    'n_supplied': TAKE_N_SUPPLIED,
-})
+# Suppliers
+Darwin_TAKE_Generator = sup.SupplierGenerator(
+    sup.Supplier_Config(supplier_type='TAKE',
+                        config={
+                            'env': env,
+                            'base': Darwin,
+                        }).config)
+
+Darwin_C5_Generator = sup.SupplierGenerator(
+    sup.Supplier_Config(supplier_type='C5',
+                        config={
+                            'env': env,
+                            'base': Darwin,
+                        }).config)
+
+Darwin_C17_Generator = sup.SupplierGenerator(
+    sup.Supplier_Config(supplier_type='C17',
+                        config={
+                            'env': env,
+                            'base': Darwin,
+                        }).config)
+
+Darwin_C130_Generator = sup.SupplierGenerator(
+    sup.Supplier_Config(supplier_type='C130',
+                        config={
+                            'env': env,
+                            'base': Darwin,
+                        }).config)
 
 # endregion ====================================================================
 
@@ -312,15 +347,35 @@ PointWilson_CRUDES_CustGen = con.ConsumerGenerator({
     'n_consumed_dist': CONSUMER_N_CONSUMED_DIST,
 })
 
-PointWilson_TAKE_Generator = sup.SupplierGenerator({
-    'env': env,
-    'base': PointWilson,
-    # 'gen_dist': SUPPLIER_GENERATION_DIST,
-    'gen_dist': None,
-    # 'gen_time': None,
-    'gen_time': [10, 300, 400],
-    'n_supplied': TAKE_N_SUPPLIED,
-})
+# Suppliers
+PointWilson_TAKE_Generator = sup.SupplierGenerator(
+    sup.Supplier_Config(supplier_type='TAKE',
+                        config={
+                            'env': env,
+                            'base': PointWilson,
+                        }).config)
+
+PointWilson_C5_Generator = sup.SupplierGenerator(
+    sup.Supplier_Config(supplier_type='C5',
+                        config={
+                            'env': env,
+                            'base': PointWilson,
+                        }).config)
+
+PointWilson_C17_Generator = sup.SupplierGenerator(
+    sup.Supplier_Config(supplier_type='C17',
+                        config={
+                            'env': env,
+                            'base': PointWilson,
+                        }).config)
+
+PointWilson_C130_Generator = sup.SupplierGenerator(
+    sup.Supplier_Config(supplier_type='C130',
+                        config={
+                            'env': env,
+                            'base': PointWilson,
+                        }).config)
+
 # endregion ====================================================================
 
 
@@ -410,6 +465,35 @@ Male = bases.Base({
     'n_reload_team': 1,
 })
 
+
+# Suppliers
+Male_TAKE_Generator = sup.SupplierGenerator(
+    sup.Supplier_Config(supplier_type='TAKE',
+                        config={
+                            'env': env,
+                            'base': Male,
+                        }).config)
+
+Male_C5_Generator = sup.SupplierGenerator(
+    sup.Supplier_Config(supplier_type='C5',
+                        config={
+                            'env': env,
+                            'base': Male,
+                        }).config)
+
+Male_C17_Generator = sup.SupplierGenerator(
+    sup.Supplier_Config(supplier_type='C17',
+                        config={
+                            'env': env,
+                            'base': Male,
+                        }).config)
+
+Male_C130_Generator = sup.SupplierGenerator(
+    sup.Supplier_Config(supplier_type='C130',
+                        config={
+                            'env': env,
+                            'base': Male,
+                        }).config)
 # endregion ====================================================================
 
 
@@ -421,6 +505,35 @@ KauriPoint = bases.Base({
     'n_reload_team': 1,
 })
 
+
+# Suppliers
+KauriPoint_TAKE_Generator = sup.SupplierGenerator(
+    sup.Supplier_Config(supplier_type='TAKE',
+                        config={
+                            'env': env,
+                            'base': KauriPoint,
+                        }).config)
+
+KauriPoint_C5_Generator = sup.SupplierGenerator(
+    sup.Supplier_Config(supplier_type='C5',
+                        config={
+                            'env': env,
+                            'base': KauriPoint,
+                        }).config)
+
+KauriPoint_C17_Generator = sup.SupplierGenerator(
+    sup.Supplier_Config(supplier_type='C17',
+                        config={
+                            'env': env,
+                            'base': KauriPoint,
+                        }).config)
+
+KauriPoint_C130_Generator = sup.SupplierGenerator(
+    sup.Supplier_Config(supplier_type='C130',
+                        config={
+                            'env': env,
+                            'base': KauriPoint,
+                        }).config)
 # endregion ====================================================================
 
 
@@ -431,6 +544,35 @@ Tauranga = bases.Base({
     'reload_team': fast_ERT,
     'n_reload_team': 1,
 })
+
+# Suppliers
+Tauranga_TAKE_Generator = sup.SupplierGenerator(
+    sup.Supplier_Config(supplier_type='TAKE',
+                        config={
+                            'env': env,
+                            'base': Tauranga,
+                        }).config)
+
+Tauranga_C5_Generator = sup.SupplierGenerator(
+    sup.Supplier_Config(supplier_type='C5',
+                        config={
+                            'env': env,
+                            'base': Tauranga,
+                        }).config)
+
+Tauranga_C17_Generator = sup.SupplierGenerator(
+    sup.Supplier_Config(supplier_type='C17',
+                        config={
+                            'env': env,
+                            'base': Tauranga,
+                        }).config)
+
+Tauranga_C130_Generator = sup.SupplierGenerator(
+    sup.Supplier_Config(supplier_type='C130',
+                        config={
+                            'env': env,
+                            'base': Tauranga,
+                        }).config)
 
 # endregion ====================================================================
 
@@ -443,6 +585,35 @@ PearlHarbor = bases.Base({
     'reload_team': fast_ERT,
     'n_reload_team': 1,
 })
+
+# Suppliers
+PearlHarbor_TAKE_Generator = sup.SupplierGenerator(
+    sup.Supplier_Config(supplier_type='TAKE',
+                        config={
+                            'env': env,
+                            'base': PearlHarbor,
+                        }).config)
+
+PearlHarbor_C5_Generator = sup.SupplierGenerator(
+    sup.Supplier_Config(supplier_type='C5',
+                        config={
+                            'env': env,
+                            'base': PearlHarbor,
+                        }).config)
+
+PearlHarbor_C17_Generator = sup.SupplierGenerator(
+    sup.Supplier_Config(supplier_type='C17',
+                        config={
+                            'env': env,
+                            'base': PearlHarbor,
+                        }).config)
+
+PearlHarbor_C130_Generator = sup.SupplierGenerator(
+    sup.Supplier_Config(supplier_type='C130',
+                        config={
+                            'env': env,
+                            'base': PearlHarbor,
+                        }).config)
 # endregion ====================================================================
 
 
