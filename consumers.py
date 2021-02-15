@@ -27,6 +27,7 @@ class ConsumerConfig():
             'CG': CG_FULL_LOADOUT,
             'DDG': DDG_FULL_LOADOUT,
             'FFG': FFG_FULL_LOADOUT,
+            'SAG': SAG_FULL_LOADOUT,
         }
 
         default_config = {

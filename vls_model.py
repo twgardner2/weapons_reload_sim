@@ -24,7 +24,8 @@ from resources import *
 
 
 # region: (((((((((((((((((((((((((((((Port of Alma)))))))))))))))))))))))))))))
-# Base
+
+# ---------- Base ----------
 PortOfAlma = bases.Base({
     'name': 'Port of Alma',
     'env': env,
@@ -32,15 +33,15 @@ PortOfAlma = bases.Base({
     'n_reload_team': 1,
 })
 
-# Consumers
-# PortOfAlma_CG_CustGen = con.ConsumerGenerator(
-#     con.ConsumerConfig(
-#         consumer_type='CG',
-#         config={
-#             'env': env,
-#             'base': PortOfAlma,
-#             'gen_dist': sim.IntUniform(40, 80),
-#         }).config)
+# ---------- Consumers ----------
+PortOfAlma_CG_CustGen = con.ConsumerGenerator(
+    con.ConsumerConfig(
+        consumer_type='CG',
+        config={
+            'env': env,
+            'base': PortOfAlma,
+            'gen_dist': sim.IntUniform(40, 80),
+        }).config)
 
 PortOfAlma_DDG_CustGen = con.ConsumerGenerator(
     con.ConsumerConfig(
@@ -51,7 +52,7 @@ PortOfAlma_DDG_CustGen = con.ConsumerGenerator(
             'gen_dist': sim.IntUniform(40, 80),
         }).config)
 
-# Suppliers
+# ---------- Suppliers ----------
 PortOfAlma_TAKE_Generator = sup.SupplierGenerator(
     sup.Supplier_Config(supplier_type='TAKE',
                         config={
@@ -77,6 +78,7 @@ PortOfAlma_C130_Generator = sup.SupplierGenerator(
 
 
 # region: (((((((((((((((((((((((((((((Diego Garcia)))))))))))))))))))))))))))))
+# ---------- Base ----------
 DGar = bases.Base({
     'name': 'Diego Garcia',
     'env': env,
@@ -84,7 +86,7 @@ DGar = bases.Base({
     'n_reload_team': 1,
 })
 
-# Consumers
+# ---------- Consumers ----------
 DGar_CG_CustGen = con.ConsumerGenerator(
     con.ConsumerConfig(
         consumer_type='CG',
@@ -103,7 +105,7 @@ DGar_DDG_CustGen = con.ConsumerGenerator(
             'gen_dist': sim.IntUniform(40, 80),
         }).config)
 
-# Suppliers
+# ---------- Suppliers ----------
 DGar_TAKE_Generator = sup.SupplierGenerator(
     sup.Supplier_Config(supplier_type='TAKE',
                         config={
@@ -135,6 +137,7 @@ DGar_C130_Generator = sup.SupplierGenerator(
 
 
 # region: (((((((((((((((((((((((((((((((((Guam)))))))))))))))))))))))))))))))))
+# ---------- Base ----------
 Guam = bases.Base({
     'name': 'Guam',
     'env': env,
@@ -145,14 +148,14 @@ Guam = bases.Base({
 # CRUDESs arriving at Guam
 Guam_CRUDES_CustGen = con.ConsumerGenerator(
     con.ConsumerConfig(
-        consumer_type='CG',
+        consumer_type='SAG',
         config={
             'env': env,
             'base': Guam,
             'gen_dist': sim.IntUniform(40, 80),
         }).config)
 
-# Suppliers
+# ---------- Suppliers ----------
 Guam_TAKE_Generator = sup.SupplierGenerator(
     sup.Supplier_Config(supplier_type='TAKE',
                         config={
@@ -184,6 +187,7 @@ Guam_C130_Generator = sup.SupplierGenerator(
 
 
 # region: ((((((((((((((((((((((((((((((((Saipan))))))))))))))))))))))))))))))))
+# ---------- Base ----------
 Saipan = bases.Base({
     'name': 'Saipan',
     'env': env,
@@ -202,12 +206,14 @@ Saipan_CRUDES_CustGen = con.ConsumerGenerator({
     'n_consumed_dist': CONSUMER_N_CONSUMED_DIST,
 })
 
-# Suppliers
+# ---------- Suppliers ----------
 Saipan_TAKE_Generator = sup.SupplierGenerator(
     sup.Supplier_Config(supplier_type='TAKE',
                         config={
                             'env': env,
                             'base': Saipan,
+                            'gen_dist': None,
+                            'gen_time': [1e9],
                         }).config)
 
 Saipan_C17_Generator = sup.SupplierGenerator(
@@ -215,6 +221,8 @@ Saipan_C17_Generator = sup.SupplierGenerator(
                         config={
                             'env': env,
                             'base': Saipan,
+                            'gen_dist': None,
+                            'gen_time': [1e9],
                         }).config)
 
 Saipan_C130_Generator = sup.SupplierGenerator(
@@ -227,6 +235,8 @@ Saipan_C130_Generator = sup.SupplierGenerator(
 
 
 # region: (((((((((((((((((((((((((((((((Brisbane)))))))))))))))))))))))))))))))
+
+# ---------- Base ----------
 Brisbane = bases.Base({
     'name': 'Port of Brisbane',
     'env': env,
@@ -245,7 +255,7 @@ Brisbane_CRUDES_CustGen = con.ConsumerGenerator({
     'n_consumed_dist': CONSUMER_N_CONSUMED_DIST,
 })
 
-# Suppliers
+# ---------- Suppliers ----------
 Brisbane_TAKE_Generator = sup.SupplierGenerator(
     sup.Supplier_Config(supplier_type='TAKE',
                         config={
@@ -277,6 +287,7 @@ Brisbane_C130_Generator = sup.SupplierGenerator(
 
 
 # region: ((((((((((((((((((((((((((((((((Darwin))))))))))))))))))))))))))))))))
+# ---------- Base ----------
 Darwin = bases.Base({
     'name': 'Darwin',
     'env': env,
@@ -296,7 +307,7 @@ Darwin_CRUDES_CustGen = con.ConsumerGenerator({
     'n_consumed_dist': CONSUMER_N_CONSUMED_DIST,
 })
 
-# Suppliers
+# ---------- Suppliers ----------
 Darwin_TAKE_Generator = sup.SupplierGenerator(
     sup.Supplier_Config(supplier_type='TAKE',
                         config={
@@ -329,6 +340,7 @@ Darwin_C130_Generator = sup.SupplierGenerator(
 
 
 # region: (((((((((((((((((((((((((((((Point Wilson)))))))))))))))))))))))))))))
+# ---------- Base ----------
 PointWilson = bases.Base({
     'name': 'Point Wilson',
     'env': env,
@@ -348,7 +360,7 @@ PointWilson_CRUDES_CustGen = con.ConsumerGenerator({
     'n_consumed_dist': CONSUMER_N_CONSUMED_DIST,
 })
 
-# Suppliers
+# ---------- Suppliers ----------
 PointWilson_TAKE_Generator = sup.SupplierGenerator(
     sup.Supplier_Config(supplier_type='TAKE',
                         config={
@@ -382,7 +394,7 @@ PointWilson_C130_Generator = sup.SupplierGenerator(
 
 # region: ((((((((((((((((((((((((((((((Banyuwangi))))))))))))))))))))))))))))))
 
-# Base
+# ---------- Base ----------
 Banyuwangi = bases.Base({
     'name': 'Banyuwangi',
     'env': env,
@@ -390,7 +402,7 @@ Banyuwangi = bases.Base({
     'n_reload_team': 1,
 })
 
-# Consumers
+# ---------- Consumers ----------
 Banyuwangi_CRUDES_CustGen = con.ConsumerGenerator({
     'description': 'Cruisers and Destroyers arriving at Diego Garcia for resupply',
     'env': env,
@@ -402,7 +414,7 @@ Banyuwangi_CRUDES_CustGen = con.ConsumerGenerator({
     'n_consumed_dist': CONSUMER_N_CONSUMED_DIST,
 })
 
-# Suppliers
+# ---------- Suppliers ----------
 Banyuwangi_TAKE_Generator = sup.SupplierGenerator(
     sup.Supplier_Config(supplier_type='TAKE',
                         config={
@@ -427,6 +439,8 @@ Banyuwangi_C130_Generator = sup.SupplierGenerator(
 
 
 # region: (((((((((((((((((((((((((((((((Semarang)))))))))))))))))))))))))))))))
+
+# ---------- Base ----------
 Semarang = bases.Base({
     'name': 'Semarang',
     'env': env,
@@ -434,7 +448,7 @@ Semarang = bases.Base({
     'n_reload_team': 1,
 })
 
-# Suppliers
+# ---------- Suppliers ----------
 Semarang_TAKE_Generator = sup.SupplierGenerator(
     sup.Supplier_Config(supplier_type='TAKE',
                         config={
@@ -459,6 +473,8 @@ Semarang_C130_Generator = sup.SupplierGenerator(
 
 
 # region: (((((((((((((((((((((((((((((((((Male)))))))))))))))))))))))))))))))))
+
+# ---------- Base ----------
 Male = bases.Base({
     'name': 'Male',
     'env': env,
@@ -467,7 +483,7 @@ Male = bases.Base({
 })
 
 
-# Suppliers
+# ---------- Suppliers ----------
 Male_TAKE_Generator = sup.SupplierGenerator(
     sup.Supplier_Config(supplier_type='TAKE',
                         config={
@@ -499,6 +515,8 @@ Male_C130_Generator = sup.SupplierGenerator(
 
 
 # region: (((((((((((((((((((((((((((((Kauri Point)))))))))))))))))))))))))))))
+
+# ---------- Base ----------
 KauriPoint = bases.Base({
     'name': 'Kauri Point',
     'env': env,
@@ -507,7 +525,7 @@ KauriPoint = bases.Base({
 })
 
 
-# Suppliers
+# ---------- Suppliers ----------
 KauriPoint_TAKE_Generator = sup.SupplierGenerator(
     sup.Supplier_Config(supplier_type='TAKE',
                         config={
@@ -539,6 +557,8 @@ KauriPoint_C130_Generator = sup.SupplierGenerator(
 
 
 # region: (((((((((((((((((((((((((((((((Tauranga)))))))))))))))))))))))))))))))
+
+# ---------- Base ----------
 Tauranga = bases.Base({
     'name': 'Tauranga',
     'env': env,
@@ -546,7 +566,7 @@ Tauranga = bases.Base({
     'n_reload_team': 1,
 })
 
-# Suppliers
+# ---------- Suppliers ----------
 Tauranga_TAKE_Generator = sup.SupplierGenerator(
     sup.Supplier_Config(supplier_type='TAKE',
                         config={
@@ -580,6 +600,7 @@ Tauranga_C130_Generator = sup.SupplierGenerator(
 
 # region: (((((((((((((((((((((((((((((Pearl Harbor)))))))))))))))))))))))))))))
 
+# ---------- Base ----------
 PearlHarbor = bases.Base({
     'name': 'Pearl Harbor',
     'env': env,
@@ -587,7 +608,7 @@ PearlHarbor = bases.Base({
     'n_reload_team': 1,
 })
 
-# Suppliers
+# ---------- Suppliers ----------
 PearlHarbor_TAKE_Generator = sup.SupplierGenerator(
     sup.Supplier_Config(supplier_type='TAKE',
                         config={
@@ -619,7 +640,7 @@ PearlHarbor_C130_Generator = sup.SupplierGenerator(
 
 
 # region: ((((((((((((((((((((((((((((((Animation))))))))))))))))))))))))))))))
-# # > Queue length line plot
+# Queue length line plot
 # sim.AnimateMonitor(monitor=Guam.queue.length,
 #                    x=ani.q_lineplot_x_left,
 #                    y=ani.q_lineplot_y_bottom,
@@ -660,7 +681,7 @@ for i, base in enumerate(bases.Base.getInstances()):
                          arg=base,
                          offsety=-25)
 
-# Consumers Queue
+# ---------- Consumers ---------- Queue
 for i, base in enumerate(bases.Base.getInstances()):
     cprint(f'{i}: {base}')
     sim.AnimateQueue(
@@ -675,7 +696,7 @@ for i, base in enumerate(bases.Base.getInstances()):
         id='blue',
     )
 
-# Suppliers Queue
+# ---------- Suppliers ---------- Queue
 for i, base in enumerate(bases.Base.getInstances()):
     cprint(f'{i}: {base}')
     sim.AnimateQueue(

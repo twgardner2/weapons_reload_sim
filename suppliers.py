@@ -27,10 +27,17 @@ class Supplier_Config():
             'C130': C130_N_SUPPLIED,
         }
 
+        gen_dist_dict = {
+            'TAKE': sim.IntUniform(800, 1000),
+            'C5': sim.IntUniform(72, 96),
+            'C17': sim.IntUniform(48, 72),
+            'C130': sim.IntUniform(24, 48),
+        }
+
         default_config = {
             'description': f'{supplier_type} supplying {config["base"]}',
             'n_supplied': n_supplied_dict[supplier_type],
-            'gen_dist': SUPPLIER_GENERATION_DIST,
+            'gen_dist': gen_dist_dict[supplier_type],
             'gen_time': SUPPLIER_GENERATION_TIMES,
         }
         self.config = {**default_config, **config}
@@ -76,6 +83,11 @@ class Supplier(sim.Component):
     def __init__(self, config={}):
         sim.Component.__init__(self)
         self.config = config
+
+        if OUTPUT:
+            with open(OUTPUT_DIR + QUEUE_OUTPUT_FILE, 'a') as f:
+                f.write(
+                    f'{self.config["env"].now()},{self.config["base"].config["name"]},supplier_arrived,{self.config["n_supplied"]}\n')
 
     def process(self):
 
