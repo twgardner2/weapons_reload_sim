@@ -3,19 +3,19 @@ import crayons
 import datetime
 
 # region: (((((((((((((((((((((((((Simulation Controls)))))))))))))))))))))))))
-TRACE = 1
-SIM_LENGTH = 1500
+TRACE = 0
+SIM_LENGTH = 1000
 SIM_SPEED = 32
 ANIMATE = 0
 # endregion ====================================================================
 
 # region: ((((((((((((((((((((((((((((((Debugging))))))))))))))))))))))))))))))
-VERBOSE_ALL = 1
-VERBOSE_MAIN = 1
+VERBOSE_ALL = 0
+VERBOSE_MAIN = 0
 VERBOSE_BASE = 0
 VERBOSE_CONSUMERS = 0
-VERBOSE_SUPPLIERS = 1
-VERBOSE_ANIMATION = 1
+VERBOSE_SUPPLIERS = 0
+VERBOSE_ANIMATION = 0
 
 VERBOSE_MAIN_COLOR = crayons.yellow
 VERBOSE_BASE_COLOR = crayons.blue
@@ -40,7 +40,7 @@ OUTPUT = 1
 OUTPUT_DIR = 'output/'
 TIME = datetime.datetime.now().strftime("%y%m%d_%H%M%S")
 # QUEUE_OUTPUT_FILE = f'queue_lengths_{TIME}.csv'
-QUEUE_OUTPUT_FILE = f'queue_lengths.csv'
+QUEUE_OUTPUT_FILE = f'output.csv'
 # endregion ====================================================================
 
 # region: ((((((((((((((((((((((((((((((Consumers))))))))))))))))))))))))))))))
@@ -52,6 +52,10 @@ CONSUMER_GENERATION_DIST = sim.Normal(50, 15)
 CONSUMER_GENERATION_TIMES = list(range(1, 300, 50))
 # CONSUMER_N_CONSUMED_DIST = sim.IntUniform(8, 96)
 CONSUMER_N_CONSUMED_DIST = sim.IntUniform(25, 25)
+
+CG_FULL_LOADOUT = 122
+DDG_FULL_LOADOUT = 96
+FFG_FULL_LOADOUT = 50
 # endregion ====================================================================
 
 # region: ((((((((((((((((((((((((((((((Suppliers))))))))))))))))))))))))))))))

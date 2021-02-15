@@ -12,6 +12,33 @@ cprint = MAKE_CPRINT(verbose, VERBOSE_CONSUMERS_COLOR)
 cprint(f"consumers.py verbose output ON")
 
 
+class ConsumerConfig():
+    def __init__(self, consumer_type, config={}):
+        if consumer_type is None:
+            raise Exception('You must pass "consumer_type"')
+        if 'base' not in config and 'env' not in config:
+            raise Exception('You must pass "env" and "base"')
+        if 'base' not in config:
+            raise Exception('You must pass "base"')
+        if 'env' not in config:
+            raise Exception('You must pass "env"')
+
+        n_res_resupply_dict = {
+            'CG': CG_FULL_LOADOUT,
+            'DDG': DDG_FULL_LOADOUT,
+            'FFG': FFG_FULL_LOADOUT,
+        }
+
+        default_config = {
+            'description': f'{consumer_type} resupplying at {config["base"]}',
+            'n_res_resupply': n_res_resupply_dict[consumer_type],
+            'n_res_onhand': 0,
+            'gen_dist': CONSUMER_GENERATION_DIST,
+            'gen_time': CONSUMER_GENERATION_TIMES,
+        }
+        self.config = {**default_config, **config}
+
+
 class ConsumerGenerator(sim.Component):
     def __init__(self, config={}):
         sim.Component.__init__(self)
@@ -57,8 +84,8 @@ class Consumer(sim.Component):
         cprint(f'Init Consumer:')
         cprint(self)
         cprint(f'n_res_required: {self.n_res_required()}')
-        n_consumed = config.get('n_consumed_dist').sample()
-        config['n_consumed'] = n_consumed
+        # n_consumed = config.get('n_consumed_dist').sample()
+        # config['n_consumed'] = n_consumed
 
     def animation_objects(self, id):
         '''Defines representation of Consumers in a queue animation'''
@@ -86,15 +113,15 @@ class Consumer(sim.Component):
 
     def process(self):
         # Destructure the config dict
-        base, n_consumed, env, n_res_resupply = itemgetter(
-            'base', 'n_consumed', 'env', 'n_res_resupply')(self.config)
+        base, env, n_res_resupply = itemgetter(
+            'base', 'env', 'n_res_resupply')(self.config)
 
         # Enter the queue for resources at the assigned base
         self.enter(base.queue)
 
         # Debugging
-        cprint(
-            f'{env.now()}: Consumer arrived, requesting {n_consumed} resources, number in line: {len(base.queue)}')
+        # cprint(
+        #     f'{env.now()}: Consumer arrived, requesting {n_consumed} resources, number in line: {len(base.queue)}')
 
         if base.ispassive():
             base.activate()
