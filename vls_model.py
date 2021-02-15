@@ -33,14 +33,14 @@ PortOfAlma = bases.Base({
 })
 
 # Consumers
-PortOfAlma_CG_CustGen = con.ConsumerGenerator(
-    con.ConsumerConfig(
-        consumer_type='CG',
-        config={
-            'env': env,
-            'base': PortOfAlma,
-            'gen_dist': sim.IntUniform(40, 80),
-        }).config)
+# PortOfAlma_CG_CustGen = con.ConsumerGenerator(
+#     con.ConsumerConfig(
+#         consumer_type='CG',
+#         config={
+#             'env': env,
+#             'base': PortOfAlma,
+#             'gen_dist': sim.IntUniform(40, 80),
+#         }).config)
 
 PortOfAlma_DDG_CustGen = con.ConsumerGenerator(
     con.ConsumerConfig(
@@ -57,6 +57,7 @@ PortOfAlma_TAKE_Generator = sup.SupplierGenerator(
                         config={
                             'env': env,
                             'base': PortOfAlma,
+                            'gen_dist': sim.IntUniform(100, 200)
                         }).config)
 
 PortOfAlma_C17_Generator = sup.SupplierGenerator(
@@ -693,6 +694,8 @@ for i, base in enumerate(bases.Base.getInstances()):
 # region: (((((((((((((((((((((((((((((((Monitors)))))))))))))))))))))))))))))))
 # all_queues_length = Guam.queue.length.merge(DGar.queue.length)
 # all_queues_length = Guam.queue.length + DGar.queue.length
+# endregion ====================================================================
+
 
 # Run simulation
 env.animation_parameters(animate=ANIMATE, speed=SIM_SPEED)  # , width=1500
