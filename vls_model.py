@@ -148,7 +148,7 @@ Guam = bases.Base({
 # CRUDESs arriving at Guam
 Guam_CRUDES_CustGen = con.ConsumerGenerator(
     con.ConsumerConfig(
-        consumer_type='CG',
+        consumer_type='SAG',
         config={
             'env': env,
             'base': Guam,
@@ -432,6 +432,7 @@ Banyuwangi_C130_Generator = sup.SupplierGenerator(
                             'base': Banyuwangi,
                         }).config)
 # endregion ====================================================================
+
 
 # region: (((((((((((((((((((((((((((((((Semarang)))))))))))))))))))))))))))))))
 
