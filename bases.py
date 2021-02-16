@@ -68,9 +68,9 @@ class Base(sim.Component):
             if OUTPUT:
                 with open(OUTPUT_DIR + QUEUE_OUTPUT_FILE, 'a') as f:
                     f.write(
-                        f'{env.now()},{name},queue_length,{self.queue.length()}\n')
+                        f'{env.now()},{name},queue_length,{self.queue.length()},NA\n')
                     f.write(
-                        f'{env.now()},{name},resources_available,{self.resource.available_quantity()}\n')
+                        f'{env.now()},{name},resources_available,{self.resource.available_quantity()},NA\n')
 
             # Verbose logging
             cprint(

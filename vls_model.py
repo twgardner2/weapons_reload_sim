@@ -212,8 +212,8 @@ Saipan_TAKE_Generator = sup.SupplierGenerator(
                         config={
                             'env': env,
                             'base': Saipan,
-                            'gen_dist': None,
-                            'gen_time': [1e9],
+                            # 'gen_dist': None,
+                            # 'gen_time': [1e9],
                         }).config)
 
 Saipan_C17_Generator = sup.SupplierGenerator(
@@ -230,6 +230,8 @@ Saipan_C130_Generator = sup.SupplierGenerator(
                         config={
                             'env': env,
                             'base': Saipan,
+                            'gen_dist': None,
+                            'gen_time': [1e9],
                         }).config)
 # endregion ====================================================================
 
