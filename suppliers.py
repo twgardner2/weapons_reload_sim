@@ -35,6 +35,7 @@ class Supplier_Config():
         }
 
         default_config = {
+            'type': supplier_type,
             'description': f'{supplier_type} supplying {config["base"]}',
             'n_supplied': n_supplied_dict[supplier_type],
             'gen_dist': gen_dist_dict[supplier_type],
@@ -87,7 +88,8 @@ class Supplier(sim.Component):
         if OUTPUT:
             with open(OUTPUT_DIR + QUEUE_OUTPUT_FILE, 'a') as f:
                 f.write(
-                    f'{self.config["env"].now()},{self.config["base"].config["name"]},supplier_arrived,{self.config["n_supplied"]}\n')
+                    # f'{self.config["env"].now()},{self.config["base"].config["name"]},supplier_arrived,{self.config["n_supplied"]},NA\n')
+                    f'{self.config["env"].now()},{self.config["base"].config["name"]},supplier_arrived,NA,{self.config["type"]}\n')
 
     def process(self):
 
