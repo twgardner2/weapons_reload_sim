@@ -59,6 +59,13 @@ Node1_TAKE_Generator = sup.SupplierGenerator(
                             'base': Node1,
                         }).config)
 
+Node1_NGLS_Generator = sup.SupplierGenerator(
+    sup.Supplier_Config(supplier_type='NGLS',
+                        config={
+                            'env': env,
+                            'base': Node1,
+                        }).config)
+
 Node1_C5_Generator = sup.SupplierGenerator(
     sup.Supplier_Config(supplier_type='C5',
                         config={

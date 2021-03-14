@@ -4,7 +4,7 @@ import datetime
 
 # region: (((((((((((((((((((((((((Simulation Controls)))))))))))))))))))))))))
 TRACE = 0
-SIM_LENGTH = 20 * 24
+SIM_LENGTH = 60 * 24
 SIM_SPEED = 32
 ANIMATE = 0
 # endregion ====================================================================
@@ -78,9 +78,10 @@ SUPPLIER_GENERATION_DIST = sim.IntUniform(500, 900)
 SUPPLIER_GENERATION_TIMES = list(range(500, 5000, 500))
 
 SUPPLIER_N_SUPPLIED = 1000
-TAKE_N_SUPPLIED = 100
+TAKE_N_SUPPLIED = 96
+NGLS_N_SUPPLIED = 8
 C5_N_SUPPLIED = 18
-C17_N_SUPPLIED = 8
+C17_N_SUPPLIED = 12
 C130_N_SUPPLIED = 2
 
 SUPPLIER_UNLOAD_RATE = 8  # resources/hour

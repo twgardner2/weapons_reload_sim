@@ -22,6 +22,7 @@ class Supplier_Config():
 
         n_supplied_dict = {
             'TAKE': TAKE_N_SUPPLIED,
+            'NGLS': NGLS_N_SUPPLIED,
             'C5': C5_N_SUPPLIED,
             'C17': C17_N_SUPPLIED,
             'C130': C130_N_SUPPLIED,
@@ -29,6 +30,7 @@ class Supplier_Config():
 
         gen_dist_dict = {
             'TAKE': sim.IntUniform(800, 1000),
+            'NGLS': sim.IntUniform(800, 1000),
             'C5': sim.IntUniform(72, 96),
             'C17': sim.IntUniform(48, 72),
             'C130': sim.IntUniform(24, 48),
