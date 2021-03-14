@@ -422,6 +422,8 @@ Banyuwangi_TAKE_Generator = sup.SupplierGenerator(
                         config={
                             'env': env,
                             'base': Banyuwangi,
+                            'gen_dist': None,
+                            'gen_time': [1],
                         }).config)
 
 Banyuwangi_C17_Generator = sup.SupplierGenerator(
@@ -758,4 +760,4 @@ env.run(till=SIM_LENGTH)
 # endregion ====================================================================
 
 
-os.system("Rscript plots/r_plots.R")
+os.system(f'Rscript --verbose plots/r_plots.R {PLOT_DAY_NIGHT_SHADING}')

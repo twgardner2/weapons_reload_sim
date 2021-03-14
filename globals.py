@@ -4,7 +4,7 @@ import datetime
 
 # region: (((((((((((((((((((((((((Simulation Controls)))))))))))))))))))))))))
 TRACE = 0
-SIM_LENGTH = 1000
+SIM_LENGTH = 260
 SIM_SPEED = 32
 ANIMATE = 0
 # endregion ====================================================================
@@ -12,7 +12,7 @@ ANIMATE = 0
 # region: ((((((((((((((((((((((((((((((Debugging))))))))))))))))))))))))))))))
 VERBOSE_ALL = 0
 VERBOSE_MAIN = 0
-VERBOSE_BASE = 0
+VERBOSE_BASE = 1
 VERBOSE_CONSUMERS = 0
 VERBOSE_SUPPLIERS = 0
 VERBOSE_ANIMATION = 0
@@ -41,6 +41,7 @@ OUTPUT_DIR = 'output/'
 TIME = datetime.datetime.now().strftime("%y%m%d_%H%M%S")
 # QUEUE_OUTPUT_FILE = f'queue_lengths_{TIME}.csv'
 QUEUE_OUTPUT_FILE = f'output.csv'
+PLOT_DAY_NIGHT_SHADING = 1
 # endregion ====================================================================
 
 # region: ((((((((((((((((((((((((((((((Consumers))))))))))))))))))))))))))))))

@@ -20,6 +20,15 @@ if out:
         pass
 
 
+def is_daytime(simtime):
+    time_of_day = simtime % 24
+    if time_of_day >= 6 and time_of_day <= 18:
+        cprint(f'{simtime}: is DAYTIME')
+        return True
+    cprint(f'{simtime}: is NIGHTTIME')
+    return False
+
+
 class Base(sim.Component):
     # https://stackoverflow.com/questions/328851/printing-all-instances-of-a-class
     instances = []
@@ -90,8 +99,8 @@ class Base(sim.Component):
             cprint(
                 f'Resources available: {self.resource.available_quantity()}')
 
-            # Resources available
-            if self.resource.available_quantity() > 0:
+            # During daytime and resources available
+            if is_daytime(env.now()) and self.resource.available_quantity() > 0:
 
                 # Issue resources to as many Consumers as there are Reload Teams
                 # starting from the first in line

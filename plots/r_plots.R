@@ -1,5 +1,10 @@
 library(tidyverse)
 
+# Collect arguments
+args <- commandArgs(trailingOnly = TRUE)
+PLOT_DAY_NIGHT_SHADING <- as.logical(as.integer(args[1]))
+
+
 theme_set(theme_minimal())
 
 model_output_path <- '/home/tom/Documents/weapons_reload_sim/output/'
@@ -16,7 +21,7 @@ p <- ggplot(data = df_queue_length,
             mapping = aes(x=time, y=value, color=key)) +
     geom_step(show.legend = FALSE) + 
     facet_grid(rows = vars(base)) +
-  theme(
+    theme(
       strip.text.x = element_text(
         size = 4, color = "black", face = "plain"
       ),
@@ -30,6 +35,30 @@ p <- ggplot(data = df_queue_length,
               sides = 'b')+
               # show.legend = FALSE) +
     ylim(0, max(df_queue_length$value))
+
+
+x_lim <- ggplot_build(p)$layout$panel_scales_x[[1]]$range$range
+y_lim <- ggplot_build(p)$layout$panel_scales_y[[1]]$range$range
+dusk <- c(0, seq(18, x_lim[2], 24))
+dawn <- c(6, seq(30, x_lim[2], 24))
+
+if( length(dusk) != length(dawn) ) {
+  dawn <- c(dawn, x_lim[2])
+}
+
+if(PLOT_DAY_NIGHT_SHADING) {
+  p <- p + 
+      annotate("rect",
+              xmin = dusk,
+              xmax = dawn,
+              ymin = y_lim[1],
+              ymax = y_lim[2],
+              fill = 'lightgrey',
+              alpha = .5) 
+}
+
+
+
 ggsave(filename = file.path(model_output_path, 'queue_length.png'),
        plot = p)
 
