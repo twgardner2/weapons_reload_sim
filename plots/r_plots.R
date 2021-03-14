@@ -13,14 +13,24 @@ df <- read_csv(file = file.path(model_output_path, 'output.csv'),
                col_names = c('time', 'base', 'key', 'value','value2'))
 
 # Queue length plot
-df_queue_length <- df %>% filter(key=='queue_length')
-df_supplier_arrived <- df %>% filter(key=='supplier_arrived')
+node_names_in_order <- c('Node1','Node2','Node3','Node4',
+                          'Node5','Node6','Node7','Node8',
+                          'Node9','Node10','Node11','Node12',
+                          'Node13')
 
+df_queue_length <- df %>% 
+  filter(key=='queue_length') %>%
+  mutate(base_f = factor(base, levels = node_names_in_order))
+df_supplier_arrived <- df %>% 
+  filter(key=='supplier_arrived') %>%
+  mutate(base_f = factor(base, levels = node_names_in_order))
+
+df_queue_length
 
 p <- ggplot(data = df_queue_length,
             mapping = aes(x=time, y=value, color=key)) +
     geom_step(show.legend = FALSE) + 
-    facet_grid(rows = vars(base)) +
+    facet_grid(rows = vars(base_f)) +
     theme(
       strip.text.x = element_text(
         size = 4, color = "black", face = "plain"
