@@ -105,14 +105,15 @@ class Supplier(sim.Component):
         # Simulate unloading resources at base
         n_left_to_unload = self.config.get('n_supplied')
         while n_left_to_unload > 0:
-            n_to_unload_this_period = min(
-                SUPPLIER_UNLOAD_RATE, n_left_to_unload)
-            cprint(
-                f'{env.now()}: {self} is unloading {n_to_unload_this_period} resources at {base}')
-            base.resource.set_capacity(
-                base.resource.capacity() + n_to_unload_this_period)
+            if is_daytime(env.now()):
+                n_to_unload_this_period = min(
+                    SUPPLIER_UNLOAD_RATE, n_left_to_unload)
+                cprint(
+                    f'{env.now()}: {self} is unloading {n_to_unload_this_period} resources at {base}')
+                base.resource.set_capacity(
+                    base.resource.capacity() + n_to_unload_this_period)
 
-            n_left_to_unload -= n_to_unload_this_period
+                n_left_to_unload -= n_to_unload_this_period
             yield self.hold(1)
 
         # Leave supplier queue at base

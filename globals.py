@@ -4,7 +4,7 @@ import datetime
 
 # region: (((((((((((((((((((((((((Simulation Controls)))))))))))))))))))))))))
 TRACE = 0
-SIM_LENGTH = 260
+SIM_LENGTH = 60 * 24
 SIM_SPEED = 32
 ANIMATE = 0
 # endregion ====================================================================
@@ -35,13 +35,22 @@ def MAKE_CPRINT(verbose, color):
 # endregion ====================================================================
 
 
+def is_daytime(simtime):
+    time_of_day = simtime % 24
+    if time_of_day >= 6 and time_of_day <= 18:
+        # cprint(f'{simtime}: is DAYTIME')
+        return True
+    # cprint(f'{simtime}: is NIGHTTIME')
+    return False
+
+
 # region: ((((((((((((((((((((((((((((((((Output))))))))))))))))))))))))))))))))
 OUTPUT = 1
 OUTPUT_DIR = 'output/'
 TIME = datetime.datetime.now().strftime("%y%m%d_%H%M%S")
 # QUEUE_OUTPUT_FILE = f'queue_lengths_{TIME}.csv'
 QUEUE_OUTPUT_FILE = f'output.csv'
-PLOT_DAY_NIGHT_SHADING = 1
+PLOT_DAY_NIGHT_SHADING = 0
 # endregion ====================================================================
 
 # region: ((((((((((((((((((((((((((((((Consumers))))))))))))))))))))))))))))))

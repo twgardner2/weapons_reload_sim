@@ -101,7 +101,6 @@ class Consumer(sim.Component):
             'img/warship2.png',
             width=50,
             text='Needs:\n' + str(round(self.n_res_required())),
-            # text=lambda self: 'Needs:\n' + str(round(self.n_res_required())),
             text_offsety=-25,
             textcolor='white' if base.queue.index(
                 self) >= base.config.get('n_reload_team') else 'red'
