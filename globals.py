@@ -12,9 +12,9 @@ ANIMATE = 0
 # region: ((((((((((((((((((((((((((((((Debugging))))))))))))))))))))))))))))))
 VERBOSE_ALL = 0
 VERBOSE_MAIN = 0
-VERBOSE_BASE = 1
+VERBOSE_BASE = 0
 VERBOSE_CONSUMERS = 0
-VERBOSE_SUPPLIERS = 0
+VERBOSE_SUPPLIERS = 1
 VERBOSE_ANIMATION = 0
 
 VERBOSE_MAIN_COLOR = crayons.yellow
@@ -52,7 +52,10 @@ TIME = datetime.datetime.now().strftime("%y%m%d_%H%M%S")
 QUEUE_OUTPUT_FILE = f'output.csv'
 
 # Plots
+CREATE_PLOTS = 1
+# >> Queue length plot
 PLOT_DAY_NIGHT_SHADING = 0
+SHOW_SUPPLIER_ARRIVALS = 0
 # endregion ====================================================================
 
 # region: ((((((((((((((((((((((((((((((Consumers))))))))))))))))))))))))))))))
@@ -77,8 +80,7 @@ SUPPLIER_GENERATION_DIST = sim.IntUniform(500, 900)
 # SUPPLIER_GENERATION_DIST = None
 SUPPLIER_GENERATION_TIMES = list(range(500, 5000, 500))
 
-SUPPLIER_N_SUPPLIED = 1000
-TAKE_N_SUPPLIED = 96
+TAKE_N_SUPPLIED = 960
 NGLS_N_SUPPLIED = 8
 C5_N_SUPPLIED = 18
 C17_N_SUPPLIED = 12

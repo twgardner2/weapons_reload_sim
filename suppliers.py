@@ -43,6 +43,10 @@ class Supplier_Config():
             'gen_dist': gen_dist_dict[supplier_type],
             'gen_time': SUPPLIER_GENERATION_TIMES,
         }
+
+        if 'gen_time' in config:
+            default_config['gen_dist'] = None
+
         self.config = {**default_config, **config}
 
 

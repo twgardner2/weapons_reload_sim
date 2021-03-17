@@ -1,5 +1,6 @@
 import salabim as sim
 from operator import itemgetter
+import math
 from globals import *
 
 import crayons as cr
@@ -33,15 +34,21 @@ class ConsumerConfig():
         default_config = {
             'description': f'{consumer_type} resupplying at {config["base"]}',
             'n_res_resupply': n_res_resupply_dict[consumer_type],
-            'n_res_onhand': 0,
+            'pct_res_onhand_dist': sim.Uniform(5, 50),
             'gen_dist': CONSUMER_GENERATION_DIST,
             'gen_time': CONSUMER_GENERATION_TIMES,
         }
+        # print('======================')
+        # print({**default_config, **config})
+        # print('====================')
         self.config = {**default_config, **config}
 
 
 class ConsumerGenerator(sim.Component):
     def __init__(self, config={}):
+        # print('XXXXXXXXXXx')
+        # print(config)
+        # print('XXXXXXXXXXx')
         sim.Component.__init__(self)
         self.config = config
 
@@ -81,7 +88,9 @@ class Consumer(sim.Component):
         sim.Component.__init__(self)
         self.config = config
         self.n_res_resupply = config['n_res_resupply']
-        self.n_res_onhand = config['n_res_onhand']
+        self.pct_res_onhand = config['pct_res_onhand_dist'].sample()
+        self.n_res_onhand = round(
+            self.pct_res_onhand * config['n_res_resupply'] / 100)
         cprint(f'Init Consumer:')
         cprint(self)
         cprint(f'n_res_required: {self.n_res_required()}')

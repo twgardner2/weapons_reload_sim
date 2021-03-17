@@ -33,23 +33,25 @@ Node1 = bases.Base({
 })
 
 # ---------- Consumers ----------
-Node1_CG_CustGen = con.ConsumerGenerator(
-    con.ConsumerConfig(
-        consumer_type='CG',
-        config={
-            'env': env,
-            'base': Node1,
-            'gen_dist': sim.IntUniform(40, 80),
-        }).config)
+for i in range(8):
+    con.ConsumerGenerator(
+        con.ConsumerConfig(
+            consumer_type='DDG',
+            config={
+                'env': env,
+                'base': Node1,
+                'gen_dist': sim.Normal(13 * 24, 3 * 24),
+            }).config
+    )
 
-Node1_DDG_CustGen = con.ConsumerGenerator(
-    con.ConsumerConfig(
-        consumer_type='DDG',
-        config={
-            'env': env,
-            'base': Node1,
-            'gen_dist': sim.IntUniform(40, 80),
-        }).config)
+# Node1_CustGen = con.ConsumerGenerator(
+#     con.ConsumerConfig(
+#         consumer_type='DDG',
+#         config={
+#             'env': env,
+#             'base': Node1,
+#             'gen_dist': sim.IntUniform(140, 180),
+#         }).config)
 
 # ---------- Suppliers ----------
 Node1_TAKE_Generator = sup.SupplierGenerator(
@@ -57,6 +59,15 @@ Node1_TAKE_Generator = sup.SupplierGenerator(
                         config={
                             'env': env,
                             'base': Node1,
+                            'gen_dist': sim.IntUniform(6 * 24, 12 * 24)
+                        }).config)
+
+sup.SupplierGenerator(
+    sup.Supplier_Config(supplier_type='TAKE',
+                        config={
+                            'env': env,
+                            'base': Node1,
+                            'gen_time': [0]
                         }).config)
 
 Node1_NGLS_Generator = sup.SupplierGenerator(
@@ -66,26 +77,26 @@ Node1_NGLS_Generator = sup.SupplierGenerator(
                             'base': Node1,
                         }).config)
 
-Node1_C5_Generator = sup.SupplierGenerator(
-    sup.Supplier_Config(supplier_type='C5',
-                        config={
-                            'env': env,
-                            'base': Node1,
-                        }).config)
+# Node1_C5_Generator = sup.SupplierGenerator(
+#     sup.Supplier_Config(supplier_type='C5',
+#                         config={
+#                             'env': env,
+#                             'base': Node1,
+#                         }).config)
 
-Node1_C17_Generator = sup.SupplierGenerator(
-    sup.Supplier_Config(supplier_type='C17',
-                        config={
-                            'env': env,
-                            'base': Node1,
-                        }).config)
+# Node1_C17_Generator = sup.SupplierGenerator(
+#     sup.Supplier_Config(supplier_type='C17',
+#                         config={
+#                             'env': env,
+#                             'base': Node1,
+#                         }).config)
 
-Node1_C130_Generator = sup.SupplierGenerator(
-    sup.Supplier_Config(supplier_type='C130',
-                        config={
-                            'env': env,
-                            'base': Node1,
-                        }).config)
+# Node1_C130_Generator = sup.SupplierGenerator(
+#     sup.Supplier_Config(supplier_type='C130',
+#                         config={
+#                             'env': env,
+#                             'base': Node1,
+#                         }).config)
 # endregion ====================================================================
 
 
@@ -99,13 +110,13 @@ Node2 = bases.Base({
 })
 
 # CRUDESs arriving at Node2
-Node2_CRUDES_CustGen = con.ConsumerGenerator(
+Node2_CustGen = con.ConsumerGenerator(
     con.ConsumerConfig(
-        consumer_type='SAG',
+        consumer_type='DDG',
         config={
             'env': env,
             'base': Node2,
-            'gen_dist': sim.IntUniform(40, 80),
+            'gen_dist': sim.IntUniform(140, 180),
         }).config)
 
 # ---------- Suppliers ----------
@@ -148,16 +159,14 @@ Node3 = bases.Base({
     'n_reload_team': 2,
 })
 
-Node3_CRUDES_CustGen = con.ConsumerGenerator({
-    'description': 'Cruisers and Destroyers arriving at Diego Garcia for resupply',
-    'env': env,
-    'gen_dist': CONSUMER_GENERATION_DIST,
-    'gen_time': CONSUMER_GENERATION_TIMES,
-    'base': Node3,
-    'n_res_resupply': 40,
-    'n_res_onhand': 1,
-    'n_consumed_dist': CONSUMER_N_CONSUMED_DIST,
-})
+Node3_CustGen = con.ConsumerGenerator(
+    con.ConsumerConfig(
+        consumer_type='DDG',
+        config={
+            'env': env,
+            'base': Node3,
+            'gen_dist': sim.IntUniform(140, 180),
+        }).config)
 
 # ---------- Suppliers ----------
 Node3_TAKE_Generator = sup.SupplierGenerator(
@@ -202,21 +211,13 @@ Node4 = bases.Base({
 # ---------- Consumers ----------
 Node4_CG_CustGen = con.ConsumerGenerator(
     con.ConsumerConfig(
-        consumer_type='CG',
-        config={
-            'env': env,
-            'base': Node4,
-            'gen_dist': sim.IntUniform(40, 80),
-        }).config)
-
-Node4_DDG_CustGen = con.ConsumerGenerator(
-    con.ConsumerConfig(
         consumer_type='DDG',
         config={
             'env': env,
             'base': Node4,
-            'gen_dist': sim.IntUniform(40, 80),
+            'gen_dist': sim.IntUniform(240, 280),
         }).config)
+
 
 # ---------- Suppliers ----------
 Node4_TAKE_Generator = sup.SupplierGenerator(
@@ -224,7 +225,7 @@ Node4_TAKE_Generator = sup.SupplierGenerator(
                         config={
                             'env': env,
                             'base': Node4,
-                            'gen_dist': sim.IntUniform(100, 200)
+                            'gen_dist': sim.IntUniform(15 * 24, 20 * 24)
                         }).config)
 
 Node4_C17_Generator = sup.SupplierGenerator(
@@ -253,16 +254,15 @@ Node5 = bases.Base({
     'n_reload_team': 1,
 })
 
-Node5_CRUDES_CustGen = con.ConsumerGenerator({
-    'description': 'Cruisers and Destroyers arriving at Diego Garcia for resupply',
-    'env': env,
-    'gen_dist': CONSUMER_GENERATION_DIST,
-    'gen_time': CONSUMER_GENERATION_TIMES,
-    'base': Node5,
-    'n_res_resupply': 40,
-    'n_res_onhand': 1,
-    'n_consumed_dist': CONSUMER_N_CONSUMED_DIST,
-})
+# ---------- Consumers ----------
+Node5_CustGen = con.ConsumerGenerator(
+    con.ConsumerConfig(
+        consumer_type='DDG',
+        config={
+            'env': env,
+            'base': Node5,
+            'gen_dist': sim.IntUniform(140, 180),
+        }).config)
 
 # ---------- Suppliers ----------
 Node5_TAKE_Generator = sup.SupplierGenerator(
@@ -304,17 +304,15 @@ Node6 = bases.Base({
     'n_reload_team': 1,
 })
 
-
-Node6_CRUDES_CustGen = con.ConsumerGenerator({
-    'description': 'Cruisers and Destroyers arriving at Diego Garcia for resupply',
-    'env': env,
-    'gen_dist': CONSUMER_GENERATION_DIST,
-    'gen_time': CONSUMER_GENERATION_TIMES,
-    'base': Node6,
-    'n_res_resupply': 40,
-    'n_res_onhand': 1,
-    'n_consumed_dist': CONSUMER_N_CONSUMED_DIST,
-})
+# ---------- Consumers ----------
+Node6_CustGen = con.ConsumerGenerator(
+    con.ConsumerConfig(
+        consumer_type='DDG',
+        config={
+            'env': env,
+            'base': Node6,
+            'gen_dist': sim.IntUniform(140, 180),
+        }).config)
 
 # ---------- Suppliers ----------
 Node6_TAKE_Generator = sup.SupplierGenerator(
@@ -359,16 +357,14 @@ Node7 = bases.Base({
 })
 
 # ---------- Consumers ----------
-Node7_CRUDES_CustGen = con.ConsumerGenerator({
-    'description': 'Cruisers and Destroyers arriving at Diego Garcia for resupply',
-    'env': env,
-    'gen_dist': CONSUMER_GENERATION_DIST,
-    'gen_time': CONSUMER_GENERATION_TIMES,
-    'base': Node7,
-    'n_res_resupply': 40,
-    'n_res_onhand': 1,
-    'n_consumed_dist': CONSUMER_N_CONSUMED_DIST,
-})
+Node7_CustGen = con.ConsumerGenerator(
+    con.ConsumerConfig(
+        consumer_type='DDG',
+        config={
+            'env': env,
+            'base': Node7,
+            'gen_dist': sim.IntUniform(140, 180),
+        }).config)
 
 # ---------- Suppliers ----------
 Node7_TAKE_Generator = sup.SupplierGenerator(
@@ -406,6 +402,16 @@ Node8 = bases.Base({
     'n_reload_team': 1,
 })
 
+# ---------- Consumers ----------
+Node8_CustGen = con.ConsumerGenerator(
+    con.ConsumerConfig(
+        consumer_type='DDG',
+        config={
+            'env': env,
+            'base': Node8,
+            'gen_dist': sim.IntUniform(140, 180),
+        }).config)
+
 # ---------- Suppliers ----------
 Node8_TAKE_Generator = sup.SupplierGenerator(
     sup.Supplier_Config(supplier_type='TAKE',
@@ -440,16 +446,15 @@ Node9 = bases.Base({
 })
 
 
-Node9_CRUDES_CustGen = con.ConsumerGenerator({
-    'description': 'Cruisers and Destroyers arriving at Diego Garcia for resupply',
-    'env': env,
-    'gen_dist': CONSUMER_GENERATION_DIST,
-    'gen_time': CONSUMER_GENERATION_TIMES,
-    'base': Node9,
-    'n_res_resupply': 40,
-    'n_res_onhand': 1,
-    'n_consumed_dist': CONSUMER_N_CONSUMED_DIST,
-})
+# ---------- Consumers ----------
+Node9_CustGen = con.ConsumerGenerator(
+    con.ConsumerConfig(
+        consumer_type='DDG',
+        config={
+            'env': env,
+            'base': Node9,
+            'gen_dist': sim.IntUniform(140, 180),
+        }).config)
 
 # ---------- Suppliers ----------
 Node9_TAKE_Generator = sup.SupplierGenerator(
@@ -752,5 +757,6 @@ env.run(till=SIM_LENGTH)
 
 # endregion ====================================================================
 
-
-os.system(f'Rscript --verbose plots/r_plots.R {PLOT_DAY_NIGHT_SHADING}')
+if CREATE_PLOTS:
+    os.system(
+        f'Rscript --verbose plots/r_plots.R {PLOT_DAY_NIGHT_SHADING} {SHOW_SUPPLIER_ARRIVALS}')
