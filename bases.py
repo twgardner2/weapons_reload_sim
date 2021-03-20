@@ -75,8 +75,6 @@ class Base(sim.Component):
             # Verbose logging
             cprint(
                 f'{env.now()}: Available resources, {self.resource} at base {self}: {self.resource.available_quantity()}')
-            # cprint([customer for customer in self.queue])
-            # cprint([customer.n_res_required() for customer in self.queue])
 
             # While no consumers in line, passivate
             while len(self.queue) == 0:
@@ -105,12 +103,10 @@ class Base(sim.Component):
                 n_req_cum = [sum(n_req[:x]) for x in range(0, len(n_req))]
                 n = 0               # resources issued to one team
                 n_all_teams = 0     # resources issued to all teams
-                cprint(n_req)
-                cprint(n_req_cum)
 
                 # Loop through reload teams
-                for team in range(0, n_reload_team):
-                    # cprint(team)
+                # for team in range(0, n_reload_team):
+                for team in range(n_reload_team):
                     # If no consumer in line for this reload team, break
                     if self.queue[team] is None:
                         break
@@ -125,8 +121,6 @@ class Base(sim.Component):
 
                     # Issue resources to Consumer, have Consumer request the resource
                     cprint(f'issuing {n} to {self.queue[team]}')
-                    cprint(
-                        f"!@#$ - {self.queue[team]} n_res_onhand: {self.queue[team].n_res_onhand}, n_res_required: {self.queue[team].n_res_required()}")
 
                     self.queue[team].n_res_onhand += n
                     self.queue[team].n_issued = n
