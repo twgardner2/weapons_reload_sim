@@ -19,18 +19,22 @@ import bases
 
 
 # region: ((((((((((((((((((((((((((((((Resources))))))))))))))))))))))))))))))
-from resources import *
+# from resources import *
 # endregion ====================================================================
 
 
 # region: ((((((((((((((((((((((((((((((((Node1))))))))))))))))))))))))))))))))
 # ---------- Base ----------
-Node1 = bases.Base({
-    'name': 'Node1',
-    'env': env,
-    'reload_team': fast_ERT,
-    'n_reload_team': 2,
-})
+Node1 = bases.Base(
+    bases.BaseConfig(
+        config={
+            'name': 'Node1',
+            'env': env,
+            'n_QRT': 10,
+            'n_ERT': 1,
+            'initial_resources': 500
+        }).config
+)
 
 # ---------- Consumers ----------
 for i in range(8):
@@ -44,14 +48,6 @@ for i in range(8):
             }).config
     )
 
-# Node1_CustGen = con.ConsumerGenerator(
-#     con.ConsumerConfig(
-#         consumer_type='DDG',
-#         config={
-#             'env': env,
-#             'base': Node1,
-#             'gen_dist': sim.IntUniform(140, 180),
-#         }).config)
 
 # ---------- Suppliers ----------
 Node1_TAKE_Generator = sup.SupplierGenerator(
@@ -77,47 +73,55 @@ Node1_NGLS_Generator = sup.SupplierGenerator(
                             'base': Node1,
                         }).config)
 
-# Node1_C5_Generator = sup.SupplierGenerator(
-#     sup.Supplier_Config(supplier_type='C5',
-#                         config={
-#                             'env': env,
-#                             'base': Node1,
-#                         }).config)
+Node1_C5_Generator = sup.SupplierGenerator(
+    sup.Supplier_Config(supplier_type='C5',
+                        config={
+                            'env': env,
+                            'base': Node1,
+                            # 'gen_dist': sim.Normal(1, .2)
+                        }).config)
 
-# Node1_C17_Generator = sup.SupplierGenerator(
-#     sup.Supplier_Config(supplier_type='C17',
-#                         config={
-#                             'env': env,
-#                             'base': Node1,
-#                         }).config)
+Node1_C17_Generator = sup.SupplierGenerator(
+    sup.Supplier_Config(supplier_type='C17',
+                        config={
+                            'env': env,
+                            'base': Node1,
+                            # 'gen_dist': sim.Normal(12, 2)
+                        }).config)
 
-# Node1_C130_Generator = sup.SupplierGenerator(
-#     sup.Supplier_Config(supplier_type='C130',
-#                         config={
-#                             'env': env,
-#                             'base': Node1,
-#                         }).config)
+Node1_C130_Generator = sup.SupplierGenerator(
+    sup.Supplier_Config(supplier_type='C130',
+                        config={
+                            'env': env,
+                            'base': Node1,
+                            # 'gen_dist': sim.Normal(12, 2)
+                        }).config)
 # endregion ====================================================================
 
 
 # region: (((((((((((((((((((((((((((((((((Node2)))))))))))))))))))))))))))))))))
 # ---------- Base ----------
-Node2 = bases.Base({
-    'name': 'Node2',
-    'env': env,
-    'reload_team': fast_ERT,
-    'n_reload_team': 4,
-})
+Node2 = bases.Base(
+    bases.BaseConfig(
+        config={
+            'name': 'Node2',
+            'env': env,
+            'n_QRT': 0,
+            'n_ERT': 4,
+        }).config
+)
 
 # CRUDESs arriving at Node2
-Node2_CustGen = con.ConsumerGenerator(
-    con.ConsumerConfig(
-        consumer_type='DDG',
-        config={
-            'env': env,
-            'base': Node2,
-            'gen_dist': sim.IntUniform(140, 180),
-        }).config)
+for i in range(8):
+    con.ConsumerGenerator(
+        con.ConsumerConfig(
+            consumer_type='DDG',
+            config={
+                'env': env,
+                'base': Node2,
+                'gen_dist': sim.Normal(13 * 24, 3 * 24),
+            }).config
+    )
 
 # ---------- Suppliers ----------
 Node2_TAKE_Generator = sup.SupplierGenerator(
@@ -152,21 +156,26 @@ Node2_C130_Generator = sup.SupplierGenerator(
 
 # region: ((((((((((((((((((((((((((((((((Node3))))))))))))))))))))))))))))))))
 # ---------- Base ----------
-Node3 = bases.Base({
-    'name': 'Node3',
-    'env': env,
-    'reload_team': fast_ERT,
-    'n_reload_team': 2,
-})
-
-Node3_CustGen = con.ConsumerGenerator(
-    con.ConsumerConfig(
-        consumer_type='DDG',
+Node3 = bases.Base(
+    bases.BaseConfig(
         config={
+            'name': 'Node3',
             'env': env,
-            'base': Node3,
-            'gen_dist': sim.IntUniform(140, 180),
-        }).config)
+            'n_QRT': 2,
+            'n_ERT': 0,
+        }).config
+)
+
+for i in range(8):
+    con.ConsumerGenerator(
+        con.ConsumerConfig(
+            consumer_type='DDG',
+            config={
+                'env': env,
+                'base': Node3,
+                'gen_dist': sim.Normal(13 * 24, 3 * 24),
+            }).config
+    )
 
 # ---------- Suppliers ----------
 Node3_TAKE_Generator = sup.SupplierGenerator(
@@ -178,13 +187,18 @@ Node3_TAKE_Generator = sup.SupplierGenerator(
                             # 'gen_time': [1e9],
                         }).config)
 
+Node3_C5_Generator = sup.SupplierGenerator(
+    sup.Supplier_Config(supplier_type='C5',
+                        config={
+                            'env': env,
+                            'base': Node3,
+                        }).config)
+
 Node3_C17_Generator = sup.SupplierGenerator(
     sup.Supplier_Config(supplier_type='C17',
                         config={
                             'env': env,
                             'base': Node3,
-                            'gen_dist': None,
-                            'gen_time': [1e9],
                         }).config)
 
 Node3_C130_Generator = sup.SupplierGenerator(
@@ -192,8 +206,6 @@ Node3_C130_Generator = sup.SupplierGenerator(
                         config={
                             'env': env,
                             'base': Node3,
-                            'gen_dist': None,
-                            'gen_time': [1e9],
                         }).config)
 # endregion ====================================================================
 
@@ -201,22 +213,27 @@ Node3_C130_Generator = sup.SupplierGenerator(
 # region: ((((((((((((((((((((((((((((((((Node4))))))))))))))))))))))))))))))))
 
 # ---------- Base ----------
-Node4 = bases.Base({
-    'name': 'Node4',
-    'env': env,
-    'reload_team': fast_ERT,
-    'n_reload_team': 1,
-})
+Node4 = bases.Base(
+    bases.BaseConfig(
+        config={
+            'name': 'Node4',
+            'env': env,
+            'n_QRT': 0,
+            'n_ERT': 1,
+        }).config
+)
 
 # ---------- Consumers ----------
-Node4_CG_CustGen = con.ConsumerGenerator(
-    con.ConsumerConfig(
-        consumer_type='DDG',
-        config={
-            'env': env,
-            'base': Node4,
-            'gen_dist': sim.IntUniform(240, 280),
-        }).config)
+for i in range(8):
+    con.ConsumerGenerator(
+        con.ConsumerConfig(
+            consumer_type='DDG',
+            config={
+                'env': env,
+                'base': Node4,
+                'gen_dist': sim.Normal(13 * 24, 3 * 24),
+            }).config
+    )
 
 
 # ---------- Suppliers ----------
@@ -247,22 +264,27 @@ Node4_C130_Generator = sup.SupplierGenerator(
 # region: (((((((((((((((((((((((((((((((Node5)))))))))))))))))))))))))))))))
 
 # ---------- Base ----------
-Node5 = bases.Base({
-    'name': 'Node5',
-    'env': env,
-    'reload_team': fast_ERT,
-    'n_reload_team': 1,
-})
+Node5 = bases.Base(
+    bases.BaseConfig(
+        config={
+            'name': 'Node5',
+            'env': env,
+            'n_QRT': 0,
+            'n_ERT': 1,
+        }).config
+)
 
 # ---------- Consumers ----------
-Node5_CustGen = con.ConsumerGenerator(
-    con.ConsumerConfig(
-        consumer_type='DDG',
-        config={
-            'env': env,
-            'base': Node5,
-            'gen_dist': sim.IntUniform(140, 180),
-        }).config)
+for i in range(8):
+    con.ConsumerGenerator(
+        con.ConsumerConfig(
+            consumer_type='DDG',
+            config={
+                'env': env,
+                'base': Node5,
+                'gen_dist': sim.Normal(13 * 24, 3 * 24),
+            }).config
+    )
 
 # ---------- Suppliers ----------
 Node5_TAKE_Generator = sup.SupplierGenerator(
@@ -297,22 +319,27 @@ Node5_C130_Generator = sup.SupplierGenerator(
 
 # region: ((((((((((((((((((((((((((((((((Node6))))))))))))))))))))))))))))))))
 # ---------- Base ----------
-Node6 = bases.Base({
-    'name': 'Node6',
-    'env': env,
-    'reload_team': fast_ERT,
-    'n_reload_team': 1,
-})
+Node6 = bases.Base(
+    bases.BaseConfig(
+        config={
+            'name': 'Node6',
+            'env': env,
+            'n_QRT': 0,
+            'n_ERT': 2,
+        }).config
+)
 
 # ---------- Consumers ----------
-Node6_CustGen = con.ConsumerGenerator(
-    con.ConsumerConfig(
-        consumer_type='DDG',
-        config={
-            'env': env,
-            'base': Node6,
-            'gen_dist': sim.IntUniform(140, 180),
-        }).config)
+for i in range(8):
+    con.ConsumerGenerator(
+        con.ConsumerConfig(
+            consumer_type='DDG',
+            config={
+                'env': env,
+                'base': Node6,
+                'gen_dist': sim.Normal(13 * 24, 3 * 24),
+            }).config
+    )
 
 # ---------- Suppliers ----------
 Node6_TAKE_Generator = sup.SupplierGenerator(
@@ -343,301 +370,6 @@ Node6_C130_Generator = sup.SupplierGenerator(
                             'base': Node6,
                         }).config)
 
-# endregion ====================================================================
-
-
-# region: ((((((((((((((((((((((((((((((((Node7))))))))))))))))))))))))))))))))
-
-# ---------- Base ----------
-Node7 = bases.Base({
-    'name': 'Node7',
-    'env': env,
-    'reload_team': fast_ERT,
-    'n_reload_team': 1,
-})
-
-# ---------- Consumers ----------
-Node7_CustGen = con.ConsumerGenerator(
-    con.ConsumerConfig(
-        consumer_type='DDG',
-        config={
-            'env': env,
-            'base': Node7,
-            'gen_dist': sim.IntUniform(140, 180),
-        }).config)
-
-# ---------- Suppliers ----------
-Node7_TAKE_Generator = sup.SupplierGenerator(
-    sup.Supplier_Config(supplier_type='TAKE',
-                        config={
-                            'env': env,
-                            'base': Node7,
-                            'gen_dist': None,
-                            'gen_time': [1],
-                        }).config)
-
-Node7_C17_Generator = sup.SupplierGenerator(
-    sup.Supplier_Config(supplier_type='C17',
-                        config={
-                            'env': env,
-                            'base': Node7,
-                        }).config)
-
-Node7_C130_Generator = sup.SupplierGenerator(
-    sup.Supplier_Config(supplier_type='C130',
-                        config={
-                            'env': env,
-                            'base': Node7,
-                        }).config)
-# endregion ====================================================================
-
-
-# region: ((((((((((((((((((((((((((((((((Node8))))))))))))))))))))))))))))))))
-
-# ---------- Base ----------
-Node8 = bases.Base({
-    'name': 'Node8',
-    'env': env,
-    'reload_team': fast_ERT,
-    'n_reload_team': 1,
-})
-
-# ---------- Consumers ----------
-Node8_CustGen = con.ConsumerGenerator(
-    con.ConsumerConfig(
-        consumer_type='DDG',
-        config={
-            'env': env,
-            'base': Node8,
-            'gen_dist': sim.IntUniform(140, 180),
-        }).config)
-
-# ---------- Suppliers ----------
-Node8_TAKE_Generator = sup.SupplierGenerator(
-    sup.Supplier_Config(supplier_type='TAKE',
-                        config={
-                            'env': env,
-                            'base': Node8,
-                        }).config)
-
-Node8_C17_Generator = sup.SupplierGenerator(
-    sup.Supplier_Config(supplier_type='C17',
-                        config={
-                            'env': env,
-                            'base': Node8,
-                        }).config)
-
-Node8_C130_Generator = sup.SupplierGenerator(
-    sup.Supplier_Config(supplier_type='C130',
-                        config={
-                            'env': env,
-                            'base': Node8,
-                        }).config)
-# endregion ====================================================================
-
-
-# region: ((((((((((((((((((((((((((((((((Node9))))))))))))))))))))))))))))))))
-# ---------- Base ----------
-Node9 = bases.Base({
-    'name': 'Node9',
-    'env': env,
-    'reload_team': fast_ERT,
-    'n_reload_team': 1,
-})
-
-
-# ---------- Consumers ----------
-Node9_CustGen = con.ConsumerGenerator(
-    con.ConsumerConfig(
-        consumer_type='DDG',
-        config={
-            'env': env,
-            'base': Node9,
-            'gen_dist': sim.IntUniform(140, 180),
-        }).config)
-
-# ---------- Suppliers ----------
-Node9_TAKE_Generator = sup.SupplierGenerator(
-    sup.Supplier_Config(supplier_type='TAKE',
-                        config={
-                            'env': env,
-                            'base': Node9,
-                        }).config)
-
-Node9_C5_Generator = sup.SupplierGenerator(
-    sup.Supplier_Config(supplier_type='C5',
-                        config={
-                            'env': env,
-                            'base': Node9,
-                        }).config)
-
-Node9_C17_Generator = sup.SupplierGenerator(
-    sup.Supplier_Config(supplier_type='C17',
-                        config={
-                            'env': env,
-                            'base': Node9,
-                        }).config)
-
-Node9_C130_Generator = sup.SupplierGenerator(
-    sup.Supplier_Config(supplier_type='C130',
-                        config={
-                            'env': env,
-                            'base': Node9,
-                        }).config)
-
-# endregion ====================================================================
-
-
-# region: (((((((((((((((((((((((((((((((((Node10)))))))))))))))))))))))))))))))))
-
-# ---------- Base ----------
-Node10 = bases.Base({
-    'name': 'Node10',
-    'env': env,
-    'reload_team': fast_ERT,
-    'n_reload_team': 1,
-})
-
-
-# ---------- Suppliers ----------
-Node10_TAKE_Generator = sup.SupplierGenerator(
-    sup.Supplier_Config(supplier_type='TAKE',
-                        config={
-                            'env': env,
-                            'base': Node10,
-                        }).config)
-
-Node10_C5_Generator = sup.SupplierGenerator(
-    sup.Supplier_Config(supplier_type='C5',
-                        config={
-                            'env': env,
-                            'base': Node10,
-                        }).config)
-
-Node10_C17_Generator = sup.SupplierGenerator(
-    sup.Supplier_Config(supplier_type='C17',
-                        config={
-                            'env': env,
-                            'base': Node10,
-                        }).config)
-
-Node10_C130_Generator = sup.SupplierGenerator(
-    sup.Supplier_Config(supplier_type='C130',
-                        config={
-                            'env': env,
-                            'base': Node10,
-                        }).config)
-# endregion ====================================================================
-
-
-# region: (((((((((((((((((((((((((((((Node11)))))))))))))))))))))))))))))
-
-# ---------- Base ----------
-Node11 = bases.Base({
-    'name': 'Node11',
-    'env': env,
-    'reload_team': fast_ERT,
-    'n_reload_team': 1,
-})
-
-
-# ---------- Suppliers ----------
-Node11_TAKE_Generator = sup.SupplierGenerator(
-    sup.Supplier_Config(supplier_type='TAKE',
-                        config={
-                            'env': env,
-                            'base': Node11,
-                        }).config)
-
-Node11_C5_Generator = sup.SupplierGenerator(
-    sup.Supplier_Config(supplier_type='C5',
-                        config={
-                            'env': env,
-                            'base': Node11,
-                        }).config)
-
-Node11_C17_Generator = sup.SupplierGenerator(
-    sup.Supplier_Config(supplier_type='C17',
-                        config={
-                            'env': env,
-                            'base': Node11,
-                        }).config)
-
-Node11_C130_Generator = sup.SupplierGenerator(
-    sup.Supplier_Config(supplier_type='C130',
-                        config={
-                            'env': env,
-                            'base': Node11,
-                        }).config)
-# endregion ====================================================================
-
-
-# region: (((((((((((((((((((((((((((((((Node12)))))))))))))))))))))))))))))))
-
-# ---------- Base ----------
-Node12 = bases.Base({
-    'name': 'Node12',
-    'env': env,
-    'reload_team': fast_ERT,
-    'n_reload_team': 1,
-})
-
-# ---------- Suppliers ----------
-Node12_TAKE_Generator = sup.SupplierGenerator(
-    sup.Supplier_Config(supplier_type='TAKE',
-                        config={
-                            'env': env,
-                            'base': Node12,
-                        }).config)
-
-Node12_C5_Generator = sup.SupplierGenerator(
-    sup.Supplier_Config(supplier_type='C5',
-                        config={
-                            'env': env,
-                            'base': Node12,
-                        }).config)
-
-Node12_C17_Generator = sup.SupplierGenerator(
-    sup.Supplier_Config(supplier_type='C17',
-                        config={
-                            'env': env,
-                            'base': Node12,
-                        }).config)
-
-Node12_C130_Generator = sup.SupplierGenerator(
-    sup.Supplier_Config(supplier_type='C130',
-                        config={
-                            'env': env,
-                            'base': Node12,
-                        }).config)
-
-# endregion ====================================================================
-
-
-# region: (((((((((((((((((((((((((((((Node13)))))))))))))))))))))))))))))
-
-# ---------- Base ----------
-Node13 = bases.Base({
-    'name': 'Node13',
-    'env': env,
-    'reload_team': fast_ERT,
-    'n_reload_team': 2,
-})
-
-# ---------- Suppliers ----------
-Node13_C17_Generator = sup.SupplierGenerator(
-    sup.Supplier_Config(supplier_type='C17',
-                        config={
-                            'env': env,
-                            'base': Node13,
-                        }).config)
-
-Node13_C130_Generator = sup.SupplierGenerator(
-    sup.Supplier_Config(supplier_type='C130',
-                        config={
-                            'env': env,
-                            'base': Node13,
-                        }).config)
 # endregion ====================================================================
 
 

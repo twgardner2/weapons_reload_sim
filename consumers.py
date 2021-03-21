@@ -38,19 +38,16 @@ class ConsumerConfig():
             'gen_dist': CONSUMER_GENERATION_DIST,
             'gen_time': CONSUMER_GENERATION_TIMES,
         }
-        # print('======================')
-        # print({**default_config, **config})
-        # print('====================')
+
         self.config = {**default_config, **config}
 
 
 class ConsumerGenerator(sim.Component):
     def __init__(self, config={}):
-        # print('XXXXXXXXXXx')
-        # print(config)
-        # print('XXXXXXXXXXx')
+
         sim.Component.__init__(self)
         self.config = config
+        self.generated_ship_is_inport = False
 
         # Destructure the config dict
         gen_dist, gen_time, base, env = itemgetter(
@@ -59,34 +56,44 @@ class ConsumerGenerator(sim.Component):
         cprint(f'{env.now()}: Creating a ConsumerGenerator, config: {config}')
 
     def process(self):
+        print(
+            f'generator: {self}, ship is inport: {self.generated_ship_is_inport}')
         # Destructure the config dict
         gen_dist, gen_time, base, env = itemgetter(
             'gen_dist', 'gen_time', 'base', 'env')(self.config)
 
+        print(self.generated_ship_is_inport)
+
         # Generate objects: If distribution is defined, overrides times
+        if not self.generated_ship_is_inport:
+            if gen_dist:        # Generate based on distribution
+                while True:
+                    yield self.hold(gen_dist.sample())
+                    cprint(
+                        f'{round(env.now(), 2)}: Generating a Consumer based on distribution:\n {gen_dist.print_info(as_str=True)}')
+                    if not self.generated_ship_is_inport:
+                        print(env.now())
+                        print(self.generated_ship_is_inport)
+                        Consumer(self, self.config)
+                        yield self.hold(gen_dist.sample())
 
-        if gen_dist:        # Generate based on distribution
-            while True:
-                cprint(
-                    f'{round(env.now(), 2)}: Generating a Consumer based on distribution:\n {gen_dist.print_info(as_str=True)}')
-                Consumer(self.config)
-                yield self.hold(gen_dist.sample())
-
-        else:               # Generate at predefined times
-            yield self.hold(gen_time.pop(0) - env.now())
-            cprint(f'{round(env.now(), 2)}: Generating a Consumer based on time')
-            Consumer(self.config)
-            while len(gen_time) > 0:
+            else:               # Generate at predefined times
                 yield self.hold(gen_time.pop(0) - env.now())
                 cprint(
                     f'{round(env.now(), 2)}: Generating a Consumer based on time')
-                Consumer(self.config)
+                Consumer(self, self.config)
+                while len(gen_time) > 0:
+                    yield self.hold(gen_time.pop(0) - env.now())
+                    cprint(
+                        f'{round(env.now(), 2)}: Generating a Consumer based on time')
+                    Consumer(self, self.config)
 
 
 class Consumer(sim.Component):
-    def __init__(self, config={}):
+    def __init__(self, generator, config={}):
         sim.Component.__init__(self)
         self.config = config
+        self.generator = generator
         self.n_res_resupply = config['n_res_resupply']
         self.pct_res_onhand = config['pct_res_onhand_dist'].sample()
         self.n_res_onhand = round(
@@ -94,8 +101,6 @@ class Consumer(sim.Component):
         cprint(f'Init Consumer:')
         cprint(self)
         cprint(f'n_res_required: {self.n_res_required()}')
-        # n_consumed = config.get('n_consumed_dist').sample()
-        # config['n_consumed'] = n_consumed
 
     def animation_objects(self, id):
         '''Defines representation of Consumers in a queue animation'''
@@ -126,6 +131,9 @@ class Consumer(sim.Component):
             'base', 'env', 'n_res_resupply')(self.config)
 
         # Enter the queue for resources at the assigned base
+        self.generator.generated_ship_is_inport = True
+        print('consumer entering port')
+        print(self.generator.generated_ship_is_inport)
         self.enter(base.queue)
 
         # Debugging
@@ -138,10 +146,10 @@ class Consumer(sim.Component):
         yield self.passivate()
 
         while self.n_res_required() > 0:
-            # cprint(f'$$$$$ {self.n_issued}')
             yield self.request((base.resource, self.n_issued))
             yield self.hold(1)
 
         # Finished with the consumer object, hold for remainder of simulation
         # so it doesn't release its resources
+        self.generator.generated_ship_is_inport = False
         yield self.hold(float('inf'))

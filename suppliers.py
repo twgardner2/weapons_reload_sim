@@ -31,9 +31,9 @@ class Supplier_Config():
         gen_dist_dict = {
             'TAKE': sim.IntUniform(800, 1000),
             'NGLS': sim.IntUniform(800, 1000),
-            'C5': sim.IntUniform(72, 96),
-            'C17': sim.IntUniform(48, 72),
-            'C130': sim.IntUniform(24, 48),
+            'C5': sim.IntUniform(10, 14),
+            'C17': sim.IntUniform(10, 14),
+            'C130': sim.IntUniform(10, 14),
         }
 
         default_config = {

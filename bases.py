@@ -20,6 +20,23 @@ if out:
         pass
 
 
+class BaseConfig():
+    def __init__(self, config={}):
+        if 'name' not in config and 'env' not in config:
+            raise Exception('You must pass "env" and "name"')
+        if 'name' not in config:
+            raise Exception('You must pass "name"')
+        if 'env' not in config:
+            raise Exception('You must pass "env"')
+
+        default_config = {
+            'n_QRT': 1,
+            'n_ERT': 1,
+            'initial_resources': 100
+        }
+        self.config = {**default_config, **config}
+
+
 class Base(sim.Component):
     # https://stackoverflow.com/questions/328851/printing-all-instances-of-a-class
     instances = []
@@ -29,8 +46,10 @@ class Base(sim.Component):
         self.__class__.instances.append(self)
 
         # Destructure config
-        name, reload_team, env, n_reload_team = itemgetter(
-            'name', 'reload_team', 'env', 'n_reload_team')(config)
+        name, env, n_QRT, n_ERT = itemgetter(
+            'name', 'env', 'n_QRT', 'n_ERT')(config)
+        # name, reload_team, env, n_reload_team = itemgetter(
+        # 'name', 'reload_team', 'env', 'n_reload_team')(config)
 
         # Verbose logging
         cprint(f'{env.now()}: Creating a BASE, config: {config}')
@@ -38,16 +57,10 @@ class Base(sim.Component):
         # Create queue and resources for consumers
         self.queue = sim.Queue(f'{name}_queue')
         self.supplier_queue = sim.Queue(f'{name}_supplier_queue')
-        self.resource = sim.Resource(f'{name}_resource', 0)
-        self.reload_teams = sim.Resource(f'{name}_reload_teams', n_reload_team)
-        self.reload_queue = [None] * n_reload_team
-
-        # Consume the assigned reload_team resource
-        # if reload_team.available_quantity() > 0:
-        #     self.request((reload_team, 1))
-        # else:
-        #     raise Exception(
-        #         f'not enough ERTs. {name} tried to request reload_team {reload_team} but there are none')
+        self.resource = sim.Resource(
+            f'{name}_resource', config['initial_resources'])
+        self.reload_teams = n_QRT * ['QRT'] + n_ERT * ['ERT']
+        self.n_reload_team = len(self.reload_teams)
 
         # Attach config to self to pass to process
         self.config = config
@@ -59,9 +72,9 @@ class Base(sim.Component):
 
     def process(self):
         # Destructure config
-        name, reload_team, env, n_reload_team = itemgetter(
-            'name', 'reload_team', 'env', 'n_reload_team')(self.config)
-
+        # name, reload_team, env, n_reload_team = itemgetter(
+        #     'name', 'reload_team', 'env', 'n_reload_team')(self.config)
+        name, env = itemgetter('name', 'env')(self.config)
         # Run process
         while True:
 
@@ -98,22 +111,26 @@ class Base(sim.Component):
                 avail = self.resource.available_quantity()
                 # Required by each consumer
                 n_req = [x.n_res_required()
-                         for x in self.queue[:n_reload_team]]
+                         for x in self.queue[:self.n_reload_team]]
                 # Required by all consumers ahead of a particular consumer
                 n_req_cum = [sum(n_req[:x]) for x in range(0, len(n_req))]
                 n = 0               # resources issued to one team
                 n_all_teams = 0     # resources issued to all teams
 
+                # Reload rates for each reload team
+                reload_rates = [RELOAD_TEAM_RATES[team]
+                                for team in self.reload_teams]
+                cprint(reload_rates)
+
                 # Loop through reload teams
-                # for team in range(0, n_reload_team):
-                for team in range(n_reload_team):
+                for team in range(self.n_reload_team):
                     # If no consumer in line for this reload team, break
                     if self.queue[team] is None:
                         break
                     # Determine n resources to issue to consumer
                     n = min(avail - n_all_teams,
                             n_req[team],
-                            reload_team.reload_rate,
+                            reload_rates[team],
                             avail - n_req_cum[team] if avail >= n_req_cum[team] else 0)
 
                     # Track number issued this time step
@@ -127,7 +144,7 @@ class Base(sim.Component):
                     self.queue[team].activate()
 
                 # Remove consumers who no longer need resources from queue
-                for consumer in self.queue[0:n_reload_team]:
+                for consumer in self.queue[0:self.n_reload_team]:
                     if consumer.n_res_required() <= 0:
                         self.queue.remove(consumer)
 
