@@ -30,9 +30,9 @@ Node1 = bases.Base(
         config={
             'name': 'Node1',
             'env': env,
-            'n_QRT': 10,
+            'n_QRT': 1,
             'n_ERT': 1,
-            'initial_resources': 500
+            # 'initial_resources': 500
         }).config
 )
 
@@ -44,7 +44,7 @@ for i in range(8):
             config={
                 'env': env,
                 'base': Node1,
-                'gen_dist': sim.Normal(13 * 24, 3 * 24),
+                # 'gen_dist': sim.Normal(13 * 24, 3 * 24),
             }).config
     )
 
@@ -55,22 +55,7 @@ Node1_TAKE_Generator = sup.SupplierGenerator(
                         config={
                             'env': env,
                             'base': Node1,
-                            'gen_dist': sim.IntUniform(6 * 24, 12 * 24)
-                        }).config)
-
-sup.SupplierGenerator(
-    sup.Supplier_Config(supplier_type='TAKE',
-                        config={
-                            'env': env,
-                            'base': Node1,
-                            'gen_time': [0]
-                        }).config)
-
-Node1_NGLS_Generator = sup.SupplierGenerator(
-    sup.Supplier_Config(supplier_type='NGLS',
-                        config={
-                            'env': env,
-                            'base': Node1,
+                            # 'gen_dist': sim.IntUniform(6 * 24, 12 * 24)
                         }).config)
 
 Node1_C5_Generator = sup.SupplierGenerator(
@@ -119,7 +104,7 @@ for i in range(8):
             config={
                 'env': env,
                 'base': Node2,
-                'gen_dist': sim.Normal(13 * 24, 3 * 24),
+                # 'gen_dist': sim.Normal(13 * 24, 3 * 24),
             }).config
     )
 
@@ -173,7 +158,7 @@ for i in range(8):
             config={
                 'env': env,
                 'base': Node3,
-                'gen_dist': sim.Normal(13 * 24, 3 * 24),
+                # 'gen_dist': sim.Normal(13 * 24, 3 * 24),
             }).config
     )
 
@@ -218,7 +203,7 @@ Node4 = bases.Base(
         config={
             'name': 'Node4',
             'env': env,
-            'n_QRT': 0,
+            'n_QRT': 1,
             'n_ERT': 1,
         }).config
 )
@@ -231,7 +216,6 @@ for i in range(8):
             config={
                 'env': env,
                 'base': Node4,
-                'gen_dist': sim.Normal(13 * 24, 3 * 24),
             }).config
     )
 
@@ -242,7 +226,6 @@ Node4_TAKE_Generator = sup.SupplierGenerator(
                         config={
                             'env': env,
                             'base': Node4,
-                            'gen_dist': sim.IntUniform(15 * 24, 20 * 24)
                         }).config)
 
 Node4_C17_Generator = sup.SupplierGenerator(
@@ -282,7 +265,7 @@ for i in range(8):
             config={
                 'env': env,
                 'base': Node5,
-                'gen_dist': sim.Normal(13 * 24, 3 * 24),
+                # 'gen_dist': sim.Normal(13 * 24, 3 * 24),
             }).config
     )
 
@@ -294,12 +277,12 @@ Node5_TAKE_Generator = sup.SupplierGenerator(
                             'base': Node5,
                         }).config)
 
-Node5_C5_Generator = sup.SupplierGenerator(
-    sup.Supplier_Config(supplier_type='C5',
-                        config={
-                            'env': env,
-                            'base': Node5,
-                        }).config)
+# Node5_C5_Generator = sup.SupplierGenerator(
+#     sup.Supplier_Config(supplier_type='C5',
+#                         config={
+#                             'env': env,
+#                             'base': Node5,
+#                         }).config)
 
 Node5_C17_Generator = sup.SupplierGenerator(
     sup.Supplier_Config(supplier_type='C17',
@@ -337,24 +320,24 @@ for i in range(8):
             config={
                 'env': env,
                 'base': Node6,
-                'gen_dist': sim.Normal(13 * 24, 3 * 24),
+                # 'gen_dist': sim.Normal(13 * 24, 3 * 24),
             }).config
     )
 
 # ---------- Suppliers ----------
-Node6_TAKE_Generator = sup.SupplierGenerator(
-    sup.Supplier_Config(supplier_type='TAKE',
-                        config={
-                            'env': env,
-                            'base': Node6,
-                        }).config)
+# Node6_TAKE_Generator = sup.SupplierGenerator(
+#     sup.Supplier_Config(supplier_type='TAKE',
+#                         config={
+#                             'env': env,
+#                             'base': Node6,
+#                         }).config)
 
-Node6_C5_Generator = sup.SupplierGenerator(
-    sup.Supplier_Config(supplier_type='C5',
-                        config={
-                            'env': env,
-                            'base': Node6,
-                        }).config)
+# Node6_C5_Generator = sup.SupplierGenerator(
+#     sup.Supplier_Config(supplier_type='C5',
+#                         config={
+#                             'env': env,
+#                             'base': Node6,
+#                         }).config)
 
 Node6_C17_Generator = sup.SupplierGenerator(
     sup.Supplier_Config(supplier_type='C17',

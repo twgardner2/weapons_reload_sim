@@ -35,6 +35,7 @@ class ConsumerConfig():
             'description': f'{consumer_type} resupplying at {config["base"]}',
             'n_res_resupply': n_res_resupply_dict[consumer_type],
             'pct_res_onhand_dist': sim.Uniform(5, 50),
+            'initial_delay_dist': CONSUMER_INITIAL_DELAY,
             'gen_dist': CONSUMER_GENERATION_DIST,
             'gen_time': CONSUMER_GENERATION_TIMES,
         }
@@ -59,16 +60,17 @@ class ConsumerGenerator(sim.Component):
         print(
             f'generator: {self}, ship is inport: {self.generated_ship_is_inport}')
         # Destructure the config dict
-        gen_dist, gen_time, base, env = itemgetter(
-            'gen_dist', 'gen_time', 'base', 'env')(self.config)
+        initial_delay_dist, gen_dist, gen_time, base, env = itemgetter(
+            'initial_delay_dist', 'gen_dist', 'gen_time', 'base', 'env')(self.config)
 
-        print(self.generated_ship_is_inport)
+        # initial_delay = initial_delay_dist.sample()
 
         # Generate objects: If distribution is defined, overrides times
+        # if not self.generated_ship_is_inport and env.now() >= initial_delay:
         if not self.generated_ship_is_inport:
             if gen_dist:        # Generate based on distribution
                 while True:
-                    yield self.hold(gen_dist.sample())
+                    yield self.hold(initial_delay_dist.sample())
                     cprint(
                         f'{round(env.now(), 2)}: Generating a Consumer based on distribution:\n {gen_dist.print_info(as_str=True)}')
                     if not self.generated_ship_is_inport:
@@ -129,6 +131,11 @@ class Consumer(sim.Component):
         # Destructure the config dict
         base, env, n_res_resupply = itemgetter(
             'base', 'env', 'n_res_resupply')(self.config)
+
+        if OUTPUT:
+            with open(OUTPUT_DIR + QUEUE_OUTPUT_FILE, 'a') as f:
+                f.write(
+                    f'{self.config["env"].now()},{self.config["base"].config["name"]},consumer_arrived,NA,{self.n_res_required()}\n')
 
         # Enter the queue for resources at the assigned base
         self.generator.generated_ship_is_inport = True

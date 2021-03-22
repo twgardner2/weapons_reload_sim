@@ -29,11 +29,11 @@ class Supplier_Config():
         }
 
         gen_dist_dict = {
-            'TAKE': sim.IntUniform(800, 1000),
+            'TAKE': sim.Normal(12 * 24, 2 * 24),
             'NGLS': sim.IntUniform(800, 1000),
-            'C5': sim.IntUniform(10, 14),
-            'C17': sim.IntUniform(10, 14),
-            'C130': sim.IntUniform(10, 14),
+            'C5': sim.IntUniform(0.5 * 24, 1 * 24),
+            'C17': sim.IntUniform(0.5 * 24, 1 * 24),
+            'C130': sim.IntUniform(0.5 * 24, 1 * 24),
         }
 
         default_config = {
@@ -95,7 +95,7 @@ class Supplier(sim.Component):
             with open(OUTPUT_DIR + QUEUE_OUTPUT_FILE, 'a') as f:
                 f.write(
                     # f'{self.config["env"].now()},{self.config["base"].config["name"]},supplier_arrived,{self.config["n_supplied"]},NA\n')
-                    f'{self.config["env"].now()},{self.config["base"].config["name"]},supplier_arrived,NA,{self.config["type"]}\n')
+                    f'{self.config["env"].now()},{self.config["base"].config["name"]},supplier_arrived,NA,{self.config["type"]}, {self.config["n_supplied"]}\n')
 
     def process(self):
 

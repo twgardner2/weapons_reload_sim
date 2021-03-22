@@ -10,14 +10,16 @@ theme_set(theme_minimal())
 
 model_output_path <- '/home/tom/Documents/weapons_reload_sim/output/'
 
+integer_breaks <- function(x) unique(floor(pretty(seq(0, (max(x) + 1) * 1.1))))
+
 df <- read_csv(file = file.path(model_output_path, 'output.csv'), 
-               col_names = c('time', 'base', 'key', 'value','value2'))
+               col_names = c('time', 'base', 'key', 'value','value2', 'value3'))
 
-bases_to_keep <- c('Node1', 'Node2', 'Node3', 'Node4', 
-					'Node5', 'Node6', 'Node7', 'Node8')
-
-df <- df %>%
-	filter(base %in% bases_to_keep)
+# bases_to_keep <- c('Node1', 'Node2', 'Node3', 'Node4', 
+# 					'Node5', 'Node6', 'Node7', 'Node8')
+# 
+# df <- df %>%
+# 	filter(base %in% bases_to_keep)
 
 # Queue length plot
 # > Node names in order, used for setting as factor levels
@@ -27,14 +29,18 @@ node_names_in_order <- c('Node1','Node2','Node3','Node4',
                           'Node13')
 
 # > Separate out queue length and supplier arrival data
-df_queue_length <- df %>% 
-  filter(key=='queue_length') %>%
+df_f <- df %>% 
   mutate(base_f = factor(base, levels = node_names_in_order))
-df_supplier_arrived <- df %>% 
-  filter(key=='supplier_arrived') %>%
-  mutate(base_f = factor(base, levels = node_names_in_order))
+  
+df_queue_length <- df_f %>% 
+  filter(key=='queue_length')
+df_supplier_arrived <- df_f %>% 
+  filter(key=='supplier_arrived')
+df_resources_avail <- df_f %>% 
+  filter(key=='resources_available')
 
-# > Create queue length plot
+
+# > Create queue length plot -------------------------------------------------------------------------
 basic_queue_length <- ggplot(data = df_queue_length,
             mapping = aes(x=time, y=value, color=key)) +
     geom_step(show.legend = FALSE) + 
@@ -45,20 +51,14 @@ basic_queue_length <- ggplot(data = df_queue_length,
     ) +
 	labs(title = 'Ship Queue at Nodes') +
 	xlab('Time (hours)') +
-    ylab('Ships in Queue') +
-    scale_y_continuous(breaks = function(x) unique(floor(pretty(seq(0, (max(x) + 1) * 1.1))))) 
-
-    # ylim(0, max(df_queue_length$value))
-    # # > Rug of supplier arrivals
-    # geom_rug(data = df_supplier_arrived,
-    #           mapping = aes(x=time, color=value2),
-    #           sides = 'b')
+  ylab('Ships in Queue') +
+  scale_y_continuous(breaks = integer_breaks) 
 
 # Save basic queue length plot
 ggsave(filename = file.path(model_output_path, 'queue_length_basic.png'),
        plot = basic_queue_length)
 
-# Add day/night shading to plot
+# Add day/night shading to plot ----------------------------------------------------------
 
 # Get x and y limits of faceted plot to make nighttime hours shaded
 x_lim <- ggplot_build(basic_queue_length)$layout$panel_scales_x[[1]]$range$range
@@ -88,7 +88,7 @@ ggsave(filename = file.path(model_output_path, 'queue_length_day_night.png'),
        plot = day_night_shaded_queue_length)
 
 
-# Add supplier arrivals to queue length
+# Add supplier arrivals to queue length -----------------------------------------------------
 supplier_arrival_queue_length <- basic_queue_length + 
 	labs(
 		title = 'Ship Queue at Nodes with Supplier Arrivals',
@@ -102,8 +102,7 @@ supplier_arrival_queue_length <- basic_queue_length +
 ggsave(filename = file.path(model_output_path, 'queue_length_supplier_arrival.png'),
        plot = supplier_arrival_queue_length)
 
-# Resources available plot
-df_resources_avail <- df %>% filter(key=='resources_available')
+# Resources available plot ------------------------------------------------------------------
 p <- ggplot(data = df_resources_avail,
             mapping = aes(x=time, y=value, color=key)) +
   geom_step(show.legend = FALSE) + 
@@ -119,7 +118,7 @@ p <- ggplot(data = df_resources_avail,
 ggsave(filename = file.path(model_output_path, 'resources_available.png'),
        plot = p)
 
-# Total Queue Length
+# Total Queue Length -----------------------------------------------------------------------
 df_total_queue <- df %>% 
   filter(key == "queue_length") %>% 
   group_by(time) %>% 
@@ -138,3 +137,18 @@ p <- ggplot(data = df_total_queue,
   )
 ggsave(filename = file.path(model_output_path, 'total_queue.png'),
        plot = p)
+
+
+
+# Make queue length and resources available plot (dual y-axes) ----------------------------
+queue_length_resources_available <- basic_queue_length +
+  geom_line(data = df_resources_avail, mapping = aes(x=time, y=value/250, color=key)) +
+  facet_grid(rows = vars(base_f)) +
+  scale_y_continuous(
+    breaks = integer_breaks,
+    sec.axis = sec_axis(~.*250, name="Resources Available")
+  ) + 
+  theme(legend.position="bottom")
+
+ggsave(filename = file.path(model_output_path, 'queue_length_w_resources_avail.png'),
+       plot = queue_length_resources_available)
