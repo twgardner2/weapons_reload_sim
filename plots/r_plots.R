@@ -142,11 +142,11 @@ ggsave(filename = file.path(model_output_path, 'total_queue.png'),
 
 # Make queue length and resources available plot (dual y-axes) ----------------------------
 queue_length_resources_available <- basic_queue_length +
-  geom_line(data = df_resources_avail, mapping = aes(x=time, y=value/250, color=key)) +
+  geom_step(data = df_resources_avail, mapping = aes(x=time, y=value/50, color=key), alpha=0.5) +
   facet_grid(rows = vars(base_f)) +
   scale_y_continuous(
     breaks = integer_breaks,
-    sec.axis = sec_axis(~.*250, name="Resources Available")
+    sec.axis = sec_axis(~.*50, name="Resources Available")
   ) + 
   theme(legend.position="bottom")
 
