@@ -148,7 +148,12 @@ queue_length_resources_available <- basic_queue_length +
     breaks = integer_breaks,
     sec.axis = sec_axis(~.*50, name="Resources Available")
   ) + 
-  theme(legend.position="bottom")
+  theme(
+    legend.position = "bottom",
+    axis.title.y.right = element_text(margin = margin(t = 0, r = 0, b = 0, l = 10)),
+    axis.title.y.left = element_text(margin = margin(t = 0, r = 10, b = 0, l = 0))
+  )
 
 ggsave(filename = file.path(model_output_path, 'queue_length_w_resources_avail.png'),
        plot = queue_length_resources_available)
+
