@@ -42,7 +42,7 @@ df_resources_avail <- df_f %>%
 
 # > Create queue length plot -------------------------------------------------------------------------
 basic_queue_length <- ggplot(data = df_queue_length,
-            mapping = aes(x=time, y=value, color=key)) +
+            mapping = aes(x=time/24, y=value, color=key)) +
     geom_step(show.legend = FALSE) + 
     facet_grid(rows = vars(base_f)) +
     theme(
@@ -50,7 +50,7 @@ basic_queue_length <- ggplot(data = df_queue_length,
       strip.text.y = element_text(size = 8, color = "black", face = "plain")
     ) +
 	labs(title = 'Ship Queue at Nodes') +
-	xlab('Time (hours)') +
+	xlab('Time (days)') +
   ylab('Ships in Queue') +
   scale_y_continuous(breaks = integer_breaks) 
 
@@ -63,8 +63,8 @@ ggsave(filename = file.path(model_output_path, 'queue_length_basic.png'),
 # Get x and y limits of faceted plot to make nighttime hours shaded
 x_lim <- ggplot_build(basic_queue_length)$layout$panel_scales_x[[1]]$range$range
 y_lim <- ggplot_build(basic_queue_length)$layout$panel_scales_y[[1]]$range$range
-dusk <- c(0, seq(18, x_lim[2], 24))
-dawn <- c(6, seq(30, x_lim[2], 24))
+dusk <- c(0/24, seq(18/24, x_lim[2], 24/24))
+dawn <- c(6/24, seq(30/24, x_lim[2], 24/24))
 
 if( length(dusk) != length(dawn) ) {
   dawn <- c(dawn, x_lim[2])
@@ -95,7 +95,7 @@ supplier_arrival_queue_length <- basic_queue_length +
 		subtitle = waiver()
 	) +
 	geom_point(data = df_supplier_arrived,
-				mapping = aes(x=time, color=value2, shape=value2),
+				mapping = aes(x=time/24, color=value2, shape=value2),
 				y= 0.75*y_lim[2])
 
 
@@ -125,7 +125,7 @@ df_total_queue <- df %>%
   summarize(total_queue = sum(value))
 
 p <- ggplot(data = df_total_queue,
-            mapping = aes(x=time, y=total_queue)) +
+            mapping = aes(x=time/24, y=total_queue)) +
   geom_step(show.legend = FALSE) + 
   theme(
     strip.text.x = element_text(
@@ -142,18 +142,70 @@ ggsave(filename = file.path(model_output_path, 'total_queue.png'),
 
 # Make queue length and resources available plot (dual y-axes) ----------------------------
 queue_length_resources_available <- basic_queue_length +
-  geom_step(data = df_resources_avail, mapping = aes(x=time, y=value/50, color=key), alpha=0.5) +
+  geom_step(data = df_resources_avail, mapping = aes(x=time/24, y=value/50, color=key)) +
   facet_grid(rows = vars(base_f)) +
   scale_y_continuous(
     breaks = integer_breaks,
     sec.axis = sec_axis(~.*50, name="Resources Available")
   ) + 
+  labs(title="Ship Queue and Resources Available") +
   theme(
     legend.position = "bottom",
+    legend.title = element_blank(),
     axis.title.y.right = element_text(margin = margin(t = 0, r = 0, b = 0, l = 10)),
     axis.title.y.left = element_text(margin = margin(t = 0, r = 10, b = 0, l = 0))
-  )
+  ) +
+  scale_color_discrete(labels = c('Queue Length', 'Resources Available')) 
 
-ggsave(filename = file.path(model_output_path, 'queue_length_w_resources_avail.png'),
+ggsave(filename = file.path(model_output_path, 'queue_and_resources.png'),
        plot = queue_length_resources_available)
 
+
+make_base_queue_resource_plot <- function(filter_term, df_queue, df_resources) {
+  print(filter_term)
+  
+  filename <- file.path(model_output_path, str_c(filter_term, '_queue_and_resources.png'))
+  print(filename)
+  # print(df_queue_length %>% filter(base=="Node1"))
+  
+  node_queue_data <- df_queue %>% filter(base == filter_term)
+  print(node_queue_data)
+  node_resources_data <- df_resources_avail %>% filter(base == filter_term)
+  
+  tmp <- ggplot(data = node_queue_data,
+                mapping = aes(x=time/24, y=value, color=key)) +
+          geom_step(show.legend = FALSE) + 
+          # facet_grid(rows = vars(base_f)) +
+          theme(
+            strip.text.x = element_text(size = 8, color = "black", face = "plain"),
+            strip.text.y = element_text(size = 8, color = "black", face = "plain")
+          ) +
+          geom_step(data = node_resources_data, 
+                    mapping = aes(x=time/24, y=value/50, color=key)) +
+          labs(title = str_c('Ship Queue and Resources Available at ', filter_term), color = 'asfd') +
+          xlab('Time (days)') +
+          # xlab('Time (hours)') +
+          ylab('Ships in Queue') +
+          scale_y_continuous(
+            breaks = integer_breaks,
+            sec.axis = sec_axis(~.*50, name="Resources Available")
+          ) + 
+          theme(
+            legend.position = "bottom",
+            legend.title = element_blank(),
+            axis.title.y.right = element_text(margin = margin(t = 0, r = 0, b = 0, l = 10)),
+            axis.title.y.left = element_text(margin = margin(t = 0, r = 10, b = 0, l = 0))
+          ) +
+        scale_color_discrete(labels = c('Queue Length', 'Resources Available')) 
+    
+  
+  ggsave(filename = filename,
+         plot = tmp,
+         width = NA,
+         height = 3,
+         units = c("in"),
+         dpi = 300)
+  
+}
+
+purrr::map(unique(df$base), make_base_queue_resource_plot, df_queue_length, df_resources_avail)
