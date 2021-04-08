@@ -80,6 +80,7 @@ class ConsumerGenerator(sim.Component):
                         yield self.hold(gen_dist.sample())
 
             else:               # Generate at predefined times
+                print(base)
                 yield self.hold(gen_time.pop(0) - env.now())
                 cprint(
                     f'{round(env.now(), 2)}: Generating a Consumer based on time')
@@ -135,7 +136,7 @@ class Consumer(sim.Component):
         if OUTPUT:
             with open(OUTPUT_DIR + QUEUE_OUTPUT_FILE, 'a') as f:
                 f.write(
-                    f'{self.config["env"].now()},{self.config["base"].config["name"]},consumer_arrived,NA,{self.n_res_required()}\n')
+                    f'{self.config["env"].now()},{self.config["base"].config["name"]},consumer_arrived,NA,{self.n_res_required()},NA\n')
 
         # Enter the queue for resources at the assigned base
         self.generator.generated_ship_is_inport = True

@@ -47,6 +47,7 @@ def is_daytime(simtime):
 # region: ((((((((((((((((((((((((((((((((Output))))))))))))))))))))))))))))))))
 OUTPUT = 1
 OUTPUT_DIR = 'output/'
+OUTPUT_SUBDIR = 'ERT_SENS'
 TIME = datetime.datetime.now().strftime("%y%m%d_%H%M%S")
 # QUEUE_OUTPUT_FILE = f'queue_lengths_{TIME}.csv'
 QUEUE_OUTPUT_FILE = f'output.csv'
@@ -62,7 +63,8 @@ NUMBER_OF_NODES_TAKE_SERVES = 5
 
 # region: ((((((((((((((((((((((((((((((Consumers))))))))))))))))))))))))))))))
 # defining CONSUMER_GENERATION_DIST overrides CONSUMER_GENERATION_TIMES
-CONSUMER_INITIAL_DELAY = sim.Uniform(2 * 24, 9 * 24)
+# CONSUMER_INITIAL_DELAY = sim.Uniform(2 * 24, 9 * 24)
+CONSUMER_INITIAL_DELAY = sim.Constant(2 * 24)
 # CONSUMER_GENERATION_DIST = sim.IntUniform(60, 110)
 CONSUMER_GENERATION_DIST = sim.Uniform(7 * 24, 12 * 24)
 # CONSUMER_GENERATION_DIST = None

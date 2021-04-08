@@ -3,18 +3,18 @@ library(scales)
 
 # Collect arguments
 args <- commandArgs(trailingOnly = TRUE)
-PLOT_DAY_NIGHT_SHADING <- as.logical(as.integer(args[1]))
-SHOW_SUPPLIER_ARRIVALS <- as.logical(as.integer(args[2]))
+OUTPUT_SUBDIR <- args[1]
 
-
+print(OUTPUT_SUBDIR)
 theme_set(theme_minimal())
 
-model_output_path <- '/home/tom/Documents/weapons_reload_sim/output/'
+model_output_path <- file.path('/home/tom/Documents/weapons_reload_sim/output', OUTPUT_SUBDIR)
+dir.create(model_output_path, showWarnings = FALSE)
 
 integer_breaks <- function(x) unique(floor(pretty(seq(0, (max(x) + 1) * 1.1))))
 
-df <- read_csv(file = file.path(model_output_path, 'output.csv'), 
-               col_names = c('time', 'base', 'key', 'value','value2', 'value3'))
+df <- read_csv(file = file.path('/home/tom/Documents/weapons_reload_sim/output', 'output.csv'), 
+               col_names = c('time', 'base', 'key', 'value','value2','value3'))
 
 # bases_to_keep <- c('Node1', 'Node2', 'Node3', 'Node4', 
 # 					'Node5', 'Node6', 'Node7', 'Node8')
@@ -24,15 +24,18 @@ df <- read_csv(file = file.path(model_output_path, 'output.csv'),
 
 # Queue length plot
 # > Node names in order, used for setting as factor levels
-node_names_in_order <- c('Node1','Node2','Node3','Node4',
-                          'Node5','Node6','Node7','Node8',
-                          'Node9','Node10','Node11','Node12',
-                          'Node13')
+# node_names_in_order <- c('Node1','Node2','Node3','Node4',
+#                           'Node5','Node6','Node7','Node8',
+#                           'Node9','Node10','Node11','Node12',
+#                           'Node13')
+
+node_names_in_order <- c('Node2_1-ERT','Node2_2-ERT','Node2_3-ERT','Node2_4-ERT')
 
 # > Separate out queue length and supplier arrival data
 df_f <- df %>% 
+  # mutate(base_f = factor(base))
   mutate(base_f = factor(base, levels = node_names_in_order))
-  
+
 df_queue_length <- df_f %>% 
   filter(key=='queue_length')
 df_supplier_arrived <- df_f %>% 
@@ -46,7 +49,7 @@ basic_queue_length <- ggplot(data = df_queue_length,
             mapping = aes(x=time/24, y=value, color=key)) +
     geom_step(show.legend = FALSE) + 
     facet_grid(rows = vars(base_f)) +
-    theme(
+  theme(
       strip.text.x = element_text(size = 8, color = "black", face = "plain"),
       strip.text.y = element_text(size = 8, color = "black", face = "plain")
     ) +
@@ -216,14 +219,21 @@ purrr::map(unique(df$base), make_base_queue_resource_plot, df_queue_length, df_r
 # Cumulative ship wait time at each node ####
 cum_queue_data <- df_queue_length %>% 
   # filter(key=="queue_length") %>% 
-  group_by(base) %>% 
+  group_by(base_f) %>% 
+  complete(base_f, time, fill=list(value=0)) %>% 
   arrange(time) %>% 
   mutate(time_step_wait = (time-lag(time))*lag(value)) %>% 
   mutate(time_step_wait = ifelse(is.na(time_step_wait), 0, time_step_wait)) %>% 
-  mutate(cum_wait = cumsum(time_step_wait))
+  mutate(cum_wait = cumsum(time_step_wait)) 
+  # ungroup() %>% 
 
-plt <- ggplot(data = queue_data, mapping = aes(x=time, y=cum_wait)) +
-  geom_line() + 
-  facet_grid(rows = vars(base_f))
-  
+plt <- ggplot(data = cum_queue_data, mapping = aes(x=time, y=cum_wait, color=base_f)) +
+  geom_line() 
 
+
+ggsave(filename = file.path(model_output_path, 'cumulative_wait_in_queue.png'),
+       plot = plt,
+       width = NA,
+       height = 3,
+       units = c("in"),
+       dpi = 300)
