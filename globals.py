@@ -4,7 +4,7 @@ import datetime
 
 # region: (((((((((((((((((((((((((Simulation Controls)))))))))))))))))))))))))
 TRACE = 0
-SIM_LENGTH = 80 * 24
+SIM_LENGTH = 60 * 24
 SIM_SPEED = 32
 ANIMATE = 0
 # endregion ====================================================================
@@ -12,7 +12,7 @@ ANIMATE = 0
 # region: ((((((((((((((((((((((((((((((Debugging))))))))))))))))))))))))))))))
 VERBOSE_ALL = 0
 VERBOSE_MAIN = 0
-VERBOSE_BASE = 1
+VERBOSE_BASE = 0
 VERBOSE_CONSUMERS = 0
 VERBOSE_SUPPLIERS = 0
 VERBOSE_ANIMATION = 0
@@ -95,10 +95,8 @@ SUPPLIER_UNLOAD_RATE = 8  # resources/hour
 NUM_FAST_ERT = 3
 NUM_SLOW_ERT = 3
 
-FAST_ERT_RELOAD_RATE = 4
-SLOW_ERT_RELOAD_RATE = 2
 RELOAD_TEAM_RATES = {
     'QRT': 4,
-    'ERT': 2,
+    'ERT': 8,
 }
 # endregion ====================================================================

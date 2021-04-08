@@ -1,4 +1,5 @@
 library(tidyverse)
+library(scales)
 
 # Collect arguments
 args <- commandArgs(trailingOnly = TRUE)
@@ -114,7 +115,8 @@ p <- ggplot(data = df_resources_avail,
     strip.text.y = element_text(
       size = 6, color = "black", face = "plain"
     )
-  )
+  ) +
+  scale_y_continuous(labels=scales::comma)
 ggsave(filename = file.path(model_output_path, 'resources_available.png'),
        plot = p)
 
@@ -142,11 +144,11 @@ ggsave(filename = file.path(model_output_path, 'total_queue.png'),
 
 # Make queue length and resources available plot (dual y-axes) ----------------------------
 queue_length_resources_available <- basic_queue_length +
-  geom_step(data = df_resources_avail, mapping = aes(x=time/24, y=value/50, color=key)) +
+  geom_step(data = df_resources_avail, mapping = aes(x=time/24, y=value/100, color=key)) +
   facet_grid(rows = vars(base_f)) +
   scale_y_continuous(
     breaks = integer_breaks,
-    sec.axis = sec_axis(~.*50, name="Resources Available")
+    sec.axis = sec_axis(~.*100, name="Resources Available", labels=scales::comma)
   ) + 
   labs(title="Ship Queue and Resources Available") +
   theme(
@@ -181,14 +183,14 @@ make_base_queue_resource_plot <- function(filter_term, df_queue, df_resources) {
             strip.text.y = element_text(size = 8, color = "black", face = "plain")
           ) +
           geom_step(data = node_resources_data, 
-                    mapping = aes(x=time/24, y=value/50, color=key)) +
+                    mapping = aes(x=time/24, y=value/100, color=key)) +
           labs(title = str_c('Ship Queue and Resources Available at ', filter_term), color = 'asfd') +
           xlab('Time (days)') +
           # xlab('Time (hours)') +
           ylab('Ships in Queue') +
           scale_y_continuous(
             breaks = integer_breaks,
-            sec.axis = sec_axis(~.*50, name="Resources Available")
+            sec.axis = sec_axis(~.*100, name="Resources Available", labels=scales::comma)
           ) + 
           theme(
             legend.position = "bottom",
@@ -209,3 +211,19 @@ make_base_queue_resource_plot <- function(filter_term, df_queue, df_resources) {
 }
 
 purrr::map(unique(df$base), make_base_queue_resource_plot, df_queue_length, df_resources_avail)
+
+
+# Cumulative ship wait time at each node ####
+cum_queue_data <- df_queue_length %>% 
+  # filter(key=="queue_length") %>% 
+  group_by(base) %>% 
+  arrange(time) %>% 
+  mutate(time_step_wait = (time-lag(time))*lag(value)) %>% 
+  mutate(time_step_wait = ifelse(is.na(time_step_wait), 0, time_step_wait)) %>% 
+  mutate(cum_wait = cumsum(time_step_wait))
+
+plt <- ggplot(data = queue_data, mapping = aes(x=time, y=cum_wait)) +
+  geom_line() + 
+  facet_grid(rows = vars(base_f))
+  
+

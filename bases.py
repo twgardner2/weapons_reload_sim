@@ -1,6 +1,6 @@
 import os
 import salabim as sim
-import resources as res
+# import resources as res
 from operator import itemgetter
 import crayons as cr
 from globals import *
