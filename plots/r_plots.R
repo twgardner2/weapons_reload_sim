@@ -13,21 +13,14 @@ dir.create(model_output_path, showWarnings = FALSE)
 
 integer_breaks <- function(x) unique(floor(pretty(seq(0, (max(x) + 1) * 1.1))))
 
-df <- read_csv(file = file.path('/home/tom/Documents/weapons_reload_sim/output', 'output.csv'), 
+df <- read_csv(file = file.path(model_output_path, 'output.csv'), 
                col_names = c('time', 'base', 'key', 'value','value2','value3'))
 
-# bases_to_keep <- c('Node1', 'Node2', 'Node3', 'Node4', 
-# 					'Node5', 'Node6', 'Node7', 'Node8')
-# 
-# df <- df %>%
-# 	filter(base %in% bases_to_keep)
 
 # Queue length plot
 # > Node names in order, used for setting as factor levels
 # node_names_in_order <- c('Node1','Node2','Node3','Node4',
-#                           'Node5','Node6','Node7','Node8',
-#                           'Node9','Node10','Node11','Node12',
-#                           'Node13')
+#                          'Node5','Node6')
 
 node_names_in_order <- c('Node2_1-ERT','Node2_2-ERT','Node2_3-ERT','Node2_4-ERT')
 
@@ -227,13 +220,25 @@ cum_queue_data <- df_queue_length %>%
   mutate(cum_wait = cumsum(time_step_wait)) 
   # ungroup() %>% 
 
-plt <- ggplot(data = cum_queue_data, mapping = aes(x=time, y=cum_wait, color=base_f)) +
-  geom_line() 
+plt <- ggplot(data = cum_queue_data, mapping = aes(x=time/24, y=cum_wait, color=base_f)) +
+    geom_step() +
+    labs(title = 'Cumulative Ship Queue Wait Time', color = 'Node') +
+    xlab('Time (days)') +
+    # xlab('Time (hours)') +
+    ylab('Ship-Hours in Queue') +
+    scale_y_continuous(labels=scales::comma) +
+    theme(
+        legend.position = "bottom",
+        legend.title = element_blank(),
+        axis.title.y.right = element_text(margin = margin(t = 0, r = 0, b = 0, l = 10)),
+        axis.title.y.left = element_text(margin = margin(t = 0, r = 10, b = 0, l = 0))
+      ) 
+plt
 
 
 ggsave(filename = file.path(model_output_path, 'cumulative_wait_in_queue.png'),
        plot = plt,
        width = NA,
-       height = 3,
+       height = 5,
        units = c("in"),
        dpi = 300)

@@ -15,7 +15,8 @@ out = OUTPUT
 
 if out:
     try:
-        os.remove(OUTPUT_DIR + QUEUE_OUTPUT_FILE)
+        os.remove(OUTPUT_DIR + OUTPUT_SUBDIR +
+                  QUEUE_OUTPUT_FILE)
     except OSError:
         pass
 
@@ -79,7 +80,7 @@ class Base(sim.Component):
         while True:
 
             if OUTPUT:
-                with open(OUTPUT_DIR + QUEUE_OUTPUT_FILE, 'a') as f:
+                with open(OUTPUT_DIR + OUTPUT_SUBDIR + QUEUE_OUTPUT_FILE, 'a') as f:
                     f.write(
                         f'{env.now()},{name},queue_length,{self.queue.length()},NA,NA\n')
                     f.write(

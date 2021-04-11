@@ -37,7 +37,7 @@ class ConsumerConfig():
             'pct_res_onhand_dist': sim.Uniform(5, 50),
             'initial_delay_dist': CONSUMER_INITIAL_DELAY,
             'gen_dist': CONSUMER_GENERATION_DIST,
-            'gen_time': CONSUMER_GENERATION_TIMES,
+            'gen_time': CONSUMER_GENERATION_TIMES.copy(),
         }
 
         self.config = {**default_config, **config}
@@ -134,7 +134,7 @@ class Consumer(sim.Component):
             'base', 'env', 'n_res_resupply')(self.config)
 
         if OUTPUT:
-            with open(OUTPUT_DIR + QUEUE_OUTPUT_FILE, 'a') as f:
+            with open(OUTPUT_DIR + OUTPUT_SUBDIR + QUEUE_OUTPUT_FILE, 'a') as f:
                 f.write(
                     f'{self.config["env"].now()},{self.config["base"].config["name"]},consumer_arrived,NA,{self.n_res_required()},NA\n')
 

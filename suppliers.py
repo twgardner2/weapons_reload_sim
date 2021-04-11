@@ -41,7 +41,7 @@ class Supplier_Config():
             'description': f'{supplier_type} supplying {config["base"]}',
             'n_supplied': n_supplied_dict[supplier_type],
             'gen_dist': gen_dist_dict[supplier_type],
-            'gen_time': SUPPLIER_GENERATION_TIMES,
+            'gen_time': SUPPLIER_GENERATION_TIMES.copy(),
         }
 
         if 'gen_time' in config:
@@ -92,7 +92,7 @@ class Supplier(sim.Component):
         self.config = config
 
         if OUTPUT:
-            with open(OUTPUT_DIR + QUEUE_OUTPUT_FILE, 'a') as f:
+            with open(OUTPUT_DIR + OUTPUT_SUBDIR + QUEUE_OUTPUT_FILE, 'a') as f:
                 f.write(
                     # f'{self.config["env"].now()},{self.config["base"].config["name"]},supplier_arrived,{self.config["n_supplied"]},NA\n')
                     f'{self.config["env"].now()},{self.config["base"].config["name"]},supplier_arrived,NA,{self.config["type"]}, {self.config["n_supplied"]}\n')

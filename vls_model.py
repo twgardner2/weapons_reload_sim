@@ -11,6 +11,10 @@ verbose = VERBOSE_ALL or VERBOSE_MAIN
 cprint = MAKE_CPRINT(verbose, VERBOSE_MAIN_COLOR)
 cprint(f"vls_model.py verbose output ON")
 
+# Create output dir/subdir if doesn't exist
+if not os.path.exists(OUTPUT_DIR + OUTPUT_SUBDIR):
+    os.makedirs(OUTPUT_DIR + OUTPUT_SUBDIR)
+
 # Setup environment then import bases.py, which requires the env object
 env = sim.Environment(time_unit='hours', trace=TRACE)
 # env.animate_debug(False)
@@ -44,6 +48,7 @@ import bases
 #             config={
 #                 'env': env,
 #                 'base': Node1,
+#                 # 'gen_dist': None,
 #                 # 'gen_dist': sim.Normal(13 * 24, 3 * 24),
 #             }).config
 #     )
@@ -81,9 +86,9 @@ import bases
 #                             'base': Node1,
 #                             # 'gen_dist': sim.Normal(12, 2)
 #                         }).config)
-# endregion ====================================================================
+# # endregion ====================================================================
 
-# region: (((((((((((((((((((((((((((((((((Node2)))))))))))))))))))))))))))))))))
+# # region: (((((((((((((((((((((((((((((((((Node2)))))))))))))))))))))))))))))))))
 # # ---------- Base ----------
 # Node2 = bases.Base(
 #     bases.BaseConfig(
@@ -131,244 +136,16 @@ import bases
 #                             'base': Node2,
 #                         }).config)
 
-# Node2_C130_Generator = sup.SupplierGenerator(
+# sup.SupplierGenerator(
 #     sup.Supplier_Config(supplier_type='C130',
 #                         config={
 #                             'env': env,
 #                             'base': Node2,
 #                         }).config)
-# endregion ====================================================================
+# # endregion ====================================================================
 
 
-# region: (((((((((((((((((((((((((((((((((Node2 - 4 ERT)))))))))))))))))))))))))))))))))
-# ---------- Base ----------
-Node2_4ERT = bases.Base(
-    bases.BaseConfig(
-        config={
-            'name': 'Node2_4-ERT',
-            'env': env,
-            'n_QRT': 0,
-            'n_ERT': 4,
-        }).config
-)
-
-# CRUDESs arriving at Node2
-for i in range(8):
-    con.ConsumerGenerator(
-        con.ConsumerConfig(
-            consumer_type='DDG',
-            config={
-                'env': env,
-                'base': Node2_4ERT,
-                'gen_dist': None,
-                'gen_time': [150, 600, 1000]
-                # 'gen_dist': sim.Normal(13 * 24, 3 * 24),
-            }).config
-    )
-
-# ---------- Suppliers ----------
-Node2_TAKE_Generator = sup.SupplierGenerator(
-    sup.Supplier_Config(supplier_type='TAKE',
-                        config={
-                            'env': env,
-                            'base': Node2_4ERT,
-                        }).config)
-
-Node2_C5_Generator = sup.SupplierGenerator(
-    sup.Supplier_Config(supplier_type='C5',
-                        config={
-                            'env': env,
-                            'base': Node2_4ERT,
-                        }).config)
-
-Node2_C17_Generator = sup.SupplierGenerator(
-    sup.Supplier_Config(supplier_type='C17',
-                        config={
-                            'env': env,
-                            'base': Node2_4ERT,
-                        }).config)
-
-Node2_C130_Generator = sup.SupplierGenerator(
-    sup.Supplier_Config(supplier_type='C130',
-                        config={
-                            'env': env,
-                            'base': Node2_4ERT,
-                        }).config)
-# endregion ====================================================================
-
-
-# region: (((((((((((((((((((((((((((((((((Node2 - 3 ERT)))))))))))))))))))))))))))))))))
-# ---------- Base ----------
-Node2_ERT = bases.Base(
-    bases.BaseConfig(
-        config={
-            'name': 'Node2_3-ERT',
-            'env': env,
-            'n_QRT': 0,
-            'n_ERT': 3,
-        }).config
-)
-
-# CRUDESs arriving at Node2
-for i in range(8):
-    con.ConsumerGenerator(
-        con.ConsumerConfig(
-            consumer_type='DDG',
-            config={
-                'env': env,
-                'base': Node2_ERT,
-                # 'gen_dist': None
-
-                # 'gen_dist': sim.Normal(13 * 24, 3 * 24),
-            }).config
-    )
-
-# ---------- Suppliers ----------
-Node2_TAKE_Generator = sup.SupplierGenerator(
-    sup.Supplier_Config(supplier_type='TAKE',
-                        config={
-                            'env': env,
-                            'base': Node2_ERT,
-                        }).config)
-
-Node2_C5_Generator = sup.SupplierGenerator(
-    sup.Supplier_Config(supplier_type='C5',
-                        config={
-                            'env': env,
-                            'base': Node2_ERT,
-                        }).config)
-
-Node2_C17_Generator = sup.SupplierGenerator(
-    sup.Supplier_Config(supplier_type='C17',
-                        config={
-                            'env': env,
-                            'base': Node2_ERT,
-                        }).config)
-
-Node2_C130_Generator = sup.SupplierGenerator(
-    sup.Supplier_Config(supplier_type='C130',
-                        config={
-                            'env': env,
-                            'base': Node2_ERT,
-                        }).config)
-# endregion ====================================================================
-
-
-# region: (((((((((((((((((((((((((((((((((Node2 - 2 ERT)))))))))))))))))))))))))))))))))
-# ---------- Base ----------
-Node2_2ERT = bases.Base(
-    bases.BaseConfig(
-        config={
-            'name': 'Node2_2-ERT',
-            'env': env,
-            'n_QRT': 0,
-            'n_ERT': 2,
-        }).config
-)
-
-# CRUDESs arriving at Node2
-for i in range(8):
-    con.ConsumerGenerator(
-        con.ConsumerConfig(
-            consumer_type='DDG',
-            config={
-                'env': env,
-                'base': Node2_2ERT,
-                # 'gen_dist': None
-
-                # 'gen_dist': sim.Normal(13 * 24, 3 * 24),
-            }).config
-    )
-
-# ---------- Suppliers ----------
-Node2_TAKE_Generator = sup.SupplierGenerator(
-    sup.Supplier_Config(supplier_type='TAKE',
-                        config={
-                            'env': env,
-                            'base': Node2_2ERT,
-                        }).config)
-
-Node2_C5_Generator = sup.SupplierGenerator(
-    sup.Supplier_Config(supplier_type='C5',
-                        config={
-                            'env': env,
-                            'base': Node2_2ERT,
-                        }).config)
-
-Node2_C17_Generator = sup.SupplierGenerator(
-    sup.Supplier_Config(supplier_type='C17',
-                        config={
-                            'env': env,
-                            'base': Node2_2ERT,
-                        }).config)
-
-Node2_C130_Generator = sup.SupplierGenerator(
-    sup.Supplier_Config(supplier_type='C130',
-                        config={
-                            'env': env,
-                            'base': Node2_2ERT,
-                        }).config)
-# endregion ====================================================================
-
-
-# region: (((((((((((((((((((((((((((((((((Node2 - 1 ERT)))))))))))))))))))))))))))))))))
-# ---------- Base ----------
-Node2_1ERT = bases.Base(
-    bases.BaseConfig(
-        config={
-            'name': 'Node2_1-ERT',
-            'env': env,
-            'n_QRT': 0,
-            'n_ERT': 1,
-        }).config
-)
-
-# CRUDESs arriving at Node2
-for i in range(8):
-    con.ConsumerGenerator(
-        con.ConsumerConfig(
-            consumer_type='DDG',
-            config={
-                'env': env,
-                'base': Node2_1ERT,
-                # 'gen_dist': None
-
-                # 'gen_dist': sim.Normal(13 * 24, 3 * 24),
-            }).config
-    )
-
-# ---------- Suppliers ----------
-Node2_TAKE_Generator = sup.SupplierGenerator(
-    sup.Supplier_Config(supplier_type='TAKE',
-                        config={
-                            'env': env,
-                            'base': Node2_1ERT,
-                        }).config)
-
-Node2_C5_Generator = sup.SupplierGenerator(
-    sup.Supplier_Config(supplier_type='C5',
-                        config={
-                            'env': env,
-                            'base': Node2_1ERT,
-                        }).config)
-
-Node2_C17_Generator = sup.SupplierGenerator(
-    sup.Supplier_Config(supplier_type='C17',
-                        config={
-                            'env': env,
-                            'base': Node2_1ERT,
-                        }).config)
-
-Node2_C130_Generator = sup.SupplierGenerator(
-    sup.Supplier_Config(supplier_type='C130',
-                        config={
-                            'env': env,
-                            'base': Node2_1ERT,
-                        }).config)
-# endregion ====================================================================
-
-
-# region: ((((((((((((((((((((((((((((((((Node3))))))))))))))))))))))))))))))))
+# # region: ((((((((((((((((((((((((((((((((Node3))))))))))))))))))))))))))))))))
 # # ---------- Base ----------
 # Node3 = bases.Base(
 #     bases.BaseConfig(
@@ -421,10 +198,10 @@ Node2_C130_Generator = sup.SupplierGenerator(
 #                             'env': env,
 #                             'base': Node3,
 #                         }).config)
-# endregion ====================================================================
+# # endregion ====================================================================
 
 
-# region: ((((((((((((((((((((((((((((((((Node4))))))))))))))))))))))))))))))))
+# # region: ((((((((((((((((((((((((((((((((Node4))))))))))))))))))))))))))))))))
 
 # # ---------- Base ----------
 # Node4 = bases.Base(
@@ -470,10 +247,10 @@ Node2_C130_Generator = sup.SupplierGenerator(
 #                             'env': env,
 #                             'base': Node4,
 #                         }).config)
-# endregion ====================================================================
+# # endregion ====================================================================
 
 
-# region: (((((((((((((((((((((((((((((((Node5)))))))))))))))))))))))))))))))
+# # region: (((((((((((((((((((((((((((((((Node5)))))))))))))))))))))))))))))))
 
 # # ---------- Base ----------
 # Node5 = bases.Base(
@@ -526,10 +303,10 @@ Node2_C130_Generator = sup.SupplierGenerator(
 #                             'env': env,
 #                             'base': Node5,
 #                         }).config)
-# endregion ====================================================================
+# # endregion ====================================================================
 
 
-# region: ((((((((((((((((((((((((((((((((Node6))))))))))))))))))))))))))))))))
+# # region: ((((((((((((((((((((((((((((((((Node6))))))))))))))))))))))))))))))))
 # # ---------- Base ----------
 # Node6 = bases.Base(
 #     bases.BaseConfig(
@@ -582,6 +359,269 @@ Node2_C130_Generator = sup.SupplierGenerator(
 #                             'base': Node6,
 #                         }).config)
 
+# endregion ====================================================================
+
+
+# region: (((((((((((((((((((((((((((((((((Node2 - 4 ERT)))))))))))))))))))))))))))))))))
+# ---------- Base ----------
+Node2_4ERT = bases.Base(
+    bases.BaseConfig(
+        config={
+            'name': 'Node2_4-ERT',
+            'env': env,
+            'n_QRT': 0,
+            'n_ERT': 4,
+        }).config
+)
+
+# Consumers arriving
+con.ConsumerGenerator(
+    con.ConsumerConfig(
+        consumer_type='DDG',
+        config={
+            'env': env,
+            'base': Node2_4ERT,
+            'gen_dist': None,
+            'pct_res_onhand_dist': sim.Uniform(15),
+
+            # 'gen_time': [150, 600, 1000]
+            # 'gen_dist': sim.Normal(13 * 24, 3 * 24),
+        }).config
+)
+
+# ---------- Suppliers ----------
+sup.SupplierGenerator(
+    sup.Supplier_Config(supplier_type='TAKE',
+                        config={
+                            'env': env,
+                            'base': Node2_4ERT,
+                            'gen_dist': None,
+                            'gen_time': ERT_SENS_TAKE_TIMES.copy(),
+                        }).config)
+
+sup.SupplierGenerator(
+    sup.Supplier_Config(supplier_type='C5',
+                        config={
+                            'env': env,
+                            'base': Node2_4ERT,
+                            'gen_dist': None,
+                            'gen_time': ERT_SENS_C5_TIMES.copy(),
+                        }).config)
+
+sup.SupplierGenerator(
+    sup.Supplier_Config(supplier_type='C17',
+                        config={
+                            'env': env,
+                            'base': Node2_4ERT,
+                            'gen_dist': None,
+                            'gen_time': ERT_SENS_C17_TIMES.copy(),
+                        }).config)
+
+sup.SupplierGenerator(
+    sup.Supplier_Config(supplier_type='C130',
+                        config={
+                            'env': env,
+                            'base': Node2_4ERT,
+                            'gen_dist': None,
+                            'gen_time': ERT_SENS_C130_TIMES.copy(),
+                        }).config)
+# endregion ====================================================================
+
+
+# region: (((((((((((((((((((((((((((((((((Node2 - 3 ERT)))))))))))))))))))))))))))))))))
+# ---------- Base ----------
+Node2_3ERT = bases.Base(
+    bases.BaseConfig(
+        config={
+            'name': 'Node2_3-ERT',
+            'env': env,
+            'n_QRT': 0,
+            'n_ERT': 3,
+        }).config
+)
+
+# Consumers arriving
+con.ConsumerGenerator(
+    con.ConsumerConfig(
+        consumer_type='DDG',
+        config={
+            'env': env,
+            'base': Node2_3ERT,
+            'gen_dist': None,
+            'pct_res_onhand_dist': sim.Uniform(15),
+
+
+            # 'gen_dist': sim.Normal(13 * 24, 3 * 24),
+        }).config
+)
+
+# ---------- Suppliers ----------
+sup.SupplierGenerator(
+    sup.Supplier_Config(supplier_type='TAKE',
+                        config={
+                            'env': env,
+                            'base': Node2_3ERT,
+                            'gen_dist': None,
+                            'gen_time': ERT_SENS_TAKE_TIMES.copy(),
+                        }).config)
+
+sup.SupplierGenerator(
+    sup.Supplier_Config(supplier_type='C5',
+                        config={
+                            'env': env,
+                            'base': Node2_3ERT,
+                            'gen_dist': None,
+                            'gen_time': ERT_SENS_C5_TIMES.copy(),
+                        }).config)
+
+sup.SupplierGenerator(
+    sup.Supplier_Config(supplier_type='C17',
+                        config={
+                            'env': env,
+                            'base': Node2_3ERT,
+                            'gen_dist': None,
+                            'gen_time': ERT_SENS_C17_TIMES.copy(),
+                        }).config)
+
+sup.SupplierGenerator(
+    sup.Supplier_Config(supplier_type='C130',
+                        config={
+                            'env': env,
+                            'base': Node2_3ERT,
+                            'gen_dist': None,
+                            'gen_time': ERT_SENS_C130_TIMES.copy(),
+                        }).config)
+# endregion ====================================================================
+
+
+# region: (((((((((((((((((((((((((((((((((Node2 - 2 ERT)))))))))))))))))))))))))))))))))
+# ---------- Base ----------
+Node2_2ERT = bases.Base(
+    bases.BaseConfig(
+        config={
+            'name': 'Node2_2-ERT',
+            'env': env,
+            'n_QRT': 0,
+            'n_ERT': 2,
+        }).config
+)
+
+# Consumers arriving
+con.ConsumerGenerator(
+    con.ConsumerConfig(
+        consumer_type='DDG',
+        config={
+            'env': env,
+            'base': Node2_2ERT,
+            'gen_dist': None,
+            'pct_res_onhand_dist': sim.Uniform(15),
+
+
+            # 'gen_dist': sim.Normal(13 * 24, 3 * 24),
+        }).config
+)
+
+# ---------- Suppliers ----------
+sup.SupplierGenerator(
+    sup.Supplier_Config(supplier_type='TAKE',
+                        config={
+                            'env': env,
+                            'base': Node2_2ERT,
+                            'gen_dist': None,
+                            'gen_time': ERT_SENS_TAKE_TIMES.copy(),
+                        }).config)
+
+sup.SupplierGenerator(
+    sup.Supplier_Config(supplier_type='C5',
+                        config={
+                            'env': env,
+                            'base': Node2_2ERT,
+                            'gen_dist': None,
+                            'gen_time': ERT_SENS_C5_TIMES.copy(),
+                        }).config)
+
+sup.SupplierGenerator(
+    sup.Supplier_Config(supplier_type='C17',
+                        config={
+                            'env': env,
+                            'base': Node2_2ERT,
+                            'gen_dist': None,
+                            'gen_time': ERT_SENS_C17_TIMES.copy(),
+                        }).config)
+
+sup.SupplierGenerator(
+    sup.Supplier_Config(supplier_type='C130',
+                        config={
+                            'env': env,
+                            'base': Node2_2ERT,
+                            'gen_dist': None,
+                            'gen_time': ERT_SENS_C130_TIMES.copy(),
+                        }).config)
+# endregion ====================================================================
+
+
+# region: (((((((((((((((((((((((((((((((((Node2 - 1 ERT)))))))))))))))))))))))))))))))))
+# ---------- Base ----------
+Node2_1ERT = bases.Base(
+    bases.BaseConfig(
+        config={
+            'name': 'Node2_1-ERT',
+            'env': env,
+            'n_QRT': 0,
+            'n_ERT': 1,
+        }).config
+)
+
+# Consumers arriving
+con.ConsumerGenerator(
+    con.ConsumerConfig(
+        consumer_type='DDG',
+        config={
+            'env': env,
+            'base': Node2_1ERT,
+            'gen_dist': None,
+            'pct_res_onhand_dist': sim.Uniform(15),
+
+            # 'gen_dist': sim.Normal(13 * 24, 3 * 24),
+        }).config
+)
+
+# ---------- Suppliers ----------
+sup.SupplierGenerator(
+    sup.Supplier_Config(supplier_type='TAKE',
+                        config={
+                            'env': env,
+                            'base': Node2_1ERT,
+                            'gen_dist': None,
+                            'gen_time': ERT_SENS_TAKE_TIMES.copy(),
+                        }).config)
+
+sup.SupplierGenerator(
+    sup.Supplier_Config(supplier_type='C5',
+                        config={
+                            'env': env,
+                            'base': Node2_1ERT,
+                            'gen_dist': None,
+                            'gen_time': ERT_SENS_C5_TIMES.copy(),
+                        }).config)
+
+sup.SupplierGenerator(
+    sup.Supplier_Config(supplier_type='C17',
+                        config={
+                            'env': env,
+                            'base': Node2_1ERT,
+                            'gen_dist': None,
+                            'gen_time': ERT_SENS_C17_TIMES.copy(),
+                        }).config)
+
+sup.SupplierGenerator(
+    sup.Supplier_Config(supplier_type='C130',
+                        config={
+                            'env': env,
+                            'base': Node2_1ERT,
+                            'gen_dist': None,
+                            'gen_time': ERT_SENS_C130_TIMES.copy(),
+                        }).config)
 # endregion ====================================================================
 
 
