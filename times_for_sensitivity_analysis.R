@@ -1,6 +1,6 @@
 library(tidyverse)
 
-base <- read_csv('/home/tom/Documents/weapons_reload_sim/output/BASE/output.csv', 
+base <- read_csv('/home/tom/Documents/weapons_reload_sim/output/YAPC5/output.csv', 
                col_names = c('time', 'base', 'key', 'value','value2','value3'))
 
 node2 <- base %>% filter(base == "Node2")

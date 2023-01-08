@@ -160,4 +160,9 @@ class Consumer(sim.Component):
         # Finished with the consumer object, hold for remainder of simulation
         # so it doesn't release its resources
         self.generator.generated_ship_is_inport = False
+        if OUTPUT:
+            with open(OUTPUT_DIR + OUTPUT_SUBDIR + QUEUE_OUTPUT_FILE, 'a') as f:
+                f.write(
+                    f'{env.now()},{self.config["base"].config["name"]},consumer_departed,NA,NA,NA\n')
+
         yield self.hold(float('inf'))

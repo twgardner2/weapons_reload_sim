@@ -19,10 +19,10 @@ df <- read_csv(file = file.path(model_output_path, 'output.csv'),
 
 # Queue length plot
 # > Node names in order, used for setting as factor levels
-# node_names_in_order <- c('Node1','Node2','Node3','Node4',
-#                          'Node5','Node6')
+node_names_in_order <- c('Node1','Node2','Node3','Node4',
+                         'Node5','Node6')
 
-node_names_in_order <- c('Node2_1-ERT','Node2_2-ERT','Node2_3-ERT','Node2_4-ERT')
+# node_names_in_order <- c('Node2_1-ERT','Node2_2-ERT','Node2_3-ERT','Node2_4-ERT')
 
 # > Separate out queue length and supplier arrival data
 df_f <- df %>% 
@@ -35,6 +35,8 @@ df_supplier_arrived <- df_f %>%
   filter(key=='supplier_arrived')
 df_resources_avail <- df_f %>% 
   filter(key=='resources_available')
+df_consumers_departed <- df_f %>% 
+  filter(key=='consumer_departed')
 
 
 # > Create queue length plot -------------------------------------------------------------------------
@@ -220,6 +222,17 @@ cum_queue_data <- df_queue_length %>%
   mutate(cum_wait = cumsum(time_step_wait)) 
   # ungroup() %>% 
 
+# tmp <- df_queue_length %>% 
+#   # filter(key=="queue_length") %>% 
+#   group_by(base_f) %>% 
+#   complete(base_f, time, fill=list(value=0)) %>% 
+#   arrange(time) %>% 
+#   mutate(time_step_wait = (time-lag(time))*lag(value)) %>% 
+#   mutate(time_step_wait = ifelse(is.na(time_step_wait), 0, time_step_wait)) %>% 
+#   mutate(cum_wait = cumsum(time_step_wait)) 
+
+cum_queue_data %>% group_by(base_f) %>% arrange(time) %>% filter(row_number()==n())
+
 plt <- ggplot(data = cum_queue_data, mapping = aes(x=time/24, y=cum_wait, color=base_f)) +
     geom_step() +
     labs(title = 'Cumulative Ship Queue Wait Time', color = 'Node') +
@@ -242,3 +255,47 @@ ggsave(filename = file.path(model_output_path, 'cumulative_wait_in_queue.png'),
        height = 5,
        units = c("in"),
        dpi = 300)
+
+
+
+# Cumulative Average Ship Wait Time at each Node
+# Cumulative ship wait time at each node ####
+# cum_queue_data <- df_queue_length %>% 
+#   # filter(key=="queue_length") %>% 
+#   group_by(base_f) %>% 
+#   complete(base_f, time, fill=list(value=0)) %>% 
+#   arrange(time) %>% 
+#   mutate(time_step_wait = (time-lag(time))*lag(value)) %>% 
+#   mutate(time_step_wait = ifelse(is.na(time_step_wait), 0, time_step_wait)) %>% 
+#   mutate(cum_wait = cumsum(time_step_wait)) 
+# # ungroup() %>% 
+# 
+# plt <- ggplot(data = cum_queue_data, mapping = aes(x=time/24, y=cum_wait, color=base_f)) +
+#   geom_step() +
+#   labs(title = 'Cumulative Ship Queue Wait Time', color = 'Node') +
+#   xlab('Time (days)') +
+#   # xlab('Time (hours)') +
+#   ylab('Ship-Hours in Queue') +
+#   scale_y_continuous(labels=scales::comma) +
+#   theme(
+#     legend.position = "bottom",
+#     legend.title = element_blank(),
+#     axis.title.y.right = element_text(margin = margin(t = 0, r = 0, b = 0, l = 10)),
+#     axis.title.y.left = element_text(margin = margin(t = 0, r = 10, b = 0, l = 0))
+#   ) 
+# plt
+# 
+# 
+# ggsave(filename = file.path(model_output_path, 'cumulative_wait_in_queue.png'),
+#        plot = plt,
+#        width = NA,
+#        height = 5,
+#        units = c("in"),
+#        dpi = 300)
+
+# Total ships served by node
+ships_served <- df_consumers_departed %>% 
+  group_by(base_f) %>% 
+  summarise(ships_served = n())
+ships_served
+

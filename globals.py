@@ -47,7 +47,7 @@ def is_daytime(simtime):
 # region: ((((((((((((((((((((((((((((((((Output))))))))))))))))))))))))))))))))
 OUTPUT = 1
 OUTPUT_DIR = 'output/'
-OUTPUT_SUBDIR = 'ERT_SENS/'
+OUTPUT_SUBDIR = 'YAPC5/'
 TIME = datetime.datetime.now().strftime("%y%m%d_%H%M%S")
 # QUEUE_OUTPUT_FILE = f'queue_lengths_{TIME}.csv'
 QUEUE_OUTPUT_FILE = f'output.csv'
